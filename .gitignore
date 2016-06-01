@@ -1,0 +1,10 @@
+*.gem
+Gemfile.lock
+
+.DS_Store
+
+## Documentation cache and generated files:
+/.yardoc/
+/_yardoc/
+/doc/
+/rdoc/
