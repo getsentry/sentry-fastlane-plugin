@@ -52,10 +52,6 @@ module Fastlane
         uploaded_paths
       end
 
-      def self.has_uppercase?(string)
-        string =~ /[A-Z]/
-      end
-
       def self.upload_dsym(resource, dsym)
         UI.message "Uploading... #{dsym}"
         resource.post(file: File.new(dsym, 'rb')) unless Helper.test?
