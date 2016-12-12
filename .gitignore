@@ -8,3 +8,7 @@ Gemfile.lock
 /_yardoc/
 /doc/
 /rdoc/
+
+.env
+.env.api
+.env.auth

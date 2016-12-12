@@ -1,0 +1,5 @@
+lane :test do
+  sentry_upload_dsym(
+    dsym_path: './assets/SwiftExample.app.dSYM.zip'
+  )
+end
