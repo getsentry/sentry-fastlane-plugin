@@ -9,6 +9,8 @@ Gemfile.lock
 /doc/
 /rdoc/
 
+ fastlane/report.xml
+
 .env
 .env.api
 .env.auth
