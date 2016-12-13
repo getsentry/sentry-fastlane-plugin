@@ -36,8 +36,14 @@ module Fastlane
 
         UI.message "Will upload dSYM(s) to #{url}"
 
-        # Upload dsym(s)
+        # Verify dsym(s)
         dsym_paths += [dsym_path]
+        dsym_paths = dsym_paths.map { |path| File.absolute_path(path) }
+        dsym_paths.each do |path|
+          UI.user_error!("dSYM does not exist at path: #{path}") unless File.exists? path
+        end
+
+        # Upload dsym(s)
         uploaded_paths = dsym_paths.compact.map do |dsym|
           upload_dsym(resource, dsym)
         end
@@ -52,7 +58,16 @@ module Fastlane
         UI.success 'dSYM successfully uploaded to Sentry!'
 
         dsym
-      rescue
+      rescue RestClient::Exception => error
+        handle_error(error, error.http_code)
+      rescue => error
+        handle_error(error)
+      end
+
+      def self.handle_error(error, status = 0)
+        UI.error "Error: #{error}"
+        UI.important "Make sure your api_key or auth_token is configured correctly" if status == 401
+        UI.important "Make sure the org_slug and project_slug matches exactly what is displayed your admin panel's URL" if status == 404
         UI.user_error! 'Error while trying to upload dSYM to Sentry'
       end
 
