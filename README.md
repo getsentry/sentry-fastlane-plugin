@@ -24,7 +24,9 @@ sentry_upload_dsym(
 )
 ```
 
-`auth_token` is the preferred way to authentication method with Sentry. `api_key` will eventually become deprecated.
+`auth_token` is the preferred way to authentication method with Sentry. This can be obtained on https://sentry.io/api/.
+
+`api_key` still works but will eventually become deprecated. This can be obtained through the settings of your project.
 
 The following environment variables may be used in place of parameters: `SENTRY_API_KEY`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG_SLUG`, `SENTRY_PROJECT_SLUG`, and `SENTRY_DSYM_PATH`.
 
