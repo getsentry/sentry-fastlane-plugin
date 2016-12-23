@@ -11,6 +11,8 @@ module Fastlane
         auth_token = params[:auth_token]
         org = params[:org_slug]
         project = params[:project_slug]
+        timeout = params[:timeout]
+        use_curl = params[:use_curl]
 
         # Params - dSYM
         dsym_path = params[:dsym_path]
@@ -28,11 +30,6 @@ module Fastlane
 
         # Url to post dSYMs to
         url = "#{host}/projects/#{org}/#{project}/files/dsyms/"
-        if has_api_key
-          resource = RestClient::Resource.new( url, api_key, '' )
-        else
-          resource = RestClient::Resource.new( url, headers: {Authorization: "Bearer #{auth_token}"} )
-        end
 
         UI.message "Will upload dSYM(s) to #{url}"
 
@@ -45,29 +42,65 @@ module Fastlane
 
         # Upload dsym(s)
         uploaded_paths = dsym_paths.compact.map do |dsym|
-          upload_dsym(resource, dsym)
+          upload_dsym(use_curl, dsym, url, timeout, api_key, auth_token)
         end
 
         # Return uplaoded dSYM paths
         uploaded_paths
       end
 
-      def self.upload_dsym(resource, dsym)
+      def self.upload_dsym(use_curl, dsym, url, timeout, api_key, auth_token)
         UI.message "Uploading... #{dsym}"
-        resource.post(file: File.new(dsym, 'rb')) unless Helper.test?
-        UI.success 'dSYM successfully uploaded to Sentry!'
-
-        dsym
-      rescue RestClient::Exception => error
-        handle_error(error, error.http_code)
-      rescue => error
-        handle_error(error)
+        if use_curl
+          self.upload_dsym_curl(dsym, url, timeout, api_key, auth_token)
+        else
+          self.upload_dsym_restclient(dsym, url, timeout, api_key, auth_token)
+        end
+      end
+      
+      def self.upload_dsym_curl(dsym, url, timeout, api_key, auth_token)
+        has_api_key = !api_key.to_s.empty?
+        
+        status = 0
+        if has_api_key
+          status = sh "curl -s -o /dev/null -w '%{response_code}' --max-time #{timeout} --user #{api_key}: -F file=@#{dsym} #{url} | grep -o  '[1-4][0-9][0-9]' "
+        else
+          status = sh "curl -s -o /dev/null -w '%{response_code}' --max-time #{timeout} -H 'Authorization: Bearer #{auth_token}'  -F file=@#{dsym} #{url} | grep -o  '[1-4][0-9][0-9]' "
+        end
+        
+        status = status.to_i
+        if (200..299).member?(status)
+          return dsym
+        else
+          self.handle_error(nil, status)
+        end
+      end
+      
+      def self.upload_dsym_restclient(dsym, url, timeout, api_key, auth_token)
+        has_api_key = !api_key.to_s.empty?
+        
+        if has_api_key
+          resource = RestClient::Resource.new( url, user: api_key, password: '', timeout: timeout, open_timeout: timeout )
+        else
+          resource = RestClient::Resource.new( url, headers: {Authorization: "Bearer #{auth_token}"}, timeout: timeout, open_timeout: timeout )
+        end
+        
+        begin
+          resource.post(file: File.new(dsym, 'rb')) unless Helper.test?
+          UI.success 'dSYM successfully uploaded to Sentry!'
+          dsym
+        rescue RestClient::Exception => error
+          handle_error(error, error.http_code)
+        rescue => error
+          handle_error(error)
+        end
       end
 
       def self.handle_error(error, status = 0)
-        UI.error "Error: #{error}"
+        UI.error "Error: #{error}" if error
         UI.important "Make sure your api_key or auth_token is configured correctly" if status == 401
         UI.important "Make sure the org_slug and project_slug matches exactly what is displayed your admin panel's URL" if status == 404
+        UI.important "Your upload may have timed out for an unknown reason" if status == 100
         UI.user_error! 'Error while trying to upload dSYM to Sentry'
       end
 
@@ -132,7 +165,26 @@ module Fastlane
                                        optional: true,
                                        verify_block: proc do |value|
                                          # validation is done in the action
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :timeout,
+                                       env_name: "SENTRY_TIMEOUT",
+                                       description: "Sentry upload API request timeout (in seconds)",
+                                       default_value: 120,
+                                       is_string: false,
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                         # validation is done in the action
+                                       end),
+           FastlaneCore::ConfigItem.new(key: :use_curl,
+                                       env_name: "SENTRY_USE_CURL",
+                                       description: "Shells out the upload to `curl` instead of using `rest-client`. This MAY be needed for really large dSYM file sizes. Use this if you are receving timeouts",
+                                       default_value: false,
+                                       is_string: false,
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                         # validation is done in the action
                                        end)
+                                       
         ]
       end
 
