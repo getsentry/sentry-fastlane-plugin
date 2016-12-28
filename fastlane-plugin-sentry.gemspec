@@ -19,7 +19,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'rest-client', '~> 1.6.7'
 
-  spec.add_development_dependency 'pry'
+  spec.add_develepment_dependency 'rake'
+  spec.add_develepment_dependency 'pry'
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'fastlane', '>= 1.93.0'
