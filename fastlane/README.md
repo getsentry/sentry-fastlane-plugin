@@ -10,6 +10,11 @@ sudo gem install fastlane
 fastlane test
 ```
 
+### test_big
+```
+fastlane test_big
+```
+
 
 ----
 

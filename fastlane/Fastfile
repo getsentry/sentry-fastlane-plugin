@@ -3,3 +3,9 @@ lane :test do
     dsym_path: './assets/SwiftExample.app.dSYM.zip'
   )
 end
+
+lane :test_big do
+  sentry_upload_dsym(
+    dsym_path: './assets/Big.app.dSYM.zip'
+  )
+end

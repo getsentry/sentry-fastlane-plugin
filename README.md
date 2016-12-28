@@ -1,7 +1,7 @@
 # fastlane-plugin-sentry `fastlane` Plugin
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-sentry)
-
+[![Build Status](https://img.shields.io/travis/getsentry/fastlane-plugin-sentry/master.svg?style=flat)](https://travis-ci.org/getsentry/fastlane-plugin-sentry)
 
 ## Getting Started
 

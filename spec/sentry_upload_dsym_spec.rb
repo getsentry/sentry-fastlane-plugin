@@ -47,7 +47,7 @@ describe Fastlane do
               project_slug: 'some_project',
               dsym_path: '#{dsym_path_1}')
           end").runner.execute(:test)
-        end.to raise_error("dSYM does not exist at path: /Users/josh/iOS/Sentry/sentry-fastlane/fastlane-plugin-sentry/assets/this_does_not_exist.app.dSYM.zip")
+        end.to raise_error("dSYM does not exist at path: #{dsym_path_1}")
       end
 
       it "returns uploaded dSYM path using API key" do
