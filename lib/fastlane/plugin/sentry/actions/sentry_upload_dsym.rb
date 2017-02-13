@@ -2,17 +2,14 @@ module Fastlane
   module Actions
     class SentryUploadDsymAction < Action
       def self.run(params)
-
-        require 'rest-client'
+        check_sentry_cli!
 
         # Params - API
-        host = params[:api_host]
-        api_key = params[:api_key]
+        url = params[:url]
         auth_token = params[:auth_token]
+        api_key = params[:api_key]
         org = params[:org_slug]
         project = params[:project_slug]
-        timeout = params[:timeout]
-        use_curl = params[:use_curl]
 
         # Params - dSYM
         dsym_path = params[:dsym_path]
@@ -26,12 +23,14 @@ module Fastlane
           UI.user_error!("No API key or authentication token found for SentryAction given, pass using `api_key: 'key'` or `auth_token: 'token'`")
         elsif has_api_key && has_auth_token
           UI.user_error!("Both API key and authentication token found for SentryAction given, please only give one")
+        elsif has_api_key && !has_auth_token
+          UI.deprecated("Please consider switching to auth_token ... api_key will be removed in the future")
         end
 
-        # Url to post dSYMs to
-        url = "#{host}/projects/#{org}/#{project}/files/dsyms/"
-
-        UI.message "Will upload dSYM(s) to #{url}"
+        ENV['SENTRY_API_KEY'] = api_key unless api_key.to_s.empty?
+        ENV['SENTRY_AUTH_TOKEN'] = auth_token unless auth_token.to_s.empty?
+        ENV['SENTRY_URL'] = url unless url.to_s.empty?
+        ENV['SENTRY_LOG_LEVEL'] = 'info' if $verbose
 
         # Verify dsym(s)
         dsym_paths += [dsym_path]
@@ -40,68 +39,47 @@ module Fastlane
           UI.user_error!("dSYM does not exist at path: #{path}") unless File.exists? path
         end
 
-        # Upload dsym(s)
-        uploaded_paths = dsym_paths.compact.map do |dsym|
-          upload_dsym(use_curl, dsym, url, timeout, api_key, auth_token)
-        end
-
-        # Return uplaoded dSYM paths
-        uploaded_paths
+        UI.success("sentry-cli #{Fastlane::Sentry::CLI_VERSION} installed!")
+        call_sentry_cli(dsym_paths, org, project)
       end
 
-      def self.upload_dsym(use_curl, dsym, url, timeout, api_key, auth_token)
-        UI.message "Uploading... #{dsym}"
-        if use_curl
-          self.upload_dsym_curl(dsym, url, timeout, api_key, auth_token)
-        else
-          self.upload_dsym_restclient(dsym, url, timeout, api_key, auth_token)
-        end
+      def self.check_sentry_cli!
+        return if `which sentry-cli`.include?('sentry-cli') and `sentry-cli --version`.include?(Fastlane::Sentry::CLI_VERSION)
+
+        UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
+        UI.error("")
+        UI.error("Install it using:")
+        UI.command("brew install sentry-cli")
+        UI.error("If you don't have homebrew, visit http://brew.sh")
+
+        UI.user_error!("Install sentry-cli and start your lane again!")
       end
-      
-      def self.upload_dsym_curl(dsym, url, timeout, api_key, auth_token)
-        has_api_key = !api_key.to_s.empty?
-        
-        status = 0
-        if has_api_key
-          status = sh "curl -s -o /dev/null -w '%{response_code}' --max-time #{timeout} --user #{api_key}: -F file=@#{dsym} #{url} | grep -o  '[1-4][0-9][0-9]' "
-        else
-          status = sh "curl -s -o /dev/null -w '%{response_code}' --max-time #{timeout} -H 'Authorization: Bearer #{auth_token}'  -F file=@#{dsym} #{url} | grep -o  '[1-4][0-9][0-9]' "
-        end
-        
-        status = status.to_i
-        if (200..299).member?(status)
-          return dsym
-        else
-          self.handle_error(nil, status)
-        end
-      end
-      
-      def self.upload_dsym_restclient(dsym, url, timeout, api_key, auth_token)
-        has_api_key = !api_key.to_s.empty?
-        
-        if has_api_key
-          resource = RestClient::Resource.new( url, user: api_key, password: '', timeout: timeout, open_timeout: timeout )
-        else
-          resource = RestClient::Resource.new( url, headers: {Authorization: "Bearer #{auth_token}"}, timeout: timeout, open_timeout: timeout )
-        end
-        
-        begin
-          resource.post(file: File.new(dsym, 'rb')) unless Helper.test?
-          UI.success 'dSYM successfully uploaded to Sentry!'
-          dsym
-        rescue RestClient::Exception => error
-          handle_error(error, error.http_code)
-        rescue => error
-          handle_error(error)
+
+      def self.call_sentry_cli(dsym_paths, org, project)
+        UI.message "Starting sentry-cli..."
+        require 'open3'
+        error = nil
+        Open3.popen3("sentry-cli upload-dsym '#{dsym_paths.join("','")}' --org #{org} --project #{project}") do |stdin, stdout, stderr, wait_thr|
+          while line = stderr.gets do
+            error = line.strip!
+            UI.error(error)
+          end
+          while line = stdout.gets do
+            UI.message(line.strip!)
+          end
+          exit_status = wait_thr.value
+          unless exit_status.success? && error.nil?
+            handle_error(error)
+          end
         end
       end
 
-      def self.handle_error(error, status = 0)
-        UI.error "Error: #{error}" if error
-        UI.important "Make sure your api_key or auth_token is configured correctly" if status == 401
-        UI.important "Make sure the org_slug and project_slug matches exactly what is displayed your admin panel's URL" if status == 404
-        UI.important "Your upload may have timed out for an unknown reason" if status == 100
-        UI.user_error! 'Error while trying to upload dSYM to Sentry'
+      def self.handle_error(error)
+        UI.error("#{error}") if error
+        UI.important("Make sure your api_key or auth_token is configured correctly") if error.include?('401')
+        UI.important("Make sure the org_slug and project_slug matches exactly what is displayed your admin panel's URL") if error.include?('404')
+        UI.important("Your upload may have timed out for an unknown reason") if error.include?('100')
+        UI.user_error!('Error while trying to upload dSYM to Sentry')
       end
 
       #####################################################
@@ -122,20 +100,20 @@ module Fastlane
 
       def self.available_options
         [
-          FastlaneCore::ConfigItem.new(key: :api_host,
-                                       env_name: "SENTRY_HOST",
-                                       description: "API host url for Sentry",
+          FastlaneCore::ConfigItem.new(key: :url,
+                                       env_name: "SENTRY_URL",
+                                       description: "Url for Sentry",
                                        is_string: true,
                                        default_value: "https://app.getsentry.com/api/0",
                                        optional: true
                                       ),
-          FastlaneCore::ConfigItem.new(key: :api_key,
-                                       env_name: "SENTRY_API_KEY",
-                                       description: "API key for Sentry",
-                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :auth_token,
                                        env_name: "SENTRY_AUTH_TOKEN",
                                        description: "Authentication token for Sentry",
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :api_key,
+                                       env_name: "SENTRY_API_KEY",
+                                       description: "API key for Sentry",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :org_slug,
                                        env_name: "SENTRY_ORG_SLUG",
@@ -165,31 +143,13 @@ module Fastlane
                                        optional: true,
                                        verify_block: proc do |value|
                                          # validation is done in the action
-                                       end),
-          FastlaneCore::ConfigItem.new(key: :timeout,
-                                       env_name: "SENTRY_TIMEOUT",
-                                       description: "Sentry upload API request timeout (in seconds)",
-                                       default_value: 120,
-                                       is_string: false,
-                                       optional: true,
-                                       verify_block: proc do |value|
-                                         # validation is done in the action
-                                       end),
-           FastlaneCore::ConfigItem.new(key: :use_curl,
-                                       env_name: "SENTRY_USE_CURL",
-                                       description: "Shells out the upload to `curl` instead of using `rest-client`. This MAY be needed for really large dSYM file sizes. Use this if you are receving timeouts",
-                                       default_value: false,
-                                       is_string: false,
-                                       optional: true,
-                                       verify_block: proc do |value|
-                                         # validation is done in the action
                                        end)
-                                       
+
         ]
       end
 
       def self.return_value
-        "The uploaded dSYM path(s)"
+        nil
       end
 
       def self.authors
