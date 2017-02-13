@@ -41,6 +41,7 @@ module Fastlane
 
         UI.success("sentry-cli #{Fastlane::Sentry::CLI_VERSION} installed!")
         call_sentry_cli(dsym_paths, org, project)
+        UI.success("Successfully uploaded dSYMs!")
       end
 
       def self.check_sentry_cli!
@@ -58,28 +59,34 @@ module Fastlane
       def self.call_sentry_cli(dsym_paths, org, project)
         UI.message "Starting sentry-cli..."
         require 'open3'
-        error = nil
+        error = []
         Open3.popen3("sentry-cli upload-dsym '#{dsym_paths.join("','")}' --org #{org} --project #{project}") do |stdin, stdout, stderr, wait_thr|
           while line = stderr.gets do
-            error = line.strip!
-            UI.error(error)
+            error << line.strip!
           end
           while line = stdout.gets do
             UI.message(line.strip!)
           end
           exit_status = wait_thr.value
-          unless exit_status.success? && error.nil?
+          unless exit_status.success? && error.empty?
             handle_error(error)
           end
         end
       end
 
-      def self.handle_error(error)
-        UI.error("#{error}") if error
-        UI.important("Make sure your api_key or auth_token is configured correctly") if error.include?('401')
-        UI.important("Make sure the org_slug and project_slug matches exactly what is displayed your admin panel's URL") if error.include?('404')
-        UI.important("Your upload may have timed out for an unknown reason") if error.include?('100')
-        UI.user_error!('Error while trying to upload dSYM to Sentry')
+      def self.handle_error(errors)
+        fatal = false
+        for error in errors do
+          if error
+            if error.include?('[INFO]')
+              UI.verbose("#{error}")
+            else
+              UI.error("#{error}")
+              fatal = true
+            end
+          end
+        end
+        UI.user_error!('Error while trying to upload dSYM to Sentry') unless !fatal
       end
 
       #####################################################
@@ -123,7 +130,7 @@ module Fastlane
                                        end),
           FastlaneCore::ConfigItem.new(key: :project_slug,
                                        env_name: "SENTRY_PROJECT_SLUG",
-                                       description: "Prgoject slug for Sentry",
+                                       description: "Project slug for Sentry",
                                        verify_block: proc do |value|
                                          UI.user_error!("No project slug for SentryAction given, pass using `project_slug: 'project'`") unless value and !value.empty?
                                        end),
