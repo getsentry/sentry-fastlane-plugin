@@ -50,7 +50,7 @@ module Fastlane
         UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
         UI.error("")
         UI.error("Install it using:")
-        UI.command("brew install sentry-cli")
+        UI.command("brew install getsentry/tools/sentry-cli OR curl -sL https://sentry.io/get-cli/ | bash")
         UI.error("If you don't have homebrew, visit http://brew.sh")
 
         UI.user_error!("Install sentry-cli and start your lane again!")
