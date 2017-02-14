@@ -33,7 +33,7 @@ module Fastlane
         ENV['SENTRY_LOG_LEVEL'] = 'info' if $verbose
 
         # Verify dsym(s)
-        dsym_paths += [dsym_path]
+        dsym_paths += [dsym_path] unless dsym_path.nil?
         dsym_paths = dsym_paths.map { |path| File.absolute_path(path) }
         dsym_paths.each do |path|
           UI.user_error!("dSYM does not exist at path: #{path}") unless File.exists? path
