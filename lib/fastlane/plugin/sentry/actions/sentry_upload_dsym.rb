@@ -45,20 +45,30 @@ module Fastlane
       end
 
       def self.check_sentry_cli!
-        return if `which sentry-cli`.include?('sentry-cli') and `sentry-cli --version`.include?(Fastlane::Sentry::CLI_VERSION)
+        if !`which sentry-cli`.include?('sentry-cli')
+          UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
+          UI.error("")
+          UI.error("Install it using:")
+          UI.command("brew install getsentry/tools/sentry-cli")
+          UI.error("OR")
+          UI.command("curl -sL https://sentry.io/get-cli/ | bash")
+          UI.error("If you don't have homebrew, visit http://brew.sh")
+          UI.user_error!("Install sentry-cli and start your lane again!")
+        end
 
-        UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
-        UI.error("")
-        UI.error("Install it using:")
-        UI.command("brew install getsentry/tools/sentry-cli OR curl -sL https://sentry.io/get-cli/ | bash")
-        UI.error("If you don't have homebrew, visit http://brew.sh")
-
-        UI.user_error!("Install sentry-cli and start your lane again!")
+        sentry_cli_version = `sentry-cli --version`.gsub(/[^\d]/, '').to_i
+        required_version = Fastlane::Sentry::CLI_VERSION.gsub(/[^\d]/, '').to_i
+        if sentry_cli_version < required_version
+          UI.user_error!("Your sentry-cli is outdated, please upgrade to at least version #{Fastlane::Sentry::CLI_VERSION} and start your lane again!")
+        end
       end
 
       def self.call_sentry_cli(dsym_paths, org, project)
         UI.message "Starting sentry-cli..."
         require 'open3'
+        require 'shellwords'
+        org = Shellwords.escape(org)
+        project = Shellwords.escape(project)
         error = []
         Open3.popen3("sentry-cli upload-dsym '#{dsym_paths.join("','")}' --org #{org} --project #{project}") do |stdin, stdout, stderr, wait_thr|
           while line = stderr.gets do
