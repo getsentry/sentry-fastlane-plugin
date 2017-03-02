@@ -30,7 +30,7 @@ module Fastlane
         ENV['SENTRY_API_KEY'] = api_key unless api_key.to_s.empty?
         ENV['SENTRY_AUTH_TOKEN'] = auth_token unless auth_token.to_s.empty?
         ENV['SENTRY_URL'] = url unless url.to_s.empty?
-        ENV['SENTRY_LOG_LEVEL'] = 'info' if $verbose
+        ENV['SENTRY_LOG_LEVEL'] = 'debug' if FastlaneCore::Globals.verbose?
 
         # Verify dsym(s)
         dsym_paths += [dsym_path] unless dsym_path.nil?
@@ -70,9 +70,15 @@ module Fastlane
         org = Shellwords.escape(org)
         project = Shellwords.escape(project)
         error = []
-        Open3.popen3("sentry-cli upload-dsym '#{dsym_paths.join("','")}' --org #{org} --project #{project}") do |stdin, stdout, stderr, wait_thr|
+        command = "sentry-cli upload-dsym '#{dsym_paths.join("','")}' --org #{org} --project #{project}"
+        if FastlaneCore::Globals.verbose?
+          UI.verbose("sentry-cli command:\n\n")
+          UI.command("#{command}")
+          UI.verbose("\n\n")
+        end
+        Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
           while line = stderr.gets do
-            error << line.strip!
+              error << line.strip!
           end
           while line = stdout.gets do
             UI.message(line.strip!)
@@ -88,11 +94,11 @@ module Fastlane
         fatal = false
         for error in errors do
           if error
-            if error.include?('[INFO]')
-              UI.verbose("#{error}")
-            else
+            if /error/.match(error)
               UI.error("#{error}")
               fatal = true
+            else
+              UI.verbose("#{error}")
             end
           end
         end
