@@ -127,7 +127,6 @@ module Fastlane
                                        env_name: "SENTRY_URL",
                                        description: "Url for Sentry",
                                        is_string: true,
-                                       default_value: "https://app.getsentry.com/api/0",
                                        optional: true
                                       ),
           FastlaneCore::ConfigItem.new(key: :auth_token,
