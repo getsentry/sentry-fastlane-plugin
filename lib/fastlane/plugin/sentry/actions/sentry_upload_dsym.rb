@@ -56,8 +56,8 @@ module Fastlane
           UI.user_error!("Install sentry-cli and start your lane again!")
         end
 
-        sentry_cli_version = `sentry-cli --version`.gsub(/[^\d]/, '').to_i
-        required_version = Fastlane::Sentry::CLI_VERSION.gsub(/[^\d]/, '').to_i
+        sentry_cli_version = Gem::Version.new(`sentry-cli --version`.scan(/(?:\d+\.?){3}/).first)
+        required_version = Gem::Version.new(Fastlane::Sentry::CLI_VERSION)
         if sentry_cli_version < required_version
           UI.user_error!("Your sentry-cli is outdated, please upgrade to at least version #{Fastlane::Sentry::CLI_VERSION} and start your lane again!")
         end
