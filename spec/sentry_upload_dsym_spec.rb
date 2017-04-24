@@ -2,17 +2,16 @@ describe Fastlane do
   describe Fastlane::FastFile do
     describe "sentry" do
       before(:each) do
-        #result = Fastlane::FastFile.new.parse("lane :test do
-        #  gym()
-        #end").runner.execute(:test)
+        # result = Fastlane::FastFile.new.parse("lane :test do
+        #   gym()
+        # end").runner.execute(:test)
       end
-
 
       it "fails with no API key or auth token" do
         dsym_path_1 = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
 
         expect do
-          result = Fastlane::FastFile.new.parse("lane :test do
+          Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dsym(
               org_slug: 'some_org',
               project_slug: 'some_project',
@@ -25,7 +24,7 @@ describe Fastlane do
         dsym_path_1 = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
 
         expect do
-          result = Fastlane::FastFile.new.parse("lane :test do
+          Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dsym(
               org_slug: 'some_org',
               api_key: 'something123',
@@ -40,7 +39,7 @@ describe Fastlane do
         dsym_path_1 = File.absolute_path './assets/this_does_not_exist.app.dSYM.zip'
 
         expect do
-          result = Fastlane::FastFile.new.parse("lane :test do
+          Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dsym(
               org_slug: 'some_org',
               api_key: 'something123',

@@ -2,7 +2,7 @@ module Fastlane
   module Helper
     class SentryHelper
       def self.check_sentry_cli!
-        if !`which sentry-cli`.include?('sentry-cli')
+        unless `which sentry-cli`.include?('sentry-cli')
           UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
           UI.error("")
           UI.error("Install it using:")

@@ -36,7 +36,7 @@ module Fastlane
         dsym_paths += [dsym_path] unless dsym_path.nil?
         dsym_paths = dsym_paths.map { |path| File.absolute_path(path) }
         dsym_paths.each do |path|
-          UI.user_error!("dSYM does not exist at path: #{path}") unless File.exists? path
+          UI.user_error!("dSYM does not exist at path: #{path}") unless File.exist? path
         end
 
         UI.success("sentry-cli #{Fastlane::Sentry::CLI_VERSION} installed!")
@@ -54,14 +54,14 @@ module Fastlane
         command = "sentry-cli upload-dsym '#{dsym_paths.join("','")}' --org #{org} --project #{project}"
         if FastlaneCore::Globals.verbose?
           UI.verbose("sentry-cli command:\n\n")
-          UI.command("#{command}")
+          UI.command(command.to_s)
           UI.verbose("\n\n")
         end
         Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
-          while line = stderr.gets do
-              error << line.strip!
+          while (line = stderr.gets)
+            error << line.strip!
           end
-          while line = stdout.gets do
+          while (line = stdout.gets)
             UI.message(line.strip!)
           end
           exit_status = wait_thr.value
@@ -75,15 +75,15 @@ module Fastlane
         fatal = false
         for error in errors do
           if error
-            if /error/.match(error)
-              UI.error("#{error}")
+            if error =~ /error/
+              UI.error(error.to_s)
               fatal = true
             else
-              UI.verbose("#{error}")
+              UI.verbose(error.to_s)
             end
           end
         end
-        UI.user_error!('Error while trying to upload dSYM to Sentry') unless !fatal
+        UI.user_error!('Error while trying to upload dSYM to Sentry') if fatal
       end
 
       #####################################################
@@ -108,8 +108,7 @@ module Fastlane
                                        env_name: "SENTRY_URL",
                                        description: "Url for Sentry",
                                        is_string: true,
-                                       optional: true
-                                      ),
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :auth_token,
                                        env_name: "SENTRY_AUTH_TOKEN",
                                        description: "Authentication token for Sentry",
