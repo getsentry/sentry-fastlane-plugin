@@ -1,12 +1,6 @@
 describe Fastlane do
   describe Fastlane::FastFile do
     describe "sentry" do
-      before(:each) do
-        # result = Fastlane::FastFile.new.parse("lane :test do
-        #   gym()
-        # end").runner.execute(:test)
-      end
-
       it "fails with no API key or auth token" do
         dsym_path_1 = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
 
