@@ -16,8 +16,6 @@ module Fastlane
           UI.user_error!("dSYM does not exist at path: #{path}") unless File.exist? path
         end
 
-        UI.success("sentry-cli #{Fastlane::Sentry::CLI_VERSION} installed!")
-
         command = "sentry-cli upload-dsym '#{dsym_paths.join("','")}'"
 
         Helper::SentryHelper.call_sentry_cli(command)
@@ -46,19 +44,13 @@ module Fastlane
                                        env_name: "SENTRY_DSYM_PATH",
                                        description: "Path to your symbols file. For iOS and Mac provide path to app.dSYM.zip",
                                        default_value: Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH],
-                                       optional: true,
-                                       verify_block: proc do |value|
-                                         # validation is done in the action
-                                       end),
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :dsym_paths,
                                        env_name: "SENTRY_DSYM_PATHS",
                                        description: "Path to an array of your symbols file. For iOS and Mac provide path to app.dSYM.zip",
                                        default_value: Actions.lane_context[SharedValues::DSYM_PATHS],
                                        is_string: false,
-                                       optional: true,
-                                       verify_block: proc do |value|
-                                         # validation is done in the action
-                                       end)
+                                       optional: true)
 
         ]
       end
