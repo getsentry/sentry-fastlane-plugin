@@ -40,50 +40,14 @@ module Fastlane
         end
 
         UI.success("sentry-cli #{Fastlane::Sentry::CLI_VERSION} installed!")
-        call_sentry_cli(dsym_paths, org, project)
-        UI.success("Successfully uploaded dSYMs!")
-      end
 
-      def self.call_sentry_cli(dsym_paths, org, project)
-        UI.message "Starting sentry-cli..."
-        require 'open3'
         require 'shellwords'
         org = Shellwords.escape(org)
         project = Shellwords.escape(project)
-        error = []
         command = "sentry-cli upload-dsym '#{dsym_paths.join("','")}' --org #{org} --project #{project}"
-        if FastlaneCore::Globals.verbose?
-          UI.verbose("sentry-cli command:\n\n")
-          UI.command(command.to_s)
-          UI.verbose("\n\n")
-        end
-        Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
-          while (line = stderr.gets)
-            error << line.strip!
-          end
-          while (line = stdout.gets)
-            UI.message(line.strip!)
-          end
-          exit_status = wait_thr.value
-          unless exit_status.success? && error.empty?
-            handle_error(error)
-          end
-        end
-      end
 
-      def self.handle_error(errors)
-        fatal = false
-        for error in errors do
-          if error
-            if error =~ /error/
-              UI.error(error.to_s)
-              fatal = true
-            else
-              UI.verbose(error.to_s)
-            end
-          end
-        end
-        UI.user_error!('Error while trying to upload dSYM to Sentry') if fatal
+        Helper::SentryHelper.call_sentry_cli(command)
+        UI.success("Successfully uploaded dSYMs!")
       end
 
       #####################################################

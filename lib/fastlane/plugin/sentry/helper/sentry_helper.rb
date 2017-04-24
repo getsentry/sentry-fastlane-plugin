@@ -19,6 +19,44 @@ module Fastlane
           UI.user_error!("Your sentry-cli is outdated, please upgrade to at least version #{Fastlane::Sentry::CLI_VERSION} and start your lane again!")
         end
       end
+
+      def self.call_sentry_cli(command)
+        UI.message "Starting sentry-cli..."
+        require 'open3'
+        error = []
+        if FastlaneCore::Globals.verbose?
+          UI.verbose("sentry-cli command:\n\n")
+          UI.command(command.to_s)
+          UI.verbose("\n\n")
+        end
+        Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
+          while (line = stderr.gets)
+            error << line.strip!
+          end
+          while (line = stdout.gets)
+            UI.message(line.strip!)
+          end
+          exit_status = wait_thr.value
+          unless exit_status.success? && error.empty?
+            handle_error(error)
+          end
+        end
+      end
+
+      def self.handle_error(errors)
+        fatal = false
+        for error in errors do
+          if error
+            if error =~ /error/
+              UI.error(error.to_s)
+              fatal = true
+            else
+              UI.verbose(error.to_s)
+            end
+          end
+        end
+        UI.user_error!('Error while calling Sentry CLI') if fatal
+      end
     end
   end
 end
