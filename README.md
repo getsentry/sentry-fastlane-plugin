@@ -11,9 +11,18 @@ This project is a [fastlane](https://github.com/fastlane/fastlane) plugin. To ge
 fastlane add_plugin sentry
 ```
 
-## About sentry
+## Sentry Actions
 
-This action allows you to upload symbolication files to Sentry.
+A subset of actions provided by the CLI: https://docs.sentry.io/learn/cli/
+
+#### Authentication & Configuration
+
+`auth_token` is the preferred way to authentication method with Sentry. This can be obtained on https://sentry.io/api/.
+`api_key` still works but will eventually become deprecated. This can be obtained through the settings of your project.
+
+The following environment variables may be used in place of parameters: `SENTRY_API_KEY`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG_SLUG`, and `SENTRY_PROJECT_SLUG`.
+
+#### Uploading Symbolication Files
 
 ```ruby
 sentry_upload_dsym(
@@ -25,11 +34,47 @@ sentry_upload_dsym(
 )
 ```
 
-`auth_token` is the preferred way to authentication method with Sentry. This can be obtained on https://sentry.io/api/.
+The `SENTRY_DSYM_PATH` environment variable may be used in place of the `dsym_path` parameter.
 
-`api_key` still works but will eventually become deprecated. This can be obtained through the settings of your project.
+#### Creating & Finalizing Releases
 
-The following environment variables may be used in place of parameters: `SENTRY_API_KEY`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG_SLUG`, `SENTRY_PROJECT_SLUG`, and `SENTRY_DSYM_PATH`.
+```ruby
+sentry_create_release(
+  api_key: '...',
+  auth_token: '...',
+  org_slug: '...',
+  project_slug: '...',
+  version: '...', # release version to create
+  finalize: true # Whether to finalize the release. If not provided or false, the release can be finalized using the sentry_finalize_release action
+)
+```
+
+#### Uploading Files & Sourcemaps
+
+Useful for uploading build artifacts and JS sourcemaps for react-native apps built using fastlane.
+
+```ruby
+sentry_upload_file(
+  api_key: '...',
+  auth_token: '...',
+  org_slug: '...',
+  project_slug: '...',
+  version: '...',
+  file: 'main.jsbundle' # file to upload
+)
+```
+
+```ruby
+sentry_upload_sourcemap(
+  api_key: '...',
+  auth_token: '...',
+  org_slug: '...',
+  project_slug: '...',
+  version: '...',
+  sourcemap: 'main.jsbundle.map', # sourcemap to upload
+  rewrite: true
+)
+```
 
 ## Issues and Feedback
 
