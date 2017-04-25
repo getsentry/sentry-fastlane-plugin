@@ -14,6 +14,7 @@ module Fastlane
         strip_prefix_arg = params[:strip_prefix] ? '--strip-prefix' : ''
         strip_common_prefix_arg = params[:strip_common_prefix] ? '--strip-common-prefix' : ''
         url_prefix_arg = params[:url_prefix] ? "--url-prefix '#{params[:url_prefix]}'" : ''
+        dist_arg = params[:dist] ? "--dist '#{params[:dist]}'" : ''
 
         command = [
           "sentry-cli",
@@ -25,7 +26,8 @@ module Fastlane
           rewrite_arg,
           strip_prefix_arg,
           strip_common_prefix_arg,
-          url_prefix_arg
+          url_prefix_arg,
+          dist_arg
         ].join(" ")
 
         Helper::SentryHelper.call_sentry_cli(command)
@@ -51,6 +53,8 @@ module Fastlane
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version on Sentry"),
+          FastlaneCore::ConfigItem.new(key: :dist,
+                                       description: "Distribution in release"),
           FastlaneCore::ConfigItem.new(key: :sourcemap,
                                        description: "Path to the sourcemap to upload",
                                        verify_block: proc do |value|
@@ -69,14 +73,13 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :strip_common_prefix,
                                        conflicting_options: [:strip_prefix],
-                                       description: "Automatically guess what the common prefix is and chop that one off automatically",
+                                       description: "Automatically guess what the common prefix is and chop that one off",
                                        default_value: false,
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :url_prefix,
                                        description: "Sets a URL prefix in front of all files",
                                        optional: true)
-
         ]
       end
 

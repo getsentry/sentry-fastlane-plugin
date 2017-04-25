@@ -60,6 +60,7 @@ sentry_upload_file(
   org_slug: '...',
   project_slug: '...',
   version: '...',
+  dist: '...', # distribution of the release usually the buildnumber
   file: 'main.jsbundle' # file to upload
 )
 ```
@@ -71,6 +72,7 @@ sentry_upload_sourcemap(
   org_slug: '...',
   project_slug: '...',
   version: '...',
+  dist: '...', # distribution of the release usually the buildnumber
   sourcemap: 'main.jsbundle.map', # sourcemap to upload
   rewrite: true
 )

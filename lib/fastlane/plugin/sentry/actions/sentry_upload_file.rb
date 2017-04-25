@@ -10,8 +10,9 @@ module Fastlane
         version = params[:version]
         file = params[:file]
         file_url_arg = params[:file_url] ? "'#{params[:file_url]}'" : ''
+        dist_arg = params[:dist] ? "--dist '#{params[:dist]}'" : ''
 
-        command = "sentry-cli releases files '#{Shellwords.escape(version)}' upload #{file} #{file_url_arg}"
+        command = "sentry-cli releases files '#{Shellwords.escape(version)}' upload #{file} #{file_url_arg} #{dist_arg}"
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully uploaded files to release: #{version}")
@@ -36,6 +37,8 @@ module Fastlane
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version on Sentry"),
+          FastlaneCore::ConfigItem.new(key: :dist,
+                                       description: "Distribution in release"),
           FastlaneCore::ConfigItem.new(key: :file,
                                        description: "Path to the file to upload",
                                        verify_block: proc do |value|
