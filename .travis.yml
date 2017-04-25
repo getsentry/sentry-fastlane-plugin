@@ -5,4 +5,7 @@ rvm:
 before_install:
   - curl -sL https://sentry.io/get-cli/ | bash
   - gem update bundler
-script: rspec
+  - bundle install
+script:
+  - bundle exec rubocop
+  - rspec

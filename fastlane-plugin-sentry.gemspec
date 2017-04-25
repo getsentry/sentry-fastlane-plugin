@@ -7,8 +7,8 @@ require 'fastlane/plugin/sentry/version'
 Gem::Specification.new do |spec|
   spec.name          = 'fastlane-plugin-sentry'
   spec.version       = Fastlane::Sentry::VERSION
-  spec.author        = %q{Josh Holtz}
-  spec.email         = %q{josh@rokkincat.com}
+  spec.author        = %q{Sentry}
+  spec.email         = %q{hello@sentry.io}
 
   spec.summary       = %q{Upload symbols to Sentry}
   spec.homepage      = "https://github.com/getsentry/sentry-fastlane"
@@ -21,5 +21,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'fastlane', '>= 2.10.0'
 end
