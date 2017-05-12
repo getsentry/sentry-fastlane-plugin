@@ -42,7 +42,7 @@ module Fastlane
         has_auth_token = !auth_token.to_s.empty?
 
         skip_params_check = false
-        if !has_org || !has_project || !has_api_key || !has_auth_token
+        if !has_org || !has_project || !has_auth_token
           skip_params_check = fallback_sentry_cli
         end
 
