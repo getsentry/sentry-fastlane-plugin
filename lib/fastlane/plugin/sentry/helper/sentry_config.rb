@@ -69,9 +69,9 @@ module Fastlane
       def self.fallback_sentry_cli
         sentry_cli_result = JSON.parse(`sentry-cli info --config-status-json`)
         return (sentry_cli_result["auth"]["successful"] &&
-          sentry_cli_result["auth"]["type"] != nil &&
-          sentry_cli_result["config"]["org"] != nil &&
-          sentry_cli_result["config"]["project"] != nil)
+          !sentry_cli_result["auth"]["type"].nil? &&
+          !sentry_cli_result["config"]["org"].nil? &&
+          !sentry_cli_result["config"]["project"].nil?)
       end
     end
   end
