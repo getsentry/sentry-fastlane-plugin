@@ -161,7 +161,7 @@ Metrics/ParameterLists:
   Max: 17
 
 Metrics/PerceivedComplexity:
-  Max: 18
+  Max: 20
 
 # Sometimes it's easier to read without guards
 Style/GuardClause:
