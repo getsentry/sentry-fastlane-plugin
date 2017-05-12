@@ -15,4 +15,9 @@ describe Fastlane::Helper::SentryConfig do
       end.to raise_error("Both API key and authentication token found for SentryAction given, please only give one")
     end
   end
+  describe "fallback .sentryclirc" do
+    it "auth failing calling sentry-cli info" do
+      expect(Fastlane::Helper::SentryConfig.fallback_sentry_cli).to be_falsey
+    end
+  end
 end
