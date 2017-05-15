@@ -13,6 +13,26 @@ describe Fastlane do
           end").runner.execute(:test)
         end.to raise_error("Could not find file at path '#{file_path}'")
       end
+      it "accepts app_identifier" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        allow(File).to receive(:exist?).with("./fastlane/Appfile").and_return(false)
+        allow(File).to receive(:exist?).with("./.fastlane/Appfile").and_return(false)
+        allow(File).to receive(:exist?).with("./Appfile").and_return(false)
+        expect(File).to receive(:exist?).with("demo.file").and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with("sentry-cli releases files 'app.idf-1.0' upload demo.file  --dist 'dem'").and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_file(
+              org_slug: 'some_org',
+              api_key: 'something123',
+              project_slug: 'some_project',
+              version: '1.0',
+              dist: 'dem',
+              file: 'demo.file',
+              app_identifier: 'app.idf')
+        end").runner.execute(:test)
+      end
     end
   end
 end
