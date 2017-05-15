@@ -58,7 +58,7 @@ module Fastlane
           ENV['SENTRY_API_KEY'] = api_key unless api_key.to_s.empty?
           ENV['SENTRY_AUTH_TOKEN'] = auth_token unless auth_token.to_s.empty?
           ENV['SENTRY_URL'] = url unless url.to_s.empty?
-          ENV['SENTRY_LOG_LEVEL'] = 'debug' if FastlaneCore::Globals.verbose?
+          ENV['SENTRY_LOG_LEVEL'] = 'INFO' if FastlaneCore::Globals.verbose?
           ENV['SENTRY_ORG'] = Shellwords.escape(org) unless org.to_s.empty?
           ENV['SENTRY_PROJECT'] = Shellwords.escape(project) unless project.to_s.empty?
         else
