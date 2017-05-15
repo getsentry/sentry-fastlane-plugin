@@ -10,6 +10,8 @@ module Fastlane
         version = params[:version]
         sourcemap = params[:sourcemap]
 
+        version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
+
         rewrite_arg = params[:rewrite] ? '--rewrite' : ''
         strip_prefix_arg = params[:strip_prefix] ? '--strip-prefix' : ''
         strip_common_prefix_arg = params[:strip_common_prefix] ? '--strip-common-prefix' : ''
@@ -79,7 +81,14 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :url_prefix,
                                        description: "Sets a URL prefix in front of all files",
-                                       optional: true)
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                      short_option: "-a",
+                                      env_name: "SENTRY_APP_IDENTIFIER",
+                                      description: "App Bundle Identifier",
+                                      optional: true,
+                                      default_value: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier))
+
         ]
       end
 

@@ -8,6 +8,8 @@ module Fastlane
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
+        version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
+
         finalize_arg = params[:finalize] ? ' --finalize' : ''
 
         command = "sentry-cli releases new '#{Shellwords.escape(version)}' #{finalize_arg}"
@@ -39,7 +41,14 @@ module Fastlane
                                        description: "Whether to finalize the release. If not provided or false, the release can be finalized using the finalize_release action",
                                        default_value: false,
                                        is_string: false,
-                                       optional: true)
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                      short_option: "-a",
+                                      env_name: "SENTRY_APP_IDENTIFIER",
+                                      description: "App Bundle Identifier",
+                                      optional: true,
+                                      default_value: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier))
+
         ]
       end
 
