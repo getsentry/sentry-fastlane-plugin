@@ -46,6 +46,7 @@ sentry_create_release(
   org_slug: '...',
   project_slug: '...',
   version: '...', # release version to create
+  app_identifier: '...', # pass in the bundle_identifer of your app
   finalize: true # Whether to finalize the release. If not provided or false, the release can be finalized using the sentry_finalize_release action
 )
 ```
@@ -61,6 +62,7 @@ sentry_upload_file(
   org_slug: '...',
   project_slug: '...',
   version: '...',
+  app_identifier: '...', # pass in the bundle_identifer of your app
   dist: '...', # distribution of the release usually the buildnumber
   file: 'main.jsbundle' # file to upload
 )
@@ -73,6 +75,7 @@ sentry_upload_sourcemap(
   org_slug: '...',
   project_slug: '...',
   version: '...',
+  app_identifier: '...', # pass in the bundle_identifer of your app
   dist: '...', # distribution of the release usually the buildnumber
   sourcemap: 'main.jsbundle.map', # sourcemap to upload
   rewrite: true
