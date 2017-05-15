@@ -12,6 +12,8 @@ module Fastlane
         file_url_arg = params[:file_url] ? "'#{params[:file_url]}'" : ''
         dist_arg = params[:dist] ? "--dist '#{params[:dist]}'" : ''
 
+        version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
+
         command = "sentry-cli releases files '#{Shellwords.escape(version)}' upload #{file} #{file_url_arg} #{dist_arg}"
 
         Helper::SentryHelper.call_sentry_cli(command)
@@ -46,7 +48,14 @@ module Fastlane
                                        end),
           FastlaneCore::ConfigItem.new(key: :file_url,
                                        description: "Optional URL we should associate with the file",
-                                       optional: true)
+                                       optional: true),
+
+          FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                      short_option: "-a",
+                                      env_name: "SENTRY_APP_IDENTIFIER",
+                                      description: "App Bundle Identifier",
+                                      optional: true,
+                                      default_value: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier))
         ]
       end
 
