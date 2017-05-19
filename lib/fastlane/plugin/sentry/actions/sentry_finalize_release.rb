@@ -9,7 +9,12 @@ module Fastlane
 
         version = params[:version]
 
-        command = "sentry-cli releases finalize '#{Shellwords.escape(version)}'"
+        command = [
+          "sentry-cli",
+          "releases",
+          "finalize",
+          Shellwords.escape(version)
+        ]
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully finalized release: #{version}")

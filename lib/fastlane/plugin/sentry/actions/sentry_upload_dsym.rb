@@ -16,7 +16,7 @@ module Fastlane
           UI.user_error!("dSYM does not exist at path: #{path}") unless File.exist? path
         end
 
-        command = "sentry-cli upload-dsym '#{dsym_paths.join("','")}'"
+        command = ["sentry-cli", "upload-dsym"] + dsym_paths
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully uploaded dSYMs!")

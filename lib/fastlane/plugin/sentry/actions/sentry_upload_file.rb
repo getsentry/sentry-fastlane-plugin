@@ -9,12 +9,19 @@ module Fastlane
 
         version = params[:version]
         file = params[:file]
-        file_url_arg = params[:file_url] ? "'#{params[:file_url]}'" : ''
-        dist_arg = params[:dist] ? "--dist '#{params[:dist]}'" : ''
 
         version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
 
-        command = "sentry-cli releases files '#{Shellwords.escape(version)}' upload #{file} #{file_url_arg} #{dist_arg}"
+        command = [
+          "sentry-cli",
+          "releases",
+          "files",
+          Shellwords.escape(version),
+          "upload",
+          file
+        ]
+        command.push(params[:file_url]) if !params[:file_url].nil?
+        command.push("--dist").push(params[:dist]) if !params[:dist].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully uploaded files to release: #{version}")
