@@ -14,7 +14,7 @@ module Fastlane
           "sentry-cli",
           "releases",
           "new",
-          Shellwords.escape(version)
+          version
         ]
         command.push("--finalize") if params[:finalize].nil?
 

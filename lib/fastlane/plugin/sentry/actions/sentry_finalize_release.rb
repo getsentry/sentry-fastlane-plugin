@@ -8,12 +8,13 @@ module Fastlane
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
+        version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
 
         command = [
           "sentry-cli",
           "releases",
           "finalize",
-          Shellwords.escape(version)
+          version
         ]
 
         Helper::SentryHelper.call_sentry_cli(command)
@@ -38,7 +39,14 @@ module Fastlane
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :version,
-                                       description: "Release version to finalize on Sentry")
+                                       description: "Release version to finalize on Sentry"),
+          FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                      short_option: "-a",
+                                      env_name: "SENTRY_APP_IDENTIFIER",
+                                      description: "App Bundle Identifier",
+                                      optional: true,
+                                      default_value: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier))
+
         ]
       end
 

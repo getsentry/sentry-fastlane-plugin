@@ -7,16 +7,16 @@ module Fastlane
         Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
-        version = params[:version]
         file = params[:file]
 
+        version = params[:version]
         version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
 
         command = [
           "sentry-cli",
           "releases",
           "files",
-          Shellwords.escape(version),
+          version,
           "upload",
           file
         ]
@@ -56,7 +56,6 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :file_url,
                                        description: "Optional URL we should associate with the file",
                                        optional: true),
-
           FastlaneCore::ConfigItem.new(key: :app_identifier,
                                       short_option: "-a",
                                       env_name: "SENTRY_APP_IDENTIFIER",
