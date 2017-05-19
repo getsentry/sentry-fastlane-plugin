@@ -31,7 +31,7 @@ module Fastlane
           UI.command(command.to_s)
           UI.verbose("\n\n")
         end
-        Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
+        Open3.popen3(command.join(" ")) do |stdin, stdout, stderr, wait_thr|
           while (line = stderr.gets)
             error << line.strip!
           end
