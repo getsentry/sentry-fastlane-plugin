@@ -51,7 +51,8 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version on Sentry"),
           FastlaneCore::ConfigItem.new(key: :dist,
-                                       description: "Distribution in release"),
+                                       description: "Distribution in release",
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :sourcemap,
                                        description: "Path to the sourcemap to upload",
                                        verify_block: proc do |value|

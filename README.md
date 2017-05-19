@@ -63,7 +63,7 @@ sentry_upload_file(
   project_slug: '...',
   version: '...',
   app_identifier: '...', # pass in the bundle_identifer of your app
-  dist: '...', # distribution of the release usually the buildnumber
+  dist: '...', # optional distribution of the release usually the buildnumber
   file: 'main.jsbundle' # file to upload
 )
 ```
@@ -76,7 +76,7 @@ sentry_upload_sourcemap(
   project_slug: '...',
   version: '...',
   app_identifier: '...', # pass in the bundle_identifer of your app
-  dist: '...', # distribution of the release usually the buildnumber
+  dist: '...', # optional distribution of the release usually the buildnumber
   sourcemap: 'main.jsbundle.map', # sourcemap to upload
   rewrite: true
 )
