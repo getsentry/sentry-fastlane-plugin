@@ -12,25 +12,20 @@ module Fastlane
 
         version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
 
-        rewrite_arg = params[:rewrite] ? '--rewrite' : ''
-        strip_prefix_arg = params[:strip_prefix] ? '--strip-prefix' : ''
-        strip_common_prefix_arg = params[:strip_common_prefix] ? '--strip-common-prefix' : ''
-        url_prefix_arg = params[:url_prefix] ? "--url-prefix '#{params[:url_prefix]}'" : ''
-        dist_arg = params[:dist] ? "--dist '#{params[:dist]}'" : ''
-
         command = [
           "sentry-cli",
           "releases",
           "files",
-          "'#{Shellwords.escape(version)}'",
+          Shellwords.escape(version),
           "upload-sourcemaps",
-          sourcemap.to_s,
-          rewrite_arg,
-          strip_prefix_arg,
-          strip_common_prefix_arg,
-          url_prefix_arg,
-          dist_arg
-        ].join(" ")
+          sourcemap.to_s
+        ]
+
+        command.push('--rewrite') if params[:rewrite]
+        command.push('--strip-prefix') if params[:strip_prefix]
+        command.push('--strip-common-prefix') if params[:strip_common_prefix]
+        command.push('--url-prefix').push(params[:url_prefix]) if !params[:url_prefix].nil?
+        command.push('--dist').push(params[:dist]) if !params[:dist].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully uploaded files to release: #{version}")
