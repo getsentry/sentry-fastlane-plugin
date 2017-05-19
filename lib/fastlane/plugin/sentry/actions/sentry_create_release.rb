@@ -10,8 +10,6 @@ module Fastlane
         version = params[:version]
         version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
 
-        #finalize_arg = params[:finalize] ? '--finalize'
-
         command = [
           "sentry-cli",
           "releases",
