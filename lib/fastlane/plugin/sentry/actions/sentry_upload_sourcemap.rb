@@ -24,8 +24,8 @@ module Fastlane
         command.push('--rewrite') if params[:rewrite]
         command.push('--strip-prefix') if params[:strip_prefix]
         command.push('--strip-common-prefix') if params[:strip_common_prefix]
-        command.push('--url-prefix').push(params[:url_prefix]) if !params[:url_prefix].nil?
-        command.push('--dist').push(params[:dist]) if !params[:dist].nil?
+        command.push('--url-prefix').push(params[:url_prefix]) unless params[:url_prefix].nil?
+        command.push('--dist').push(params[:dist]) unless params[:dist].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully uploaded files to release: #{version}")

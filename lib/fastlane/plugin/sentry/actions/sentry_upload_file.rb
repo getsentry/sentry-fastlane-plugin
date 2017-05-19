@@ -20,8 +20,8 @@ module Fastlane
           "upload",
           file
         ]
-        command.push(params[:file_url]) if !params[:file_url].nil?
-        command.push("--dist").push(params[:dist]) if !params[:dist].nil?
+        command.push(params[:file_url]) unless params[:file_url].nil?
+        command.push("--dist").push(params[:dist]) unless params[:dist].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully uploaded files to release: #{version}")
