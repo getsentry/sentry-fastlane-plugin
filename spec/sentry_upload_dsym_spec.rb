@@ -60,6 +60,20 @@ describe Fastlane do
             dsym_path: '#{dsym_path_1}')
         end").runner.execute(:test)
       end
+
+      it "multiple dsym paths" do
+        dsym_path_1 = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
+
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dsym", dsym_path_1, dsym_path_1]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+          sentry_upload_dsym(
+            org_slug: 'some_org',
+            api_key: 'something123',
+            project_slug: 'some_project',
+            dsym_paths: ['#{dsym_path_1}', '#{dsym_path_1}'])
+        end").runner.execute(:test)
+      end
     end
   end
 end

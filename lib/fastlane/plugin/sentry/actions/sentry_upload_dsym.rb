@@ -19,7 +19,7 @@ module Fastlane
         command = ["sentry-cli", "upload-dsym"]
         command.push("--symbol-maps") unless params[:symbol_maps].nil?
         command.push(params[:symbol_maps]) unless params[:symbol_maps].nil?
-        command.push(dsym_paths)
+        command += dsym_paths
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully uploaded dSYMs!")
