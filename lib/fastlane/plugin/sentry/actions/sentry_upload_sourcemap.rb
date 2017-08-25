@@ -79,10 +79,10 @@ module Fastlane
                                        description: "Sets a URL prefix in front of all files",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :app_identifier,
-                                      short_option: "-a",
-                                      env_name: "SENTRY_APP_IDENTIFIER",
-                                      description: "App Bundle Identifier, prepended to version",
-                                      optional: true)
+                                       short_option: "-a",
+                                       env_name: "SENTRY_APP_IDENTIFIER",
+                                       description: "App Bundle Identifier, prepended to version",
+                                       optional: true)
 
         ]
       end

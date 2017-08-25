@@ -16,7 +16,10 @@ module Fastlane
           UI.user_error!("dSYM does not exist at path: #{path}") unless File.exist? path
         end
 
-        command = ["sentry-cli", "upload-dsym"] + dsym_paths
+        command = ["sentry-cli", "upload-dsym"]
+        command.push("--symbol-maps") unless params[:symbol_maps].nil?
+        command.push(params[:symbol_maps]) unless params[:symbol_maps].nil?
+        command += dsym_paths
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully uploaded dSYMs!")
@@ -41,17 +44,26 @@ module Fastlane
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :dsym_path,
-                                       env_name: "SENTRY_DSYM_PATH",
-                                       description: "Path to your symbols file. For iOS and Mac provide path to app.dSYM.zip",
-                                       default_value: Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH],
-                                       optional: true),
+                                      env_name: "SENTRY_DSYM_PATH",
+                                      description: "Path to your symbols file. For iOS and Mac provide path to app.dSYM.zip",
+                                      default_value: Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH],
+                                      optional: true,
+                                      verify_block: proc do |value|
+                                        UI.user_error! "Could not find Path to your symbols file at path '#{value}'" unless File.exist?(value)
+                                      end),
           FastlaneCore::ConfigItem.new(key: :dsym_paths,
                                        env_name: "SENTRY_DSYM_PATHS",
                                        description: "Path to an array of your symbols file. For iOS and Mac provide path to app.dSYM.zip",
                                        default_value: Actions.lane_context[SharedValues::DSYM_PATHS],
                                        is_string: false,
-                                       optional: true)
-
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :symbol_maps,
+                                      env_name: "SENTRY_SYMBOL_MAPS",
+                                      description: "Optional path to bcsymbolmap files which are used to resolve hidden symbols in the actual dsym files. This requires the dsymutil tool to be available",
+                                      optional: true,
+                                      verify_block: proc do |value|
+                                        UI.user_error! "Could not find bcsymbolmap at path '#{value}'" unless File.exist?(value)
+                                      end)
         ]
       end
 

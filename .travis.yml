@@ -10,3 +10,5 @@ script:
   - sentry-cli info --config-status-json
   - bundle exec rubocop
   - rspec
+notifications:
+  email: false
