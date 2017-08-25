@@ -59,7 +59,6 @@ describe Fastlane do
             symbol_maps: '1.bcsymbol',
             dsym_path: '#{dsym_path_1}')
         end").runner.execute(:test)
-
       end
     end
   end
