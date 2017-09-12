@@ -19,6 +19,8 @@ module Fastlane
         command = ["sentry-cli", "upload-dsym"]
         command.push("--symbol-maps") unless params[:symbol_maps].nil?
         command.push(params[:symbol_maps]) unless params[:symbol_maps].nil?
+        command.push("--info-plist") unless params[:info_plist].nil?
+        command.push(params[:info_plist]) unless params[:info_plist].nil?
         command += dsym_paths
 
         Helper::SentryHelper.call_sentry_cli(command)
@@ -63,6 +65,13 @@ module Fastlane
                                       optional: true,
                                       verify_block: proc do |value|
                                         UI.user_error! "Could not find bcsymbolmap at path '#{value}'" unless File.exist?(value)
+                                      end),
+          FastlaneCore::ConfigItem.new(key: :info_plist,
+                                      env_name: "SENTRY_INFO_PLIST",
+                                      description: "Optional path to Info.plist to add version information when uploading debug symbols",
+                                      optional: true,
+                                      verify_block: proc do |value|
+                                        UI.user_error! "Could not find Info.plist at path '#{value}'" unless File.exist?(value)
                                       end)
         ]
       end
@@ -72,7 +81,7 @@ module Fastlane
       end
 
       def self.authors
-        ["joshdholtz"]
+        ["joshdholtz", "HazAT"]
       end
 
       def self.is_supported?(platform)

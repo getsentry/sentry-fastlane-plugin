@@ -1,7 +1,14 @@
-# fastlane-plugin-sentry `fastlane` Plugin
+<p align="center">
+    <a href="https://sentry.io" target="_blank" align="center">
+        <img src="https://sentry-brand.storage.googleapis.com/sentry-logo-black.png" width="280">
+    </a>
+<br/>
+    <h1>Offical Sentry plugin for fastlane</h1>
+</p>
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-sentry)
 [![Build Status](https://img.shields.io/travis/getsentry/fastlane-plugin-sentry/master.svg?style=flat)](https://travis-ci.org/getsentry/fastlane-plugin-sentry)
+[![Gem Version](https://badge.fury.io/rb/fastlane-plugin-sentry.svg)](https://badge.fury.io/rb/fastlane-plugin-sentry)
 
 ## Getting Started
 
@@ -32,7 +39,8 @@ sentry_upload_dsym(
   org_slug: '...',
   project_slug: '...',
   symbol_maps: 'path to bcsymbols folder' # use this if you have a bcsymbols folder
-  dsym_path: './App.dSYM.zip'
+  dsym_path: './App.dSYM.zip',
+  info_plist: '...' # optional, sentry-cli tries to find the correct plist by itself
 )
 ```
 

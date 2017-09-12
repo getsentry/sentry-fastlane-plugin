@@ -74,6 +74,24 @@ describe Fastlane do
             dsym_paths: ['#{dsym_path_1}', '#{dsym_path_1}'])
         end").runner.execute(:test)
       end
+
+      it "Info.plist should exist" do
+        dsym_path_1 = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
+
+        allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("Info.plist").and_return(true)
+
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dsym", "--info-plist", "Info.plist", dsym_path_1]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+          sentry_upload_dsym(
+            org_slug: 'some_org',
+            api_key: 'something123',
+            project_slug: 'some_project',
+            dsym_paths: ['#{dsym_path_1}'],
+            info_plist: 'Info.plist')
+        end").runner.execute(:test)
+      end
     end
   end
 end
