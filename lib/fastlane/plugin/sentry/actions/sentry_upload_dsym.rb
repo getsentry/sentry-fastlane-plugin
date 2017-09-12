@@ -72,7 +72,7 @@ module Fastlane
                                       optional: true,
                                       verify_block: proc do |value|
                                         UI.user_error! "Could not find Info.plist at path '#{value}'" unless File.exist?(value)
-                                      end),
+                                      end)
         ]
       end
 

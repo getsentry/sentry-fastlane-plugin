@@ -92,7 +92,6 @@ describe Fastlane do
             info_plist: 'Info.plist')
         end").runner.execute(:test)
       end
-
     end
   end
 end
