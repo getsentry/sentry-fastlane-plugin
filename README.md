@@ -3,7 +3,7 @@
         <img src="https://sentry-brand.storage.googleapis.com/sentry-logo-black.png" width="280">
     </a>
 <br/>
-    <h1>Offical fastlane plugin for Sentry</h1>
+    <h1>Sentry Fastlane Plugin</h1>
 </p>
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-sentry)

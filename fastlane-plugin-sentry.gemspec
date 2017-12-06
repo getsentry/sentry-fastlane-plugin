@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = %q{hello@sentry.io}
 
   spec.summary       = %q{Upload symbols to Sentry}
-  spec.homepage      = "https://github.com/getsentry/sentry-fastlane"
+  spec.homepage      = "https://github.com/getsentry/sentry-fastlane-plugin"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
