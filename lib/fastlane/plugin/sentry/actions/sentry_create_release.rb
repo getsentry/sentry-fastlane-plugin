@@ -16,7 +16,7 @@ module Fastlane
           "new",
           version
         ]
-        command.push("--finalize") if params[:finalize].nil?
+        command.push("--finalize") if params[:finalize] == true
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully created release: #{version}")
@@ -42,7 +42,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version to create on Sentry"),
           FastlaneCore::ConfigItem.new(key: :finalize,
-                                       description: "Whether to finalize the release. If not provided or false, the release can be finalized using the finalize_release action",
+                                       description: "Whether to finalize the release. If set to false, the release can be finalized using the finalize_release action",
                                        default_value: false,
                                        is_string: false,
                                        optional: true),
