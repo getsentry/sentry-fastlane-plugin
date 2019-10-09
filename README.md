@@ -91,6 +91,20 @@ sentry_upload_sourcemap(
 )
 ```
 
+#### Associating commits
+
+Useful for telling Sentry which commits are associated with a release.
+
+```ruby
+sentry_set_commits(
+  version: '...',
+  app_identifier: '...', # pass in the bundle_identifer of your app
+  auto: false, # enable completely automated commit management
+  clear: false, # clear all current commits from the release
+  commit: '...', # commit spec, see `sentry-cli releases help set-commits` for more information
+)
+```
+
 ## Issues and Feedback
 
 For any other issues and feedback about this plugin, please submit it to this repository.
