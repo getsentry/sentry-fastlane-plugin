@@ -72,6 +72,27 @@ describe Fastlane do
               sourcemap: '1.map')
         end").runner.execute(:test)
       end
+
+      it "default --no-rewrite is omitted when 'rewrite' is specified" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "files", "1.0", "upload-sourcemaps", "1.map", "--rewrite", "--dist", "dem"]).and_return(true)
+
+        allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("1.map").and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_sourcemap(
+              org_slug: 'some_org',
+              api_key: 'something123',
+              project_slug: 'some_project',
+              version: '1.0',
+              dist: 'dem',
+              sourcemap: '1.map',
+              rewrite: true)
+        end").runner.execute(:test)
+      end
+
     end
   end
 end
