@@ -101,6 +101,18 @@ sentry_upload_proguard(
   project_slug: '...',
   android_manifest_path: 'path to merged AndroidManifest file' # found in `app/build/intermediates/manifests/full`
   mapping_path: 'path to mapping.txt to upload',
+
+#### Associating commits
+
+Useful for telling Sentry which commits are associated with a release.
+
+```ruby
+sentry_set_commits(
+  version: '...',
+  app_identifier: '...', # pass in the bundle_identifer of your app
+  auto: false, # enable completely automated commit management
+  clear: false, # clear all current commits from the release
+  commit: '...', # commit spec, see `sentry-cli releases help set-commits` for more information
 )
 ```
 
