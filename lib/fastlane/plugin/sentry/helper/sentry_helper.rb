@@ -39,11 +39,11 @@ module Fastlane
         end
         final_command = command.map { |arg| Shellwords.escape(arg) }.join(" ")
         Open3.popen3(final_command) do |stdin, stdout, stderr, wait_thr|
-          while (line = stderr.gets)
-            error << line.strip!
-          end
           while (line = stdout.gets)
             UI.message(line.strip!)
+          end
+          while (line = stderr.gets)
+            error << line.strip!
           end
           exit_status = wait_thr.value
           unless exit_status.success? && error.empty?
