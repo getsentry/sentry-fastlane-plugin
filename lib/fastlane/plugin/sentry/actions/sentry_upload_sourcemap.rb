@@ -16,7 +16,7 @@ module Fastlane
           "sentry-cli",
           "releases",
           "files",
-          Shellwords.escape(version),
+          version,
           "upload-sourcemaps",
           sourcemap.to_s
         ]
