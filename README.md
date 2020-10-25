@@ -38,7 +38,7 @@ sentry_upload_dsym(
   auth_token: '...', # Do not use if using api_key
   org_slug: '...',
   project_slug: '...',
-  symbol_maps: 'path to bcsymbols folder' # use this if you have a bcsymbols folder
+  symbol_maps: 'path to bcsymbols folder', # use this if you have a bcsymbols folder
   dsym_path: './App.dSYM.zip',
   info_plist: '...' # optional, sentry-cli tries to find the correct plist by itself
 )
