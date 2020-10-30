@@ -12,16 +12,6 @@ Style/FrozenStringLiteralComment:
 Style/SafeNavigation:
   Enabled: false
 
-# This doesn't work with older versions of Ruby (pre 2.4.0)
-Performance/RegexpMatch:
-  Enabled: false
-
-# This suggests use of `tr` instead of `gsub`. While this might be more performant,
-# these methods are not at all interchangable, and behave very differently. This can
-# lead to people making the substitution without considering the differences.
-Performance/StringReplacement:
-  Enabled: false
-
 # .length == 0 is also good, we don't always want .zero?
 Style/NumericPredicate:
   Enabled: false
@@ -39,8 +29,11 @@ Style/VariableNumber:
   Enabled: false
 
 # This is used a lot across the fastlane code base for config files
-Style/MethodMissing:
+Style/MissingSuper:
   Enabled: false
+Style/MissingRespondToMissing:
+  Enabled: false
+
 
 #
 #   File.chmod(0777, f)
@@ -66,21 +59,10 @@ Style/TernaryParentheses:
 Style/EmptyMethod:
   Enabled: false
 
-# It's better to be more explicit about the type
-Style/BracesAroundHashParameters:
-  Enabled: false
-
 # specs sometimes have useless assignments, which is fine
 Lint/UselessAssignment:
   Exclude:
     - '**/spec/**/*'
-
-# We could potentially enable the 2 below:
-Style/IndentHash:
-  Enabled: false
-
-Style/AlignHash:
-  Enabled: false
 
 # HoundCI doesn't like this rule
 Style/DotPosition:
@@ -95,7 +77,7 @@ Style/SymbolArray:
   Enabled: false
 
 # Sometimes we allow a rescue block that doesn't contain code
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Enabled: false
 
 # Cop supports --auto-correct.
@@ -206,7 +188,7 @@ Style/PerlBackrefs:
   Enabled: false
 
 # gemspec
-Style/UnneededPercentQ:
+Style/RedundantPercentQ:
   Enabled: false
 
 # Disable '+ should be surrounded with a single space' for xcodebuild_spec.rb
