@@ -128,7 +128,7 @@ For some more detailed help with plugins problems, check out the [Plugins Troubl
 
 ## Using `fastlane` Plugins
 
-For more information about how the `fastlane` plugin system works, check out the [Plugins documentation](https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Plugins.md) in the main `fastlane` repo.
+For more information about how the `fastlane` plugin system works, check out the [Plugins documentation](https://docs.fastlane.tools/plugins/create-plugin/) in the main `fastlane` repo.
 
 ## About `fastlane`
 
