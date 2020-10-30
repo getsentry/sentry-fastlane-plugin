@@ -1,22 +1,6 @@
 describe Fastlane do
   describe Fastlane::FastFile do
     describe "upload proguard" do
-      
-      it "fails with no API key or auth token" do  
-        mapping_path = File.absolute_path './assets/AndroidExample.mapping.txt'
-        android_manifest_path = File.absolute_path './assets/AndroidManifest.xml'
-
-        expect do
-          Fastlane::FastFile.new.parse("lane :test do
-            sentry_upload_proguard(
-              org_slug: 'some_org',
-              project_slug: 'some_project',
-              mapping_path: '#{mapping_path}',
-              android_manifest_path: '#{android_manifest_path}')
-          end").runner.execute(:test)
-        end.to raise_error("No API key or authentication token found for SentryAction given, pass using `api_key: 'key'` or `auth_token: 'token'`")
-      end
-
       it "fails with API key and auth token" do
         mapping_path = File.absolute_path './assets/AndroidExample.mapping.txt'
         android_manifest_path = File.absolute_path './assets/AndroidManifest.xml'
