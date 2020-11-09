@@ -38,7 +38,7 @@ sentry_upload_dsym(
   auth_token: '...', # Do not use if using api_key
   org_slug: '...',
   project_slug: '...',
-  symbol_maps: 'path to bcsymbols folder' # use this if you have a bcsymbols folder
+  symbol_maps: 'path to bcsymbols folder', # use this if you have a bcsymbols folder
   dsym_path: './App.dSYM.zip',
   info_plist: '...' # optional, sentry-cli tries to find the correct plist by itself
 )
@@ -128,7 +128,7 @@ For some more detailed help with plugins problems, check out the [Plugins Troubl
 
 ## Using `fastlane` Plugins
 
-For more information about how the `fastlane` plugin system works, check out the [Plugins documentation](https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Plugins.md) in the main `fastlane` repo.
+For more information about how the `fastlane` plugin system works, check out the [Plugins documentation](https://docs.fastlane.tools/plugins/create-plugin/) in the main `fastlane` repo.
 
 ## About `fastlane`
 
