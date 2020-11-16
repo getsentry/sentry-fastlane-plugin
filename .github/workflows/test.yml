@@ -1,0 +1,30 @@
+name: test
+
+on:
+  push:
+    branches:
+      -master
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install sentry-cli
+        run: curl -sL https://sentry.io/get-cli/ | bash
+
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+
+      - run: gem update bundler
+
+      - run: bundle install
+
+      - run: sentry-cli info --config-status-json
+
+      - run: bundle exec rubocop
+
+      - run: rspec
