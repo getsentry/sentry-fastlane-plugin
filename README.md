@@ -7,6 +7,7 @@
 </p>
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-sentry)
+[![Tests](https://img.shields.io/github/workflow/status/getsentry/sentry-fastlane/test?label=Tests)](https://github.com/getsentry/sentry-fastlane/actions?query=workflow%3A"test")
 [![Gem Version](https://badge.fury.io/rb/fastlane-plugin-sentry.svg)](https://badge.fury.io/rb/fastlane-plugin-sentry)
 
 ## Getting Started
