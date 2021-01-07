@@ -10,7 +10,7 @@ module Fastlane
         file = params[:file]
 
         version = params[:version]
-        version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
+        version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
 
         command = [
           "sentry-cli",

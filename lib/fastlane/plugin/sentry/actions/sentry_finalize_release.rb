@@ -8,7 +8,7 @@ module Fastlane
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
-        version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
+        version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
 
         command = [
           "sentry-cli",
