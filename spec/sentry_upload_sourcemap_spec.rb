@@ -17,7 +17,7 @@ describe Fastlane do
       it "does not require dist to be specified" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "files", "app.idf-1.0", "upload-sourcemaps", "1.map", "--no-rewrite"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "files", "app.idf@1.0", "upload-sourcemaps", "1.map", "--no-rewrite"]).and_return(true)
 
         allow(File).to receive(:exist?).and_call_original
         expect(File).to receive(:exist?).with("1.map").and_return(true)
@@ -37,7 +37,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "files", "app.idf-1.0", "upload-sourcemaps", "1.map", "--no-rewrite", "--dist", "dem"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "files", "app.idf@1.0", "upload-sourcemaps", "1.map", "--no-rewrite", "--dist", "dem"]).and_return(true)
 
         allow(File).to receive(:exist?).and_call_original
         expect(File).to receive(:exist?).with("1.map").and_return(true)
