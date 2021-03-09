@@ -1,11 +1,11 @@
 lane :test do
-  sentry_upload_dsym(
-    dsym_path: './assets/SwiftExample.app.dSYM.zip'
+  sentry_upload_dif(
+    dif_path: './assets/SwiftExample.app.dSYM.zip'
   )
 end
 
 lane :test_big do
-  sentry_upload_dsym(
-    dsym_path: './assets/Big.app.dSYM.zip'
+  sentry_upload_dif(
+    dif_path: './assets/Big.app.dSYM.zip'
   )
 end
