@@ -118,6 +118,14 @@ sentry_set_commits(
 )
 ```
 
+#### Checking the sentry-cli is installed
+
+Useful for checking that the sentry-cli is installed and meets the mimum version requirements before starting to build your app in your lane.
+
+```ruby
+sentry_check_cli_installed()
+```
+
 ## Issues and Feedback
 
 For any other issues and feedback about this plugin, please submit it to this repository.
