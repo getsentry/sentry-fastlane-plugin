@@ -10,7 +10,7 @@ module Fastlane
         version = params[:version]
         sourcemap = params[:sourcemap]
 
-        version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
+        version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
 
         sentry_cli = "sentry-cli"
         unless params[:sentry_cli_path].nil?
@@ -20,7 +20,7 @@ module Fastlane
           sentry_cli,
           "releases",
           "files",
-          Shellwords.escape(version),
+          version,
           "upload-sourcemaps",
           sourcemap.to_s
         ]
