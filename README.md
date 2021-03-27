@@ -93,16 +93,60 @@ sentry_upload_sourcemap(
 
 #### Uploading Proguard Mapping File
 
+Upload by passing `AndroidManifest.xml` file reference
+
 ```ruby
 sentry_upload_proguard(
   api_key: '...', # Do not use if using auth_token
   auth_token: '...', # Do not use if using api_key
   org_slug: '...',
   project_slug: '...',
-  android_manifest_path: 'path to merged AndroidManifest file' # found in `app/build/intermediates/manifests/full`
-  mapping_path: 'path to mapping.txt to upload',
+  android_manifest_path: 'path to merged AndroidManifest file', # found in `app/build/intermediates/manifests/full`
+  mapping_path: 'path to mapping.txt to upload'
 )
 ```
+
+Upload by passing mapping properties by hand
+
+```ruby
+sentry_upload_proguard(
+  api_key: '...', # Do not use if using auth_token
+  auth_token: '...', # Do not use if using api_key
+  org_slug: '...',
+  project_slug: '...',
+  app_id: '...',
+  version_name: "1.2.3",
+  version_code: 45,
+  uuid: '...',
+  mapping_path: 'path to mapping.txt to upload'
+)
+```
+
+<details>
+    <summary>Advanced usage</summary>
+
+`sentry_upload_proguard` handles almost all `sentry-cli` flags
+
+```ruby
+sentry_upload_proguard(
+  api_key: '...', # Do not use if using auth_token
+  auth_token: '...', # Do not use if using api_key
+  org_slug: '...',
+  project_slug: '...',
+  android_manifest_path: 'path to merged AndroidManifest file',
+  app_id: '...',
+  no_reprocessing: true,
+  no_upload: true,
+  platform: '...',
+  require_one: true,
+  uuid: '...',
+  version: '...',
+  version_code: 45,
+  mapping_path: 'path to mapping.txt to upload')
+```
+
+Reference: [`sentry-cli` documentation](https://docs.sentry.io/product/cli/dif/#proguard-mapping-upload)
+</details>
 
 #### Associating commits
 
