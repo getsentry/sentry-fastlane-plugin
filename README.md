@@ -118,6 +118,23 @@ sentry_set_commits(
 )
 ```
 
+#### Create deploy
+
+Creates a new release deployment for a project on Sentry.
+
+```ruby
+sentry_create_deploy(
+  version: '...',
+  app_identifier: '...', # pass in the bundle_identifer of your app
+  env: 'staging', # The environment for this deploy. Required.
+  name: '...', # Optional human readable name
+  deploy_url: '...', # Optional URL that points to the deployment
+  started: 1622630647, # Optional unix timestamp when the deployment started
+  finished: 1622630700, # Optional unix timestamp when the deployment finished
+  time: 180 # Optional deployment duration in seconds. This can be specified alternatively to `started` and `finished`
+)
+```
+
 ## Issues and Feedback
 
 For any other issues and feedback about this plugin, please submit it to this repository.
