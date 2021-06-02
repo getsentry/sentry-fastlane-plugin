@@ -21,7 +21,7 @@ module Fastlane
         command.push('--name').push(params[:name]) unless params[:name].nil?
         # command.push('--url').push(params[:url]) unless params[:url].nil?
         command.push('--started').push(params[:started]) unless params[:started].nil?
-        command.push('--finished').push(params[:time]) unless params[:finished].nil?
+        command.push('--finished').push(params[:finished]) unless params[:finished].nil?
         command.push('--time').push(params[:time]) unless params[:time].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)

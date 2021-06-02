@@ -26,6 +26,58 @@ describe Fastlane do
               env: 'staging')
         end").runner.execute(:test)
       end
+
+      it "includes --name if present" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "deploys", "1.0", "new", "--env", "staging", "--name", "fixture-name"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_create_deploy(
+              version: '1.0',
+              env: 'staging',
+              name: 'fixture-name')
+        end").runner.execute(:test)
+      end
+
+      it "includes --started if present" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "deploys", "1.0", "new", "--env", "staging", "--started", 1622630647]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_create_deploy(
+              version: '1.0',
+              env: 'staging',
+              started: 1622630647)
+        end").runner.execute(:test)
+      end
+
+      it "includes --finished if present" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "deploys", "1.0", "new", "--env", "staging", "--finished", 1622630700]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_create_deploy(
+              version: '1.0',
+              env: 'staging',
+              finished: 1622630700)
+        end").runner.execute(:test)
+      end
+
+      it "includes --time if present" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "deploys", "1.0", "new", "--env", "staging", "--time", 9001]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_create_deploy(
+              version: '1.0',
+              env: 'staging',
+              time: 9001)
+        end").runner.execute(:test)
+      end
     end
   end
 end
