@@ -19,7 +19,7 @@ module Fastlane
         ]
         command.push('--env').push(params[:env]) unless params[:env].nil?
         command.push('--name').push(params[:name]) unless params[:name].nil?
-        # command.push('--url').push(params[:url]) unless params[:url].nil?
+        command.push('--url').push(params[:deploy_url]) unless params[:deploy_url].nil?
         command.push('--started').push(params[:started]) unless params[:started].nil?
         command.push('--finished').push(params[:finished]) unless params[:finished].nil?
         command.push('--time').push(params[:time]) unless params[:time].nil?
@@ -55,10 +55,9 @@ module Fastlane
                                        short_option: "-n",
                                        description: "Optional human readable name for this deployment",
                                        optional: true),
-          # FastlaneCore::ConfigItem.new(key: :url,
-          #                              short_option: "-u",
-          #                              description: "Optional URL that points to the deployment",
-          #                              optional: true),
+          FastlaneCore::ConfigItem.new(key: :deploy_url,
+                                       description: "Optional URL that points to the deployment",
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :started,
                                        description: "Optional unix timestamp when the deployment started",
                                        is_string: false,

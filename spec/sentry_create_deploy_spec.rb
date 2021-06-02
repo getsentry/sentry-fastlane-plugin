@@ -40,6 +40,19 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
+      it "includes --url if present" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "deploys", "1.0", "new", "--env", "staging", "--url", "www.sentry.io"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_create_deploy(
+              version: '1.0',
+              env: 'staging',
+              deploy_url: 'www.sentry.io')
+        end").runner.execute(:test)
+      end
+
       it "includes --started if present" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
