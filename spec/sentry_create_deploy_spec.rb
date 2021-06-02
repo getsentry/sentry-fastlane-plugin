@@ -82,13 +82,13 @@ describe Fastlane do
       it "includes --time if present" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "deploys", "1.0", "new", "--env", "staging", "--time", 9001]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "deploys", "1.0", "new", "--env", "staging", "--time", 180]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_create_deploy(
               version: '1.0',
               env: 'staging',
-              time: 9001)
+              time: 180)
         end").runner.execute(:test)
       end
     end
