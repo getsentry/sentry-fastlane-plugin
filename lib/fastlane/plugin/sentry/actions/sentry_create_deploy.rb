@@ -68,7 +68,7 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :time,
                                        short_option: "-t",
-                                       description: "Optional deployment duration in seconds. This can be specified alternatively to `--started` and `--finished`",
+                                       description: "Optional deployment duration in seconds. This can be specified alternatively to `started` and `finished`",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :app_identifier,
