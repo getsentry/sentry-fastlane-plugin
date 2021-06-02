@@ -19,7 +19,7 @@ module Fastlane
         ]
         command.push('--env').push(params[:env]) unless params[:env].nil?
         command.push('--name').push(params[:name]) unless params[:name].nil?
-        command.push('--url').push(params[:url]) unless params[:url].nil?
+        # command.push('--url').push(params[:url]) unless params[:url].nil?
         command.push('--started').push(params[:started]) unless params[:started].nil?
         command.push('--finished').push(params[:time]) unless params[:finished].nil?
         command.push('--time').push(params[:time]) unless params[:time].nil?
@@ -49,27 +49,27 @@ module Fastlane
                                        description: "Release version to accociate the deloy with on Sentry"),
           FastlaneCore::ConfigItem.new(key: :env,
                                        short_option: "-e",
-                                       description: "Set the environment for this release. This argument is required. Values that make sense here would be 'production' or 'staging'.",
+                                       description: "Set the environment for this release. This argument is required. Values that make sense here would be 'production' or 'staging'",
                                        optional: false),
           FastlaneCore::ConfigItem.new(key: :name,
                                        short_option: "-n",
-                                       description: "Optional human readable name for this deployment.",
+                                       description: "Optional human readable name for this deployment",
                                        optional: true),
-          FastlaneCore::ConfigItem.new(key: :url,
-                                       short_option: "-u",
-                                       description: "Optional URL that points to the deployment.",
-                                       optional: true),
+          # FastlaneCore::ConfigItem.new(key: :url,
+          #                              short_option: "-u",
+          #                              description: "Optional URL that points to the deployment",
+          #                              optional: true),
           FastlaneCore::ConfigItem.new(key: :started,
-                                       description: "Optional unix timestamp when the deployment started.",
+                                       description: "Optional unix timestamp when the deployment started",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :finished,
-                                       description: "Optional unix timestamp when the deployment finished.",
+                                       description: "Optional unix timestamp when the deployment finished",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :time,
                                        short_option: "-t",
-                                       description: "Optional deployment duration in seconds. This can be specified alternatively to `--started` and `--finished`.",
+                                       description: "Optional deployment duration in seconds. This can be specified alternatively to `--started` and `--finished`",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :app_identifier,
