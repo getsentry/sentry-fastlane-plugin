@@ -9,6 +9,13 @@ module Fastlane
 
         version = params[:version]
         version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
+        
+        has_started = !params[:started].nil?
+        has_finished = !params[:finished].nil?
+
+        if has_started && !has_finished || !has_started && has_finished
+          UI.user_error!("Only one parmeter of 'started' and 'finished' found, please provide both.")
+        end
 
         command = [
           "sentry-cli",
@@ -20,8 +27,8 @@ module Fastlane
         command.push('--env').push(params[:env]) unless params[:env].nil?
         command.push('--name').push(params[:name]) unless params[:name].nil?
         command.push('--url').push(params[:deploy_url]) unless params[:deploy_url].nil?
-        command.push('--started').push(params[:started]) unless params[:started].nil?
-        command.push('--finished').push(params[:finished]) unless params[:finished].nil?
+        command.push('--started').push(params[:started]) unless params[:started].nil? || !params[:time].nil?
+        command.push('--finished').push(params[:finished]) unless params[:finished].nil? || !params[:time].nil?
         command.push('--time').push(params[:time]) unless params[:time].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
