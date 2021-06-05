@@ -46,7 +46,7 @@ module Fastlane
 
       def self.details
         [
-          "This action allows you to accociate deploys to releases for a project on Sentry.",
+          "This action allows you to associate deploys to releases for a project on Sentry.",
           "See https://docs.sentry.io/product/cli/releases/#creating-deploys for more information."
         ].join(" ")
       end
@@ -54,7 +54,7 @@ module Fastlane
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :version,
-                                       description: "Release version to accociate the deloy with on Sentry"),
+                                       description: "Release version to associate the deploy with on Sentry"),
           FastlaneCore::ConfigItem.new(key: :env,
                                        short_option: "-e",
                                        description: "Set the environment for this release. This argument is required. Values that make sense here would be 'production' or 'staging'",
