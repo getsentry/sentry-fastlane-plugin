@@ -124,6 +124,10 @@ Creates a new release deployment for a project on Sentry.
 
 ```ruby
 sentry_create_deploy(
+  api_key: '...', # Do not use if using auth_token
+  auth_token: '...', # Do not use if using api_key
+  org_slug: '...',
+  project_slug: '...',
   version: '...',
   app_identifier: '...', # pass in the bundle_identifer of your app
   env: 'staging', # The environment for this deploy. Required.
