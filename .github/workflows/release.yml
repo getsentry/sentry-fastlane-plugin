@@ -1,0 +1,25 @@
+  
+name: Build Release
+
+on:
+  push:
+    branches:
+      - release/**
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+    - name: Build gem source
+      run: bundle install && gem build fastlane-plugin-sentry.gemspec
+    - name: Archive Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ github.sha }}
+        path: *.gem
