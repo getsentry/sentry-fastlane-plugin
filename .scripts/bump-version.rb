@@ -1,6 +1,3 @@
-ref_name = `git branch --show-current`
-sdk_name_capture_regex = /release-(sentry-\w+)\/.*/
-
 file_name "lib/fastlane/plugin/sentry/version.rb"
 
 text = File.read(file_name)
