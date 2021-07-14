@@ -28,6 +28,7 @@ module Fastlane
         command.push('--symbol_maps').push(params[:symbol_maps]) unless params[:symbol_maps].nil?
         command.push('--derived_data') unless params[:derived_data].nil?
         command.push('--no_zips') unless params[:no_zips].nil?
+        command.push('--info_plist').push(params[:info_plist]) unless params[:info_plist].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully ran upload-dif")
@@ -104,6 +105,13 @@ module Fastlane
             FastlaneCore::ConfigItem.new(key: :no_zips,
                                        description: "Do not search in ZIP files",
                                        is_string: false,
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :info_plist,
+                                       description: "Optional path to the Info.plist.{n}We will try to find this \
+                                       automatically if run from Xcode.  Providing this information \
+                                       will associate the debug symbols with a specific ITC application \
+                                       and build in Sentry.  Note that if you provide the plist \
+                                       explicitly it must already be processed",
                                        optional: true),
         ]
       end
