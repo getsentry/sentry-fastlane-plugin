@@ -7,11 +7,6 @@ module Fastlane
         Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
-        # force_foreground
-        # include_sources
-        # wait
-        # upload_symbol_maps
-
         command = [
           "sentry-cli",
           "upload-dif"
@@ -29,6 +24,9 @@ module Fastlane
         command.push('--info_plist').push(params[:info_plist]) unless params[:info_plist].nil?
         command.push('--no_reprocessing') unless params[:no_reprocessing].nil?
         command.push('--force_foreground') unless params[:force_foreground].nil?
+        command.push('--include_sources') unless params[:include_sources].nil?
+        command.push('--wait') unless params[:wait].nil?
+        command.push('--upload_symbol_maps') unless params[:upload_symbol_maps].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully ran upload-dif")
@@ -124,6 +122,24 @@ module Fastlane
                                        a dialog is shown.  If this parameter is passed Xcode will wait \
                                        for the process to finish before the build finishes and output \
                                        will be shown in the Xcode build output",
+                                       is_string: false,
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :include_sources,
+                                       description: "Include sources from the local file system and upload \
+                                       them as source bundles",
+                                       is_string: false,
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :wait,
+                                       description: "Wait for the server to fully process uploaded files. Errors \
+                                       can only be displayed if --wait is specified, but this will \
+                                       significantly slow down the upload process",
+                                       is_string: false,
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :upload_symbol_maps,
+                                       description: "Upload any BCSymbolMap files found to allow Sentry to resolve \
+                                       hidden symbols, e.g. when it downloads dSYMs directly from App \
+                                       Store Connect or when you upload dSYMs without first resolving \
+                                       the hidden symbols using --symbol-maps",
                                        is_string: false,
                                        optional: true),
         ]
