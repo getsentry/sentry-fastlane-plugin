@@ -99,8 +99,20 @@ sentry_upload_proguard(
   auth_token: '...', # Do not use if using api_key
   org_slug: '...',
   project_slug: '...',
-  android_manifest_path: 'path to merged AndroidManifest file' # found in `app/build/intermediates/manifests/full`
+  android_manifest_path: 'path to merged AndroidManifest file', # found in `app/build/intermediates/manifests/full`
   mapping_path: 'path to mapping.txt to upload',
+)
+```
+
+#### Upload Debugging Information Files
+
+```ruby
+sentry_upload_dif(
+  api_key: '...', # Do not use if using auth_token
+  auth_token: '...', # Do not use if using api_key
+  org_slug: '...',
+  project_slug: '...',
+  path: '/path/to/files'
 )
 ```
 

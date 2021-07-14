@@ -11,8 +11,8 @@ module Fastlane
           "sentry-cli",
           "upload-dif"
         ]
-        command.push('--paths').push(params[:paths]) unless params[:paths].nil?
-        command.push('--types').push(params[:types]) unless params[:types].nil?
+        command.push('--path').push(params[:path]) unless params[:path].nil?
+        command.push('--type').push(params[:type]) unless params[:type].nil?
         command.push('--no_unwind') unless params[:no_unwind].nil?
         command.push('--no_debug') unless params[:no_debug].nil?
         command.push('--no_sources') unless params[:no_sources].nil?
@@ -43,15 +43,15 @@ module Fastlane
       def self.details
         [
           "Files can be uploaded using the upload-dif command. This command will scan a given folder recursively for files and upload them to Sentry.",
-          "See https://docs.sentry.io/platforms/native/data-management/debug-files/upload/ for more information."
+          "See https://docs.sentry.io/product/cli/dif/#uploading-files for more information."
         ].join(" ")
       end
 
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
-          FastlaneCore::ConfigItem.new(key: :paths,
+          FastlaneCore::ConfigItem.new(key: :path,
                                        description: "A path to search recursively for symbol files"),
-          FastlaneCore::ConfigItem.new(key: :types,
+          FastlaneCore::ConfigItem.new(key: :type,
                                        short_option: "-t",
                                        description: "Only consider debug information files of the given \
                                        type.  By default, all types are considered",
