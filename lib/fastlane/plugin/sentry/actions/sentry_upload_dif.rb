@@ -7,8 +7,6 @@ module Fastlane
         Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
-        # no_debug
-        # no_sources
         # ids
         # require_all
         # symbol_maps
@@ -29,7 +27,8 @@ module Fastlane
         command.push('--types').push(params[:types]) unless params[:types].nil?
         command.push('--no_unwind') unless params[:no_unwind].nil?
         command.push('--no_debug') unless params[:no_debug].nil?
-
+        command.push('--no_sources') unless params[:no_sources].nil?
+        
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully ran upload-dif")
       end
@@ -73,6 +72,14 @@ module Fastlane
             FastlaneCore::ConfigItem.new(key: :no_debug,
                                        description: "Do not scan for debugging information. This will \
                                        usually exclude debug companion files. They might \
+                                       still be uploaded, if they contain additional \
+                                       processable information (see other flags)",
+                                       conflicting_options: [:no_unwind],
+                                       is_string: false,
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :no_sources,
+                                       description: "Do not scan for source information. This will \
+                                       usually exclude source bundle files. They might \
                                        still be uploaded, if they contain additional \
                                        processable information (see other flags)",
                                        is_string: false,
