@@ -169,6 +169,45 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
+      it "includes --require_all when true" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "--paths", "fixture-paths", "--require_all"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_dif(
+              paths: 'fixture-paths',
+              require_all: true
+            )
+        end").runner.execute(:test)
+      end
+
+      it "includes --symbol_maps if present" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "--paths", "fixture-paths", "--symbol_maps", "fixture-symbol_maps"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_dif(
+              paths: 'fixture-paths',
+              symbol_maps: 'fixture-symbol_maps'
+            )
+        end").runner.execute(:test)
+      end
+
+      it "includes --derived_data when true" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "--paths", "fixture-paths", "--derived_data"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_dif(
+              paths: 'fixture-paths',
+              derived_data: true
+            )
+        end").runner.execute(:test)
+      end
+
     end
   end
 end

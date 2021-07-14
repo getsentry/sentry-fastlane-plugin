@@ -7,9 +7,6 @@ module Fastlane
         Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
-        # ids
-        # require_all
-        # symbol_maps
         # derived_data
         # no_zips
         # info_plist
@@ -29,6 +26,9 @@ module Fastlane
         command.push('--no_debug') unless params[:no_debug].nil?
         command.push('--no_sources') unless params[:no_sources].nil?
         command.push('--ids').push(params[:ids]) unless params[:ids].nil?
+        command.push('--require_all') unless params[:require_all].nil?
+        command.push('--symbol_maps').push(params[:symbol_maps]) unless params[:symbol_maps].nil?
+        command.push('--derived_data') unless params[:derived_data].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully ran upload-dif")
@@ -87,26 +87,21 @@ module Fastlane
                                        optional: true),
             FastlaneCore::ConfigItem.new(key: :ids,
                                        description: "Search for specific debug identifiers",
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :require_all,
+                                       description: "Errors if not all identifiers specified with --id could be found",
                                        is_string: false,
                                        optional: true),
-          # FastlaneCore::ConfigItem.new(key: :started,
-          #                              description: "Optional unix timestamp when the deployment started",
-          #                              is_string: false,
-          #                              optional: true),
-          # FastlaneCore::ConfigItem.new(key: :finished,
-          #                              description: "Optional unix timestamp when the deployment finished",
-          #                              is_string: false,
-          #                              optional: true),
-          # FastlaneCore::ConfigItem.new(key: :time,
-          #                              short_option: "-t",
-          #                              description: "Optional deployment duration in seconds. This can be specified alternatively to `started` and `finished`",
-          #                              is_string: false,
-          #                              optional: true),
-          # FastlaneCore::ConfigItem.new(key: :app_identifier,
-          #                              short_option: "-a",
-          #                              env_name: "SENTRY_APP_IDENTIFIER",
-          #                              description: "App Bundle Identifier, prepended with the version.\nFor example bundle@version",
-          #                              optional: true)
+            FastlaneCore::ConfigItem.new(key: :symbol_maps,
+                                       description: "Optional path to BCSymbolMap files which are used to \
+                                       resolve hidden symbols in dSYM files downloaded from \
+                                       iTunes Connect. This requires the dsymutil tool to be \
+                                       available",
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :derived_data,
+                                       description: "Search for debug symbols in Xcode's derived data",
+                                       is_string: false,
+                                       optional: true),
         ]
       end
 
