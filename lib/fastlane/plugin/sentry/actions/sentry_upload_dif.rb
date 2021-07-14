@@ -28,6 +28,7 @@ module Fastlane
         command.push('--no_zips') unless params[:no_zips].nil?
         command.push('--info_plist').push(params[:info_plist]) unless params[:info_plist].nil?
         command.push('--no_reprocessing') unless params[:no_reprocessing].nil?
+        command.push('--force_foreground') unless params[:force_foreground].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully ran upload-dif")
@@ -114,6 +115,15 @@ module Fastlane
                                        optional: true),
             FastlaneCore::ConfigItem.new(key: :no_reprocessing,
                                        description: "Do not trigger reprocessing after uploading",
+                                       is_string: false,
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :force_foreground,
+                                       description: "Wait for the process to finish.{n}\
+                                       By default, the upload process will detach and continue in the \
+                                       background when triggered from Xcode.  When an error happens, \
+                                       a dialog is shown.  If this parameter is passed Xcode will wait \
+                                       for the process to finish before the build finishes and output \
+                                       will be shown in the Xcode build output",
                                        is_string: false,
                                        optional: true),
         ]
