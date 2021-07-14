@@ -7,8 +7,6 @@ module Fastlane
         Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
-        # derived_data
-        # no_zips
         # info_plist
         # no_reprocessing
         # force_foreground
@@ -29,6 +27,7 @@ module Fastlane
         command.push('--require_all') unless params[:require_all].nil?
         command.push('--symbol_maps').push(params[:symbol_maps]) unless params[:symbol_maps].nil?
         command.push('--derived_data') unless params[:derived_data].nil?
+        command.push('--no_zips') unless params[:no_zips].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully ran upload-dif")
@@ -100,6 +99,10 @@ module Fastlane
                                        optional: true),
             FastlaneCore::ConfigItem.new(key: :derived_data,
                                        description: "Search for debug symbols in Xcode's derived data",
+                                       is_string: false,
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :no_zips,
+                                       description: "Do not search in ZIP files",
                                        is_string: false,
                                        optional: true),
         ]
