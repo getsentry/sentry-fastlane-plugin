@@ -28,6 +28,7 @@ module Fastlane
         command.push('--paths').push(params[:paths]) unless params[:paths].nil?
         command.push('--types').push(params[:types]) unless params[:types].nil?
         command.push('--no_unwind') unless params[:no_unwind].nil?
+        command.push('--no_debug') unless params[:no_debug].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully ran upload-dif")
@@ -65,6 +66,13 @@ module Fastlane
                                        this flag for builds with disabled FPO, or when \
                                        stackwalking occurs on the device. This usually \
                                        excludes executables and dynamic libraries. They might \
+                                       still be uploaded, if they contain additional \
+                                       processable information (see other flags)",
+                                       is_string: false,
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :no_debug,
+                                       description: "Do not scan for debugging information. This will \
+                                       usually exclude debug companion files. They might \
                                        still be uploaded, if they contain additional \
                                        processable information (see other flags)",
                                        is_string: false,
