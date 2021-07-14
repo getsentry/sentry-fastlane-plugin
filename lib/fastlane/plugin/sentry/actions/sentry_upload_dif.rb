@@ -7,9 +7,6 @@ module Fastlane
         Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
-        # paths
-        # types
-        # no_unwind
         # no_debug
         # no_sources
         # ids
@@ -29,6 +26,8 @@ module Fastlane
           "upload-dif"
         ]
         command.push('--paths').push(params[:paths]) unless params[:paths].nil?
+        command.push('--types').push(params[:types]) unless params[:types].nil?
+        command.push('--no_unwind') unless params[:no_unwind].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully ran upload-dif")
@@ -53,13 +52,23 @@ module Fastlane
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :paths,
                                        description: "A path to search recursively for symbol files"),
-          # FastlaneCore::ConfigItem.new(key: :name,
-          #                              short_option: "-n",
-          #                              description: "Optional human readable name for this deployment",
-          #                              optional: true),
-          # FastlaneCore::ConfigItem.new(key: :deploy_url,
-          #                              description: "Optional URL that points to the deployment",
-          #                              optional: true),
+          FastlaneCore::ConfigItem.new(key: :types,
+                                       short_option: "-t",
+                                       description: "Only consider debug information files of the given \
+                                       type.  By default, all types are considered",
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                        UI.user_error! "Invalid value '#{value}'" unless ['dsym', 'elf', 'breakpad', 'pdb', 'pe', 'sourcebundle', 'bcsymbolmap'].include? value
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :no_unwind,
+                                       description: "Do not scan for stack unwinding information. Specify \
+                                       this flag for builds with disabled FPO, or when \
+                                       stackwalking occurs on the device. This usually \
+                                       excludes executables and dynamic libraries. They might \
+                                       still be uploaded, if they contain additional \
+                                       processable information (see other flags)",
+                                       is_string: false,
+                                       optional: true),
           # FastlaneCore::ConfigItem.new(key: :started,
           #                              description: "Optional unix timestamp when the deployment started",
           #                              is_string: false,
