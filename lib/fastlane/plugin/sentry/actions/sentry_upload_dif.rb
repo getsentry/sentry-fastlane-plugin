@@ -28,7 +28,8 @@ module Fastlane
         command.push('--no_unwind') unless params[:no_unwind].nil?
         command.push('--no_debug') unless params[:no_debug].nil?
         command.push('--no_sources') unless params[:no_sources].nil?
-        
+        command.push('--ids').push(params[:ids]) unless params[:ids].nil?
+
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully ran upload-dif")
       end
@@ -82,6 +83,10 @@ module Fastlane
                                        usually exclude source bundle files. They might \
                                        still be uploaded, if they contain additional \
                                        processable information (see other flags)",
+                                       is_string: false,
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :ids,
+                                       description: "Search for specific debug identifiers",
                                        is_string: false,
                                        optional: true),
           # FastlaneCore::ConfigItem.new(key: :started,
