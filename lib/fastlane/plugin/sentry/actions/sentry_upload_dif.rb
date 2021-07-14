@@ -7,8 +7,6 @@ module Fastlane
         Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
-        # info_plist
-        # no_reprocessing
         # force_foreground
         # include_sources
         # wait
@@ -29,6 +27,7 @@ module Fastlane
         command.push('--derived_data') unless params[:derived_data].nil?
         command.push('--no_zips') unless params[:no_zips].nil?
         command.push('--info_plist').push(params[:info_plist]) unless params[:info_plist].nil?
+        command.push('--no_reprocessing') unless params[:no_reprocessing].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully ran upload-dif")
@@ -112,6 +111,10 @@ module Fastlane
                                        will associate the debug symbols with a specific ITC application \
                                        and build in Sentry.  Note that if you provide the plist \
                                        explicitly it must already be processed",
+                                       optional: true),
+            FastlaneCore::ConfigItem.new(key: :no_reprocessing,
+                                       description: "Do not trigger reprocessing after uploading",
+                                       is_string: false,
                                        optional: true),
         ]
       end
