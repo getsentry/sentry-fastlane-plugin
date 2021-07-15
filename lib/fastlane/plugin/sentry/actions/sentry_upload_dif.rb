@@ -7,11 +7,13 @@ module Fastlane
         Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
+        path = params[:path]
+
         command = [
           "sentry-cli",
-          "upload-dif"
+          "upload-dif",
+          path
         ]
-        command.push('--path').push(params[:path]) unless params[:path].nil?
         command.push('--type').push(params[:type]) unless params[:type].nil?
         command.push('--no_unwind') unless params[:no_unwind].nil?
         command.push('--no_debug') unless params[:no_debug].nil?
