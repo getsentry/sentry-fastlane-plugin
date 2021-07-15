@@ -23,8 +23,8 @@ module Fastlane
 
         command.push('--rewrite') if params[:rewrite]
         command.push('--no-rewrite') unless params[:rewrite]
-        command.push('--strip-prefix') if params[:strip_prefix]
-        command.push('--strip-common-prefix') if params[:strip_common_prefix]
+        command.push('--strip-prefix').push(params[:strip_prefix]) if params[:strip_prefix]
+        command.push('--strip-common-prefix').push(params[:strip_common_prefix]) if params[:strip_common_prefix]
         command.push('--url-prefix').push(params[:url_prefix]) unless params[:url_prefix].nil?
         command.push('--dist').push(params[:dist]) unless params[:dist].nil?
 
