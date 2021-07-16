@@ -5,7 +5,7 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: sentry_upload_dsym" time="1.617965">
+      <testcase classname="fastlane.lanes" name="0: sentry_upload_dif" time="1.617965">
         
       </testcase>
     

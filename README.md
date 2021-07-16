@@ -33,18 +33,19 @@ The following environment variables may be used in place of parameters: `SENTRY_
 #### Uploading Symbolication Files
 
 ```ruby
-sentry_upload_dsym(
+sentry_upload_dif(
   api_key: '...', # Do not use if using auth_token
   auth_token: '...', # Do not use if using api_key
   org_slug: '...',
   project_slug: '...',
   symbol_maps: 'path to bcsymbols folder', # use this if you have a bcsymbols folder
-  dsym_path: './App.dSYM.zip',
-  info_plist: '...' # optional, sentry-cli tries to find the correct plist by itself
+  dif_path: './App.dSYM.zip',
+  info_plist: '...', # optional, sentry-cli tries to find the correct plist by itself
+  include_sources: true # upload sources from the local file system
 )
 ```
 
-The `SENTRY_DSYM_PATH` environment variable may be used in place of the `dsym_path` parameter.
+The `SENTRY_DSYM_PATH` environment variable may be used in place of the `dif_path` parameter.
 
 #### Creating & Finalizing Releases
 

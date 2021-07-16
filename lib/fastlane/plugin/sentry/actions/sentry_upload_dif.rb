@@ -1,30 +1,31 @@
 module Fastlane
   module Actions
-    class SentryUploadDsymAction < Action
+    class SentryUploadDifAction < Action
       def self.run(params)
         Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
-        # Params - dSYM
-        dsym_path = params[:dsym_path]
-        dsym_paths = params[:dsym_paths] || []
+        # Params - DIF
+        dif_path = params[:dif_path]
+        dif_paths = params[:dif_paths] || []
 
-        # Verify dsym(s)
-        dsym_paths += [dsym_path] unless dsym_path.nil?
-        dsym_paths = dsym_paths.map { |path| File.absolute_path(path) }
-        dsym_paths.each do |path|
-          UI.user_error!("dSYM does not exist at path: #{path}") unless File.exist? path
+        # Verify dif(s)
+        dif_paths += [dif_path] unless dif_path.nil?
+        dif_paths = dif_paths.map { |path| File.absolute_path(path) }
+        dif_paths.each do |path|
+          UI.user_error!("File does not exist at path: #{path}") unless File.exist? path
         end
 
-        command = ["sentry-cli", "upload-dsym"]
+        command = ["sentry-cli", "upload-dif"]
+        command.push("--include-sources") if params[:include_sources].nil?
         command.push("--symbol-maps") unless params[:symbol_maps].nil?
         command.push(params[:symbol_maps]) unless params[:symbol_maps].nil?
         command.push("--info-plist") unless params[:info_plist].nil?
         command.push(params[:info_plist]) unless params[:info_plist].nil?
-        command += dsym_paths
+        command += dif_paths
 
         Helper::SentryHelper.call_sentry_cli(command)
-        UI.success("Successfully uploaded dSYMs!")
+        UI.success("Successfully uploaded debugging information files!")
       end
 
       #####################################################
@@ -32,7 +33,7 @@ module Fastlane
       #####################################################
 
       def self.description
-        "Upload dSYM symbolication files to Sentry"
+        "Upload debugging information files to Sentry"
       end
 
       def self.details
@@ -45,7 +46,7 @@ module Fastlane
 
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
-          FastlaneCore::ConfigItem.new(key: :dsym_path,
+          FastlaneCore::ConfigItem.new(key: :dif_path,
                                       env_name: "SENTRY_DSYM_PATH",
                                       description: "Path to your symbols file. For iOS and Mac provide path to app.dSYM.zip",
                                       default_value: Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH],
@@ -53,7 +54,7 @@ module Fastlane
                                       verify_block: proc do |value|
                                         UI.user_error! "Could not find Path to your symbols file at path '#{value}'" unless File.exist?(value)
                                       end),
-          FastlaneCore::ConfigItem.new(key: :dsym_paths,
+          FastlaneCore::ConfigItem.new(key: :dif_paths,
                                        env_name: "SENTRY_DSYM_PATHS",
                                        description: "Path to an array of your symbols file. For iOS and Mac provide path to app.dSYM.zip",
                                        default_value: Actions.lane_context[SharedValues::DSYM_PATHS],
