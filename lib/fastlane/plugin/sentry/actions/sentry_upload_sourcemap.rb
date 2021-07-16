@@ -4,7 +4,7 @@ module Fastlane
       def self.run(params)
         require 'shellwords'
 
-        Helper::SentryHelper.check_sentry_cli!
+        Helper::SentryHelper.check_sentry_cli(params[:sentry_cli_path])
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
@@ -12,8 +12,12 @@ module Fastlane
 
         version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
 
+        sentry_cli = "sentry-cli"
+        unless params[:sentry_cli_path].nil?
+            sentry_cli = params[:sentry_cli_path]
+        end
         command = [
-          "sentry-cli",
+          sentry_cli,
           "releases",
           "files",
           version,
@@ -96,6 +100,13 @@ module Fastlane
                                        env_name: "SENTRY_APP_IDENTIFIER",
                                        description: "App Bundle Identifier, prepended to version",
                                        optional: true),
+          FastlaneCore::ConfigItem.new(key: :sentry_cli_path,
+                                       env_name: "SENTRY_CLI_PATH",
+                                       description: "Path to your sentry-cli. Default to `which sentry-cli`",
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                         UI.user_error! "Could not find sentry-cli." unless File.exist?(File.expand_path(value))
+                                       end),
           FastlaneCore::ConfigItem.new(key: :ignore,
                                        description: "Ignores all files and folders matching the given glob or array of globs",
                                        is_string: false,
@@ -103,7 +114,6 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :ignore_file,
                                        description: "Ignore all files and folders specified in the given ignore file, e.g. .gitignore",
                                        optional: true)
-
         ]
       end
 

@@ -2,7 +2,7 @@ module Fastlane
   module Actions
     class SentryUploadDsymAction < Action
       def self.run(params)
-        Helper::SentryHelper.check_sentry_cli!
+        Helper::SentryHelper.check_sentry_cli(params[:sentry_cli_path])
         Helper::SentryConfig.parse_api_params(params)
 
         # Params - dSYM
@@ -16,7 +16,11 @@ module Fastlane
           UI.user_error!("dSYM does not exist at path: #{path}") unless File.exist? path
         end
 
-        command = ["sentry-cli", "upload-dsym"]
+        sentry_cli = "sentry-cli"
+        unless params[:sentry_cli_path].nil?
+            sentry_cli = params[:sentry_cli_path]
+        end
+        command = [sentry_cli, "upload-dsym"]
         command.push("--symbol-maps") unless params[:symbol_maps].nil?
         command.push(params[:symbol_maps]) unless params[:symbol_maps].nil?
         command.push("--info-plist") unless params[:info_plist].nil?
@@ -72,7 +76,14 @@ module Fastlane
                                       optional: true,
                                       verify_block: proc do |value|
                                         UI.user_error! "Could not find Info.plist at path '#{value}'" unless File.exist?(value)
-                                      end)
+                                      end),
+          FastlaneCore::ConfigItem.new(key: :sentry_cli_path,
+                                     env_name: "SENTRY_CLI_PATH",
+                                      description: "Path to your sentry-cli. Default to `which sentry-cli`",
+                                      optional: true,
+                                      verify_block: proc do |value|
+                                        UI.user_error! "Could not find sentry-cli." unless File.exist?(File.expand_path(value))
+                                      end),
         ]
       end
 
