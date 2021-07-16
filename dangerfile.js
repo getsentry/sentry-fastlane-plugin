@@ -9,7 +9,7 @@ const CHANGELOG_END_BODY = `If none of the above apply, you can opt out of this 
 
 function getCleanTitleWithPrLink() {
   const title = danger.github.pr.title;
-  return title.split(": ").slice(-1)[0].trim().replace(/\.+$/, "") + + " " + PR_LINK;
+  return title.split(": ").slice(-1)[0].trim().replace(/\.+$/, "") + ` ` + PR_LINK;
 }
 
 function getChangelogDetailsHtml() {
