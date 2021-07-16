@@ -2,13 +2,15 @@
 
 ## Unreleased
 
-- Test Add Danger ([#1](https://github.com/lucas-zimerman/sentry-fastlane-plugin/pull/1))
-
 ## 1.8.3
 
-- fix: Action to allow stripping prefix (#87)
-- fix: print sentry-cli level debug when verbose is set (#88)
+### Fixes
+
+- Print sentry-cli level debug when verbose is set ([#88](https://github.com/getsentry/sentry-fastlane-plugin/pull/88))
+- Fix action to allow stripping prefix ([#87](https://github.com/getsentry/sentry-fastlane-plugin/pull/87))
 
 ## 1.8.2
 
-- feat: Sentry Create Deploy Action (#83)
+### Features
+
+- Add Sentry Create Deploy Action ([#83](https://github.com/getsentry/sentry-fastlane-plugin/pull/83))
