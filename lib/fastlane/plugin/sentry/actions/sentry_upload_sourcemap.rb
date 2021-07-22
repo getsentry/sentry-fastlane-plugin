@@ -8,9 +8,10 @@ module Fastlane
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
-        sourcemap = params[:sourcemap]
-
         version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
+        version = "#{version}+#{params[:build]}" if params[:build]
+
+        sourcemap = params[:sourcemap]
 
         command = [
           "sentry-cli",
@@ -63,6 +64,15 @@ module Fastlane
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version on Sentry"),
+          FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                       short_option: "-a",
+                                       env_name: "SENTRY_APP_IDENTIFIER",
+                                       description: "App Bundle Identifier, prepended to version",
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :build,
+                                      short_option: "-b",
+                                      description: "Release build on Sentry",
+                                      optional: true),
           FastlaneCore::ConfigItem.new(key: :dist,
                                        description: "Distribution in release",
                                        optional: true),
@@ -90,11 +100,6 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :url_prefix,
                                        description: "Sets a URL prefix in front of all files",
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :app_identifier,
-                                       short_option: "-a",
-                                       env_name: "SENTRY_APP_IDENTIFIER",
-                                       description: "App Bundle Identifier, prepended to version",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :ignore,
                                        description: "Ignores all files and folders matching the given glob or array of globs",

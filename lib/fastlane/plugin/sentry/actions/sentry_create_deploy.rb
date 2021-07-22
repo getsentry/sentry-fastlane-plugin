@@ -9,6 +9,7 @@ module Fastlane
 
         version = params[:version]
         version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
+        version = "#{version}+#{params[:build]}" if params[:build]
 
         command = [
           "sentry-cli",
@@ -47,6 +48,15 @@ module Fastlane
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version to associate the deploy with on Sentry"),
+          FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                       short_option: "-a",
+                                       env_name: "SENTRY_APP_IDENTIFIER",
+                                       description: "App Bundle Identifier, prepended with the version.\nFor example bundle@version",
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :build,
+                                       short_option: "-b",
+                                       description: "Release build to associate the deploy with on Sentry",
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :env,
                                        short_option: "-e",
                                        description: "Set the environment for this release. This argument is required. Values that make sense here would be 'production' or 'staging'",
@@ -70,11 +80,6 @@ module Fastlane
                                        short_option: "-t",
                                        description: "Optional deployment duration in seconds. This can be specified alternatively to `started` and `finished`",
                                        is_string: false,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :app_identifier,
-                                       short_option: "-a",
-                                       env_name: "SENTRY_APP_IDENTIFIER",
-                                       description: "App Bundle Identifier, prepended with the version.\nFor example bundle@version",
                                        optional: true)
         ]
       end
