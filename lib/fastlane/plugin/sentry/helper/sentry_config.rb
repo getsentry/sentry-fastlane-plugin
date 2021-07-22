@@ -42,7 +42,7 @@ module Fastlane
         has_auth_token = !auth_token.to_s.empty?
 
         ENV['SENTRY_URL'] = url unless url.to_s.empty?
-        ENV['SENTRY_LOG_LEVEL'] = 'INFO' if FastlaneCore::Globals.verbose?
+        ENV['SENTRY_LOG_LEVEL'] = 'DEBUG' if FastlaneCore::Globals.verbose?
 
         # Fallback to .sentryclirc if possible when no auth token is provided
         if !has_api_key && !has_auth_token && fallback_sentry_cli_auth
