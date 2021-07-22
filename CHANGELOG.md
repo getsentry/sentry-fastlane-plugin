@@ -4,7 +4,7 @@
 
 ### Features
 
-- Add sentry-cli upload-dif action ([#89](https://github.com/getsentry/sentry-fastlane-plugin/pull/90))
+- Add sentry-cli upload-dif action ([#89](https://github.com/getsentry/sentry-fastlane-plugin/pull/89))
 
 
 ## 1.8.3
