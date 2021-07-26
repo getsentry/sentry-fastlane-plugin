@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Features
+
+- Support build numbers in versions ([#90](https://github.com/getsentry/sentry-fastlane-plugin/pull/90))
+
+
 ## 1.8.3
 
 ### Fixes
