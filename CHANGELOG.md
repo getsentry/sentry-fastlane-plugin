@@ -4,6 +4,7 @@
 
 ### Features
 
+- Add sentry-cli upload-dif action ([#89](https://github.com/getsentry/sentry-fastlane-plugin/pull/89))
 - Support build numbers in versions ([#90](https://github.com/getsentry/sentry-fastlane-plugin/pull/90))
 
 
