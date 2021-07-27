@@ -14,7 +14,6 @@
 
 - Print sentry-cli level debug when verbose is set ([#88](https://github.com/getsentry/sentry-fastlane-plugin/pull/88))
 - Fix action to allow stripping prefix ([#87](https://github.com/getsentry/sentry-fastlane-plugin/pull/87))
->>>>>>> master
 
 ## 1.8.2
 
