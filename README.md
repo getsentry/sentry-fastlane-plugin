@@ -72,6 +72,7 @@ sentry_upload_file(
   project_slug: '...',
   version: '...',
   app_identifier: '...', # pass in the bundle_identifer of your app
+  build: '...', # Optionally pass in the build number of your app
   dist: '...', # optional distribution of the release usually the buildnumber
   file: 'main.jsbundle' # file to upload
 )
@@ -85,6 +86,7 @@ sentry_upload_sourcemap(
   project_slug: '...',
   version: '...',
   app_identifier: '...', # pass in the bundle_identifer of your app
+  build: '...', # Optionally pass in the build number of your app
   dist: '...', # optional distribution of the release usually the buildnumber
   sourcemap: 'main.jsbundle.map', # sourcemap to upload
   rewrite: true
@@ -124,6 +126,7 @@ Useful for telling Sentry which commits are associated with a release.
 sentry_set_commits(
   version: '...',
   app_identifier: '...', # pass in the bundle_identifer of your app
+  build: '...', # Optionally pass in the build number of your app
   auto: false, # enable completely automated commit management
   clear: false, # clear all current commits from the release
   commit: '...', # commit spec, see `sentry-cli releases help set-commits` for more information
@@ -142,6 +145,7 @@ sentry_create_deploy(
   project_slug: '...',
   version: '...',
   app_identifier: '...', # pass in the bundle_identifer of your app
+  build: '...', # Optionally pass in the build number of your app
   env: 'staging', # The environment for this deploy. Required.
   name: '...', # Optional human readable name
   deploy_url: '...', # Optional URL that points to the deployment

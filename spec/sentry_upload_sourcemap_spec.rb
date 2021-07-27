@@ -54,6 +54,27 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
+      it "accepts build" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "files", "1.0+123", "upload-sourcemaps", "1.map", "--no-rewrite", "--dist", "dem"]).and_return(true)
+
+        allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("1.map").and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_sourcemap(
+              org_slug: 'some_org',
+              api_key: 'something123',
+              project_slug: 'some_project',
+              version: '1.0',
+              dist: 'dem',
+              sourcemap: '1.map',
+              build: '123')
+        end").runner.execute(:test)
+      end
+
       it "uses input value for strip_prefix" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)

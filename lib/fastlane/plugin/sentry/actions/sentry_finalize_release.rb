@@ -9,6 +9,7 @@ module Fastlane
 
         version = params[:version]
         version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
+        version = "#{version}+#{params[:build]}" if params[:build]
 
         command = [
           "sentry-cli",
@@ -44,8 +45,11 @@ module Fastlane
                                       short_option: "-a",
                                       env_name: "SENTRY_APP_IDENTIFIER",
                                       description: "App Bundle Identifier, prepended to version",
+                                      optional: true),
+          FastlaneCore::ConfigItem.new(key: :build,
+                                      short_option: "-b",
+                                      description: "Release build to finalize on Sentry",
                                       optional: true)
-
         ]
       end
 
