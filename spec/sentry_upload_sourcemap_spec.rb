@@ -98,11 +98,11 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-      it "uses input value for strip_common_prefix" do
+      it "accepts strip_common_prefix" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "files", "app.idf@1.0", "upload-sourcemaps", "1.map", "--no-rewrite","--strip-common-prefix", "/Users/get-sentry/semtry-fastlane-plugin", "--dist", "dem"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "files", "app.idf@1.0", "upload-sourcemaps", "1.map", "--no-rewrite","--strip-common-prefix", "--dist", "dem"]).and_return(true)
 
         allow(File).to receive(:exist?).and_call_original
         expect(File).to receive(:exist?).with("1.map").and_return(true)
@@ -115,8 +115,28 @@ describe Fastlane do
               version: '1.0',
               dist: 'dem',
               sourcemap: '1.map',
-              app_identifier: 'app.idf',
-              strip_common_prefix: '/Users/get-sentry/semtry-fastlane-plugin',
+              strip_common_prefix: true,
+              app_identifier: 'app.idf')
+        end").runner.execute(:test)
+      end
+
+      it "does not prepend strip_common_prefix if not specified" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "releases", "files", "app.idf@1.0", "upload-sourcemaps", "1.map", "--no-rewrite", "--dist", "dem"]).and_return(true)
+
+        allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("1.map").and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_sourcemap(
+              org_slug: 'some_org',
+              api_key: 'something123',
+              project_slug: 'some_project',
+              version: '1.0',
+              dist: 'dem',
+              sourcemap: '1.map',
               app_identifier: 'app.idf')
         end").runner.execute(:test)
       end
