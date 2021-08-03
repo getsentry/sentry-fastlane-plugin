@@ -6,7 +6,7 @@
 
 - Add sentry-cli upload-dif action ([#89](https://github.com/getsentry/sentry-fastlane-plugin/pull/89))
 - Support build numbers in versions ([#90](https://github.com/getsentry/sentry-fastlane-plugin/pull/90))
-
+- Don't push value to non-value param for upload-sourcemaps ([#92](https://github.com/getsentry/sentry-fastlane-plugin/pull/92))
 
 ## 1.8.3
 
