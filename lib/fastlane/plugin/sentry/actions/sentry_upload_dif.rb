@@ -8,6 +8,7 @@ module Fastlane
         Helper::SentryConfig.parse_api_params(params)
 
         path = params[:path]
+        path = '.' if path.nil?
 
         command = [
           "sentry-cli",
@@ -52,7 +53,8 @@ module Fastlane
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :path,
-                                       description: "A path to search recursively for symbol files"),
+                                       description: "A path to search recursively for symbol files",
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :type,
                                        short_option: "-t",
                                        description: "Only consider debug information files of the given \
