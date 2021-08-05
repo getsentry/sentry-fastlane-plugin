@@ -13,6 +13,16 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
+      it "includes --path fallback if not present" do
+        expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "."]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_dif()
+        end").runner.execute(:test)
+      end
+
       it "includes --type for value dsym" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
