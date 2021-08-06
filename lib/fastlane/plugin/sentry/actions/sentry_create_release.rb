@@ -9,6 +9,7 @@ module Fastlane
 
         version = params[:version]
         version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
+        version = "#{version}+#{params[:build]}" if params[:build]
 
         command = [
           "sentry-cli",
@@ -41,17 +42,20 @@ module Fastlane
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version to create on Sentry"),
-          FastlaneCore::ConfigItem.new(key: :finalize,
-                                       description: "Whether to finalize the release. If not provided or false, the release can be finalized using the finalize_release action",
-                                       default_value: false,
-                                       is_string: false,
-                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :app_identifier,
                                       short_option: "-a",
                                       env_name: "SENTRY_APP_IDENTIFIER",
                                       description: "App Bundle Identifier, prepended to version",
-                                      optional: true)
-
+                                      optional: true),
+          FastlaneCore::ConfigItem.new(key: :build,
+                                      short_option: "-b",
+                                      description: "Release build to create on Sentry",
+                                      optional: true),
+          FastlaneCore::ConfigItem.new(key: :finalize,
+                                       description: "Whether to finalize the release. If not provided or false, the release can be finalized using the finalize_release action",
+                                       default_value: false,
+                                       is_string: false,
+                                       optional: true)
         ]
       end
 
