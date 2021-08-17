@@ -7,29 +7,28 @@ module Fastlane
         Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
-        path = params[:path]
-        path = '.' if path.nil?
-
         command = [
           "sentry-cli",
           "upload-dif",
-          path
         ]
         command.push('--type').push(params[:type]) unless params[:type].nil?
-        command.push('--no_unwind') unless params[:no_unwind].nil?
-        command.push('--no_debug') unless params[:no_debug].nil?
-        command.push('--no_sources') unless params[:no_sources].nil?
+        command.push('--no-unwind') unless params[:no_unwind].nil?
+        command.push('--no-debug') unless params[:no_debug].nil?
+        command.push('--no-sources') unless params[:no_sources].nil?
         command.push('--ids').push(params[:ids]) unless params[:ids].nil?
-        command.push('--require_all') unless params[:require_all].nil?
-        command.push('--symbol_maps').push(params[:symbol_maps]) unless params[:symbol_maps].nil?
-        command.push('--derived_data') unless params[:derived_data].nil?
-        command.push('--no_zips') unless params[:no_zips].nil?
-        command.push('--info_plist').push(params[:info_plist]) unless params[:info_plist].nil?
-        command.push('--no_reprocessing') unless params[:no_reprocessing].nil?
-        command.push('--force_foreground') unless params[:force_foreground].nil?
-        command.push('--include_sources') unless params[:include_sources].nil?
+        command.push('--require-all') unless params[:require_all].nil?
+        command.push('--symbol-maps').push(params[:symbol_maps]) unless params[:symbol_maps].nil?
+        command.push('--derived-data') unless params[:derived_data].nil?
+        command.push('--no-zips') unless params[:no_zips].nil?
+        command.push('--info-plist').push(params[:info_plist]) unless params[:info_plist].nil?
+        command.push('--no-reprocessing') unless params[:no_reprocessing].nil?
+        command.push('--force-foreground') unless params[:force_foreground].nil?
+        command.push('--include-sources') unless params[:include_sources].nil?
         command.push('--wait') unless params[:wait].nil?
-        command.push('--upload_symbol_maps') unless params[:upload_symbol_maps].nil?
+        command.push('--upload-symbol-maps') unless params[:upload_symbol_maps].nil?
+        command.push('--')
+        command.push(params[:path]) unless params[:path].nil?
+        command.push(*params[:paths]) unless params[:paths].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully ran upload-dif")
@@ -53,7 +52,19 @@ module Fastlane
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :path,
-                                       description: "A path to search recursively for symbol files",
+                                       env_name: "SENTRY_DSYM_PATH",
+                                       description: "Path to search recursively for symbol files",
+                                       default_value: Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH],
+                                       is_string: false,
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                         UI.user_error! "Could not find your symbols file at path '#{value}'" unless File.exist?(value)
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :paths,
+                                       env_name: "SENTRY_DSYM_PATHS",
+                                       description: "An array of paths to search recursively for symbol files",
+                                       default_value: Actions.lane_context[SharedValues::DSYM_PATHS],
+                                       is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :type,
                                        short_option: "-t",
@@ -61,7 +72,7 @@ module Fastlane
                                        type.  By default, all types are considered",
                                        optional: true,
                                        verify_block: proc do |value|
-                                        UI.user_error! "Invalid value '#{value}'" unless ['dsym', 'elf', 'breakpad', 'pdb', 'pe', 'sourcebundle', 'bcsymbolmap'].include? value
+                                         UI.user_error! "Invalid value '#{value}'" unless ['dsym', 'elf', 'breakpad', 'pdb', 'pe', 'sourcebundle', 'bcsymbolmap'].include? value
                                        end),
           FastlaneCore::ConfigItem.new(key: :no_unwind,
                                        description: "Do not scan for stack unwinding information. Specify \
@@ -72,7 +83,7 @@ module Fastlane
                                        processable information (see other flags)",
                                        is_string: false,
                                        optional: true),
-            FastlaneCore::ConfigItem.new(key: :no_debug,
+          FastlaneCore::ConfigItem.new(key: :no_debug,
                                        description: "Do not scan for debugging information. This will \
                                        usually exclude debug companion files. They might \
                                        still be uploaded, if they contain additional \
@@ -80,46 +91,55 @@ module Fastlane
                                        conflicting_options: [:no_unwind],
                                        is_string: false,
                                        optional: true),
-            FastlaneCore::ConfigItem.new(key: :no_sources,
+          FastlaneCore::ConfigItem.new(key: :no_sources,
                                        description: "Do not scan for source information. This will \
                                        usually exclude source bundle files. They might \
                                        still be uploaded, if they contain additional \
                                        processable information (see other flags)",
                                        is_string: false,
                                        optional: true),
-            FastlaneCore::ConfigItem.new(key: :ids,
+          FastlaneCore::ConfigItem.new(key: :ids,
                                        description: "Search for specific debug identifiers",
                                        optional: true),
-            FastlaneCore::ConfigItem.new(key: :require_all,
+          FastlaneCore::ConfigItem.new(key: :require_all,
                                        description: "Errors if not all identifiers specified with --id could be found",
                                        is_string: false,
                                        optional: true),
-            FastlaneCore::ConfigItem.new(key: :symbol_maps,
+          FastlaneCore::ConfigItem.new(key: :symbol_maps,
+                                       env_name: "SENTRY_SYMBOL_MAPS",
                                        description: "Optional path to BCSymbolMap files which are used to \
                                        resolve hidden symbols in dSYM files downloaded from \
                                        iTunes Connect. This requires the dsymutil tool to be \
                                        available",
-                                       optional: true),
-            FastlaneCore::ConfigItem.new(key: :derived_data,
+                                       default_value: Actions.lane_context[SharedValues::XCODEBUILD_ARCHIVE],
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                         UI.user_error! "Could not find bcsymbolmap at path '#{value}'" unless File.exist?(value)
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :derived_data,
                                        description: "Search for debug symbols in Xcode's derived data",
                                        is_string: false,
                                        optional: true),
-            FastlaneCore::ConfigItem.new(key: :no_zips,
+          FastlaneCore::ConfigItem.new(key: :no_zips,
                                        description: "Do not search in ZIP files",
                                        is_string: false,
                                        optional: true),
-            FastlaneCore::ConfigItem.new(key: :info_plist,
+          FastlaneCore::ConfigItem.new(key: :info_plist,
+                                       env_name: "SENTRY_INFO_PLIST",
                                        description: "Optional path to the Info.plist.{n}We will try to find this \
                                        automatically if run from Xcode.  Providing this information \
                                        will associate the debug symbols with a specific ITC application \
                                        and build in Sentry.  Note that if you provide the plist \
                                        explicitly it must already be processed",
-                                       optional: true),
-            FastlaneCore::ConfigItem.new(key: :no_reprocessing,
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                         UI.user_error! "Could not find Info.plist at path '#{value}'" unless File.exist?(value)
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :no_reprocessing,
                                        description: "Do not trigger reprocessing after uploading",
                                        is_string: false,
                                        optional: true),
-            FastlaneCore::ConfigItem.new(key: :force_foreground,
+          FastlaneCore::ConfigItem.new(key: :force_foreground,
                                        description: "Wait for the process to finish.{n}\
                                        By default, the upload process will detach and continue in the \
                                        background when triggered from Xcode.  When an error happens, \
@@ -128,18 +148,18 @@ module Fastlane
                                        will be shown in the Xcode build output",
                                        is_string: false,
                                        optional: true),
-            FastlaneCore::ConfigItem.new(key: :include_sources,
+          FastlaneCore::ConfigItem.new(key: :include_sources,
                                        description: "Include sources from the local file system and upload \
                                        them as source bundles",
                                        is_string: false,
                                        optional: true),
-            FastlaneCore::ConfigItem.new(key: :wait,
+          FastlaneCore::ConfigItem.new(key: :wait,
                                        description: "Wait for the server to fully process uploaded files. Errors \
                                        can only be displayed if --wait is specified, but this will \
                                        significantly slow down the upload process",
                                        is_string: false,
                                        optional: true),
-            FastlaneCore::ConfigItem.new(key: :upload_symbol_maps,
+          FastlaneCore::ConfigItem.new(key: :upload_symbol_maps,
                                        description: "Upload any BCSymbolMap files found to allow Sentry to resolve \
                                        hidden symbols, e.g. when it downloads dSYMs directly from App \
                                        Store Connect or when you upload dSYMs without first resolving \
