@@ -98,11 +98,12 @@ sentry_upload_dif(
   auth_token: '...', # Do not use if using api_key
   org_slug: '...',
   project_slug: '...',
-  path: '/path/to/files' # Optional. Well default to '.' when no value is provided. 
+  path: '/path/to/files', # Optional, defaults to gym's DSYM.
+  paths: [ '/path/to/files' ] # Optional, defaults to download_dsyms' DSYMs.
 )
 ```
 
-The `SENTRY_DSYM_PATH` environment variable may be used in place of the `dsym_path` parameter.
+The `SENTRY_DSYM_PATH` environment variable may be used in place of the `path` parameter.
 
 
 #### Associating commits
