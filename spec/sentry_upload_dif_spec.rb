@@ -1,6 +1,20 @@
 describe Fastlane do
   describe Fastlane::FastFile do
     describe "upload-dif" do
+      it "fails with API key and auth token" do
+        dsym_path = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
+
+        expect do
+          Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_dsym(
+              api_key: 'something123',
+              auth_token: 'something123',
+              path: '#{dsym_path}'
+            )
+          end").runner.execute(:test)
+        end.to raise_error("Both API key and authentication token found for SentryAction given, please only give one")
+      end
+
       it "fails with invalid dsym path" do
         dsym_path = File.absolute_path './assets/this_does_not_exist.app.dSYM.zip'
 
