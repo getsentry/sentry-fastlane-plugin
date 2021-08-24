@@ -4,7 +4,8 @@
 
 ### Features
 
-- feat: Add default value `.` for path param of `sentry_upload_dif` action ([#94](https://github.com/getsentry/sentry-fastlane-plugin/pull/94))
+- Fix multi-word upload-dif options ([#96](https://github.com/getsentry/sentry-fastlane-plugin/pull/96))
+- Default upload-dif paths to inherit DSYMs from other fastlane actions ([#96](https://github.com/getsentry/sentry-fastlane-plugin/pull/96))
 
 ## 1.9.0
 
