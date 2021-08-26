@@ -8,9 +8,10 @@ module Fastlane
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
-        sourcemap = params[:sourcemap]
-
         version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
+        version = "#{version}+#{params[:build]}" if params[:build]
+
+        sourcemap = params[:sourcemap]
 
         sentry_cli = "sentry-cli"
         unless params[:sentry_cli_path].nil?
@@ -27,7 +28,7 @@ module Fastlane
 
         command.push('--rewrite') if params[:rewrite]
         command.push('--no-rewrite') unless params[:rewrite]
-        command.push('--strip-prefix') if params[:strip_prefix]
+        command.push('--strip-prefix').push(params[:strip_prefix]) if params[:strip_prefix]
         command.push('--strip-common-prefix') if params[:strip_common_prefix]
         command.push('--url-prefix').push(params[:url_prefix]) unless params[:url_prefix].nil?
         command.push('--dist').push(params[:dist]) unless params[:dist].nil?
@@ -67,6 +68,15 @@ module Fastlane
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version on Sentry"),
+          FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                       short_option: "-a",
+                                       env_name: "SENTRY_APP_IDENTIFIER",
+                                       description: "App Bundle Identifier, prepended to version",
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :build,
+                                      short_option: "-b",
+                                      description: "Release build on Sentry",
+                                      optional: true),
           FastlaneCore::ConfigItem.new(key: :dist,
                                        description: "Distribution in release",
                                        optional: true),

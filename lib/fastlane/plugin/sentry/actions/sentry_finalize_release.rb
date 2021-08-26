@@ -9,6 +9,7 @@ module Fastlane
 
         version = params[:version]
         version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
+        version = "#{version}+#{params[:build]}" if params[:build]
 
         sentry_cli = "sentry-cli"
         unless params[:sentry_cli_path].nil?
@@ -56,7 +57,10 @@ module Fastlane
                                       verify_block: proc do |value|
                                         UI.user_error! "Could not find sentry-cli." unless File.exist?(File.expand_path(value))
                                       end),
-
+          FastlaneCore::ConfigItem.new(key: :build,
+                                      short_option: "-b",
+                                      description: "Release build to finalize on Sentry",
+                                      optional: true)
         ]
       end
 

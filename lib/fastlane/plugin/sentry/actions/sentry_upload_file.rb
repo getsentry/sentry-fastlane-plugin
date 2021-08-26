@@ -7,10 +7,11 @@ module Fastlane
         Helper::SentryHelper.check_sentry_cli(params[:sentry_cli_path])
         Helper::SentryConfig.parse_api_params(params)
 
-        file = params[:file]
-
         version = params[:version]
         version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
+        version = "#{version}+#{params[:build]}" if params[:build]
+
+        file = params[:file]
 
         sentry_cli = "sentry-cli"
         unless params[:sentry_cli_path].nil?
@@ -50,6 +51,15 @@ module Fastlane
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version on Sentry"),
+          FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                      short_option: "-a",
+                                      env_name: "SENTRY_APP_IDENTIFIER",
+                                      description: "App Bundle Identifier, prepended to version",
+                                      optional: true),
+          FastlaneCore::ConfigItem.new(key: :build,
+                                      short_option: "-b",
+                                      description: "Release build on Sentry",
+                                      optional: true),
           FastlaneCore::ConfigItem.new(key: :dist,
                                        description: "Distribution in release",
                                        optional: true),
@@ -73,6 +83,7 @@ module Fastlane
                                       verify_block: proc do |value|
                                         UI.user_error! "Could not find sentry-cli." unless File.exist?(File.expand_path(value))
                                       end),
+                                       optional: true)
         ]
       end
 
