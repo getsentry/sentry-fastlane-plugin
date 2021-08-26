@@ -4,7 +4,6 @@ module Fastlane
       def self.run(params)
         require 'shellwords'
 
-        Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
@@ -12,7 +11,6 @@ module Fastlane
         version = "#{version}+#{params[:build]}" if params[:build]
 
         command = [
-          "sentry-cli",
           "releases",
           "set-commits",
           version
@@ -22,7 +20,7 @@ module Fastlane
         command.push('--clear') if params[:clear]
         command.push('--commit').push(params[:commit]) unless params[:commit].nil?
 
-        Helper::SentryHelper.call_sentry_cli(command)
+        Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully set commits for release: #{version}")
       end
 

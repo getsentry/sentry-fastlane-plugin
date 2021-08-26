@@ -4,14 +4,12 @@ module Fastlane
       def self.run(params)
         require 'shellwords'
 
-        Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
         path = params[:path]
         path = '.' if path.nil?
 
         command = [
-          "sentry-cli",
           "upload-dif",
           path
         ]
@@ -31,7 +29,7 @@ module Fastlane
         command.push('--wait') unless params[:wait].nil?
         command.push('--upload_symbol_maps') unless params[:upload_symbol_maps].nil?
 
-        Helper::SentryHelper.call_sentry_cli(command)
+        Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully ran upload-dif")
       end
 

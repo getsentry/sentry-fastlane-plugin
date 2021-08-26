@@ -1,34 +1,37 @@
 module Fastlane
   module Helper
     class SentryHelper
-      def self.check_sentry_cli(path)
-      
-        sentry_path = path
-        if path.nil?
-          sentry_path = `which sentry-cli`
-            unless path.nil? && `which sentry-cli`.include?('sentry-cli')
-              UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
-              UI.error("")
-              UI.error("Install it using:")
-              UI.command("brew install getsentry/tools/sentry-cli")
-              UI.error("OR")
-              UI.command("curl -sL https://sentry.io/get-cli/ | bash")
-              UI.error("If you don't have homebrew, visit http://brew.sh")
-              UI.user_error!("Install sentry-cli and start your lane again!")
-            end
-        end
-    
+      def self.check_sentry_cli!(params)
 
-      sentry_cli_version = Gem::Version.new(`#{sentry_path} --version`.scan(/(?:\d+\.?){3}/).first)
+        sentry_path = params[:sentry_cli_path]
+        if sentry_path.nil?
+          sentry_path = `which sentry-cli`
+          unless sentry_path.nil? && `which sentry-cli`.include?('sentry-cli')
+            UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
+            UI.error("")
+            UI.error("Install it using:")
+            UI.command("brew install getsentry/tools/sentry-cli")
+            UI.error("OR")
+            UI.command("curl -sL https://sentry.io/get-cli/ | bash")
+            UI.error("If you don't have homebrew, visit http://brew.sh")
+            UI.user_error!("Install sentry-cli and start your lane again!")
+          end
+        end
+
+        sentry_cli_version = Gem::Version.new(`#{sentry_path} --version`.scan(/(?:\d+\.?){3}/).first)
+
         required_version = Gem::Version.new(Fastlane::Sentry::CLI_VERSION)
         if sentry_cli_version < required_version
           UI.user_error!("Your sentry-cli is outdated, please upgrade to at least version #{Fastlane::Sentry::CLI_VERSION} and start your lane again!")
         end
 
         UI.success("sentry-cli #{sentry_cli_version} installed!")
+        sentry_path
       end
 
-      def self.call_sentry_cli(command)
+      def self.call_sentry_cli(params, sub_command)
+        sentry_path = self.check_sentry_cli!(params)
+        command = [sentry_path] + sub_command
         UI.message "Starting sentry-cli..."
         require 'open3'
         error = []
