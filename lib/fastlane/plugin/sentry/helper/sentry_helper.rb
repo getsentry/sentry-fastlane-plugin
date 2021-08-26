@@ -5,8 +5,8 @@ module Fastlane
 
         sentry_path = params[:sentry_cli_path]
         if sentry_path.nil?
-          sentry_path = `which sentry-cli`
-          unless sentry_path.nil? && `which sentry-cli`.include?('sentry-cli')
+          sentry_path = `which sentry-cli`.strip
+          unless sentry_path.include?('sentry-cli')
             UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
             UI.error("")
             UI.error("Install it using:")
