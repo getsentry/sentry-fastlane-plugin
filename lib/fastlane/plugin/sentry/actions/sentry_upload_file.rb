@@ -65,11 +65,6 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :file_url,
                                        description: "Optional URL we should associate with the file",
                                        optional: true),
-          FastlaneCore::ConfigItem.new(key: :app_identifier,
-                                      short_option: "-a",
-                                      env_name: "SENTRY_APP_IDENTIFIER",
-                                      description: "App Bundle Identifier, prepended to version",
-                                      optional: true),
         ]
       end
 

@@ -37,7 +37,7 @@ describe Fastlane do
         allow(File).to receive(:exist?).and_call_original
         expect(File).to receive(:exist?).with("1.bcsymbol").and_return(true)
 
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dsym", "--symbol-maps", "1.bcsymbol", dsym_path_1]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-dsym", "--symbol-maps", "1.bcsymbol", dsym_path_1]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
           sentry_upload_dsym(
@@ -52,7 +52,7 @@ describe Fastlane do
       it "multiple dsym paths" do
         dsym_path_1 = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
 
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dsym", dsym_path_1, dsym_path_1]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-dsym", dsym_path_1, dsym_path_1]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
           sentry_upload_dsym(
@@ -69,7 +69,7 @@ describe Fastlane do
         allow(File).to receive(:exist?).and_call_original
         expect(File).to receive(:exist?).with("Info.plist").and_return(true)
 
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dsym", "--info-plist", "Info.plist", dsym_path_1]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-dsym", "--info-plist", "Info.plist", dsym_path_1]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
           sentry_upload_dsym(
