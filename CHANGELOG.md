@@ -6,6 +6,8 @@
 
 - Fix multi-word upload-dif options ([#96](https://github.com/getsentry/sentry-fastlane-plugin/pull/96))
 - Default upload-dif paths to inherit DSYMs from other fastlane actions ([#96](https://github.com/getsentry/sentry-fastlane-plugin/pull/96))
+- feat: Add default value `.` for path param of `sentry_upload_dif` action ([#94](https://github.com/getsentry/sentry-fastlane-plugin/pull/94))
+- feat: Add an action to check sentry-cli is installed([#78](https://github.com/getsentry/sentry-fastlane-plugin/pull/78))
 
 ## 1.9.0
 
