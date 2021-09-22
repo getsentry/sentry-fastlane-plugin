@@ -8,24 +8,38 @@ module Fastlane
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
-        sourcemap = params[:sourcemap]
+        version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
+        version = "#{version}+#{params[:build]}" if params[:build]
 
-        version = "#{params[:app_identifier]}-#{params[:version]}" if params[:app_identifier]
+        sourcemap = params[:sourcemap]
 
         command = [
           "sentry-cli",
           "releases",
           "files",
-          Shellwords.escape(version),
+          version,
           "upload-sourcemaps",
           sourcemap.to_s
         ]
 
         command.push('--rewrite') if params[:rewrite]
-        command.push('--strip-prefix') if params[:strip_prefix]
+        command.push('--no-rewrite') unless params[:rewrite]
+        command.push('--strip-prefix').push(params[:strip_prefix]) if params[:strip_prefix]
         command.push('--strip-common-prefix') if params[:strip_common_prefix]
         command.push('--url-prefix').push(params[:url_prefix]) unless params[:url_prefix].nil?
         command.push('--dist').push(params[:dist]) unless params[:dist].nil?
+
+        unless params[:ignore].nil?
+          # normalize to array
+          unless params[:ignore].kind_of?(Enumerable)
+            params[:ignore] = [params[:ignore]]
+          end
+          # no nil or empty strings
+          params[:ignore].reject! { |e| e.strip.empty? rescue true }
+          command.push('--ignore').push(*params[:ignore]) if params[:ignore].any?
+        end
+
+        command.push('--ignore-file').push(params[:ignore_file]) unless params[:ignore_file].nil?
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully uploaded files to release: #{version}")
@@ -50,6 +64,15 @@ module Fastlane
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version on Sentry"),
+          FastlaneCore::ConfigItem.new(key: :app_identifier,
+                                       short_option: "-a",
+                                       env_name: "SENTRY_APP_IDENTIFIER",
+                                       description: "App Bundle Identifier, prepended to version",
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :build,
+                                      short_option: "-b",
+                                      description: "Release build on Sentry",
+                                      optional: true),
           FastlaneCore::ConfigItem.new(key: :dist,
                                        description: "Distribution in release",
                                        optional: true),
@@ -78,10 +101,12 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :url_prefix,
                                        description: "Sets a URL prefix in front of all files",
                                        optional: true),
-          FastlaneCore::ConfigItem.new(key: :app_identifier,
-                                       short_option: "-a",
-                                       env_name: "SENTRY_APP_IDENTIFIER",
-                                       description: "App Bundle Identifier, prepended to version",
+          FastlaneCore::ConfigItem.new(key: :ignore,
+                                       description: "Ignores all files and folders matching the given glob or array of globs",
+                                       is_string: false,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :ignore_file,
+                                       description: "Ignore all files and folders specified in the given ignore file, e.g. .gitignore",
                                        optional: true)
 
         ]

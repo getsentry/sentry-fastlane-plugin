@@ -41,12 +41,13 @@ module Fastlane
         has_api_key = !api_key.to_s.empty?
         has_auth_token = !auth_token.to_s.empty?
 
-        skip_params_check = false
-        if !has_org || !has_project || !has_auth_token
-          skip_params_check = fallback_sentry_cli
-        end
+        ENV['SENTRY_URL'] = url unless url.to_s.empty?
+        ENV['SENTRY_LOG_LEVEL'] = 'DEBUG' if FastlaneCore::Globals.verbose?
 
-        if !skip_params_check
+        # Fallback to .sentryclirc if possible when no auth token is provided
+        if !has_api_key && !has_auth_token && fallback_sentry_cli_auth
+            UI.important("No auth config provided, will fallback to .sentryclirc")
+        else
           # Will fail if none or both authentication methods are provided
           if !has_api_key && !has_auth_token
             UI.user_error!("No API key or authentication token found for SentryAction given, pass using `api_key: 'key'` or `auth_token: 'token'`")
@@ -57,21 +58,20 @@ module Fastlane
           end
           ENV['SENTRY_API_KEY'] = api_key unless api_key.to_s.empty?
           ENV['SENTRY_AUTH_TOKEN'] = auth_token unless auth_token.to_s.empty?
-          ENV['SENTRY_URL'] = url unless url.to_s.empty?
-          ENV['SENTRY_LOG_LEVEL'] = 'INFO' if FastlaneCore::Globals.verbose?
+        end
+
+        if has_org && has_project
           ENV['SENTRY_ORG'] = Shellwords.escape(org) unless org.to_s.empty?
           ENV['SENTRY_PROJECT'] = Shellwords.escape(project) unless project.to_s.empty?
         else
-          UI.important("No config provided, will fallback to .sentryclirc")
+          UI.important("No org/project config provided, will fallback to .sentryclirc")
         end
       end
 
-      def self.fallback_sentry_cli
+      def self.fallback_sentry_cli_auth
         sentry_cli_result = JSON.parse(`sentry-cli info --config-status-json`)
         return (sentry_cli_result["auth"]["successful"] &&
-          !sentry_cli_result["auth"]["type"].nil? &&
-          !sentry_cli_result["config"]["org"].nil? &&
-          !sentry_cli_result["config"]["project"].nil?)
+          !sentry_cli_result["auth"]["type"].nil?)
       end
     end
   end
