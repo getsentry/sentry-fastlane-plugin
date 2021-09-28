@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- fix: sets `--finalize` CLI parameter when `finalize` option is set to `true`
+- fix: sets `--finalize` CLI parameter when `finalize` option is set to `true` ([#40](https://github.com/getsentry/sentry-fastlane-plugin/pull/40))
 
 ### Features
 
