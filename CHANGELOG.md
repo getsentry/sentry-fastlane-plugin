@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- fix: sets `--finalize` CLI parameter when `finalize` option is set to `true`
+
 ### Features
 
 - feat: Add default value `.` for path param of `sentry_upload_dif` action ([#94](https://github.com/getsentry/sentry-fastlane-plugin/pull/94))

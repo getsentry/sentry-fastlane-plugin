@@ -17,7 +17,7 @@ module Fastlane
           "new",
           version
         ]
-        command.push("--finalize") if params[:finalize].nil?
+        command.push("--finalize") if params[:finalize] == true
 
         Helper::SentryHelper.call_sentry_cli(command)
         UI.success("Successfully created release: #{version}")
