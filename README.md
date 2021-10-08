@@ -22,7 +22,7 @@ fastlane add_plugin sentry
 
 A subset of actions provided by the CLI: https://docs.sentry.io/learn/cli/
 
-#### Authentication & Configuration
+### Authentication & Configuration
 
 `auth_token` is the preferred way to authentication method with Sentry. This can be obtained on https://sentry.io/api/.
 `api_key` still works but will eventually become deprecated. This can be obtained through the settings of your project.
@@ -30,7 +30,40 @@ Also note that as of version `1.2.0` you no longer have to provide the required 
 
 The following environment variables may be used in place of parameters: `SENTRY_API_KEY`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG_SLUG`, and `SENTRY_PROJECT_SLUG`.
 
-#### Uploading Symbolication Files
+### Uploading Debug Information Files
+
+```ruby
+sentry_upload_dif(
+  api_key: '...', # Do not use if using auth_token
+  auth_token: '...', # Do not use if using api_key
+  org_slug: '...',
+  project_slug: '...',
+  path: '/path/to/files', # Optional. We'll default to '.' when no value is provided.
+)
+```
+
+The `SENTRY_DSYM_PATH` environment variable may be used in place of the `dsym_path` parameter.
+
+Further options:
+
+- __type__: Optional. Only consider debug information files of the given type. By default, all types are considered. Valid options: 'dsym', 'elf', 'breakpad', 'pdb', 'pe', 'sourcebundle', 'bcsymbolmap'.
+- __no_unwind__: Optional. Do not scan for stack unwinding information. Specify this flag for builds with disabled FPO, or when stackwalking occurs on the device. This usually excludes executables and dynamic libraries. They might still be uploaded, if they contain additional processable information (see other flags)".
+- __no_debug__: Optional. Do not scan for debugging information. This will usually exclude debug companion files. They might still be uploaded, if they contain additional processable information (see other flags)".
+- __no_sources__: Optional. "Do not scan for source information. This will usually exclude source bundle files. They might still be uploaded, if they contain additional processable information (see other flags)".
+- __ids__: Optional. Search for specific debug identifiers.
+- __require_all__: Optional. Errors if not all identifiers specified with --id could be found.
+- __symbol_maps__: Optional. Optional path to BCSymbolMap files which are used to resolve hidden symbols in dSYM files downloaded from iTunes Connect. This requires the dsymutil tool to be available.
+- __derived_data__: Optional. Search for debug symbols in Xcode's derived data.
+- __no_zips__: Do not search in ZIP files.
+- __info_plist__: Optional. Optional path to the Info.plist. We will try to find this automatically if run from Xcode.  Providing this information will associate the debug symbols with a specific ITC application and build in Sentry.  Note that if you provide the plist explicitly it must already be processed.
+- __no_reprocessing__: Optional. Do not trigger reprocessing after uploading.                           
+- __force_foreground__: Optional. Wait for the process to finish. By default, the upload process will detach and continue in the background when triggered from Xcode.  When an error happens, a dialog is shown.  If this parameter is passed Xcode will wait for the process to finish before the build finishes and output will be shown in the Xcode build output.
+- __include_sources__: Optional. Include sources from the local file system and upload them as source bundles.
+- __wait__: Wait for the server to fully process uploaded files. Errors can only be displayed if --wait is specified, but this will significantly slow down the upload process.
+- __upload_symbol_maps__: Optional. Upload any BCSymbolMap files found to allow Sentry to resolve hidden symbols, e.g. when it downloads dSYMs directly from App Store Connect or when you upload dSYMs without first resolving the hidden symbols using --symbol-maps.
+
+
+Or the soon to be deprecated way:
 
 ```ruby
 sentry_upload_dsym(
@@ -44,9 +77,7 @@ sentry_upload_dsym(
 )
 ```
 
-The `SENTRY_DSYM_PATH` environment variable may be used in place of the `dsym_path` parameter.
-
-#### Creating & Finalizing Releases
+### Creating & Finalizing Releases
 
 ```ruby
 sentry_create_release(
@@ -60,7 +91,7 @@ sentry_create_release(
 )
 ```
 
-#### Uploading Files & Sourcemaps
+### Uploading Files & Sourcemaps
 
 Useful for uploading build artifacts and JS sourcemaps for react-native apps built using fastlane.
 
@@ -93,7 +124,7 @@ sentry_upload_sourcemap(
 )
 ```
 
-#### Uploading Proguard Mapping File
+### Uploading Proguard Mapping File
 
 ```ruby
 sentry_upload_proguard(
@@ -106,19 +137,7 @@ sentry_upload_proguard(
 )
 ```
 
-#### Upload Debugging Information Files
-
-```ruby
-sentry_upload_dif(
-  api_key: '...', # Do not use if using auth_token
-  auth_token: '...', # Do not use if using api_key
-  org_slug: '...',
-  project_slug: '...',
-  path: '/path/to/files' # Optional. Well default to '.' when no value is provided. 
-)
-```
-
-#### Associating commits
+### Associating commits
 
 Useful for telling Sentry which commits are associated with a release.
 
@@ -133,7 +152,7 @@ sentry_set_commits(
 )
 ```
 
-#### Create deploy
+### Create deploy
 
 Creates a new release deployment for a project on Sentry.
 
@@ -155,7 +174,7 @@ sentry_create_deploy(
 )
 ```
 
-#### Checking the sentry-cli is installed
+### Checking the sentry-cli is installed
 
 Useful for checking that the sentry-cli is installed and meets the minimum version requirements before starting to build your app in your lane.
 
