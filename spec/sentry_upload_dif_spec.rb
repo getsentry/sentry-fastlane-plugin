@@ -130,7 +130,7 @@ describe Fastlane do
       it "includes --no_unwind when true" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--no_unwind"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--no-unwind"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
@@ -143,7 +143,7 @@ describe Fastlane do
       it "includes --no_debug when true" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--no_debug"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--no-debug"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
@@ -156,7 +156,7 @@ describe Fastlane do
       it "includes --no_sources when true" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--no_sources"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--no-sources"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
@@ -182,7 +182,7 @@ describe Fastlane do
       it "includes --require_all when true" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--require_all"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--require-all"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
@@ -195,7 +195,7 @@ describe Fastlane do
       it "includes --symbol_maps if present" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--symbol_maps", "fixture-symbol_maps"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--symbol-maps", "fixture-symbol_maps"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
@@ -208,7 +208,7 @@ describe Fastlane do
       it "includes --derived_data when true" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--derived_data"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--derived-data"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
@@ -221,7 +221,7 @@ describe Fastlane do
       it "includes --no_zips when true" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--no_zips"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--no-zips"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
@@ -234,7 +234,7 @@ describe Fastlane do
       it "includes --info_plist if present" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--info_plist", "fixture-info_plist"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--info-plist", "fixture-info_plist"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
@@ -247,7 +247,7 @@ describe Fastlane do
       it "includes --no_reprocessing when true" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--no_reprocessing"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--no-reprocessing"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
@@ -260,7 +260,7 @@ describe Fastlane do
       it "includes --force_foreground when true" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--force_foreground"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--force-foreground"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
@@ -273,7 +273,7 @@ describe Fastlane do
       it "includes --include_sources when true" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--include_sources"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--include-sources"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
@@ -299,7 +299,7 @@ describe Fastlane do
       it "includes --upload_symbol_maps when true" do
         expect(Fastlane::Helper::SentryHelper).to receive(:check_sentry_cli!).and_return(true)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--upload_symbol_maps"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(["sentry-cli", "upload-dif", "fixture-path", "--upload-symbol-maps"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dif(
