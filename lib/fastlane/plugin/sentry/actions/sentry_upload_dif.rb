@@ -14,20 +14,20 @@ module Fastlane
           path
         ]
         command.push('--type').push(params[:type]) unless params[:type].nil?
-        command.push('--no_unwind') unless params[:no_unwind].nil?
-        command.push('--no_debug') unless params[:no_debug].nil?
-        command.push('--no_sources') unless params[:no_sources].nil?
+        command.push('--no-unwind') unless params[:no_unwind].nil?
+        command.push('--no-debug') unless params[:no_debug].nil?
+        command.push('--no-sources') unless params[:no_sources].nil?
         command.push('--ids').push(params[:ids]) unless params[:ids].nil?
-        command.push('--require_all') unless params[:require_all].nil?
-        command.push('--symbol_maps').push(params[:symbol_maps]) unless params[:symbol_maps].nil?
-        command.push('--derived_data') unless params[:derived_data].nil?
-        command.push('--no_zips') unless params[:no_zips].nil?
-        command.push('--info_plist').push(params[:info_plist]) unless params[:info_plist].nil?
-        command.push('--no_reprocessing') unless params[:no_reprocessing].nil?
-        command.push('--force_foreground') unless params[:force_foreground].nil?
-        command.push('--include_sources') unless params[:include_sources].nil?
+        command.push('--require-all') unless params[:require_all].nil?
+        command.push('--symbol-maps').push(params[:symbol_maps]) unless params[:symbol_maps].nil?
+        command.push('--derived-data') unless params[:derived_data].nil?
+        command.push('--no-zips') unless params[:no_zips].nil?
+        command.push('--info-plist').push(params[:info_plist]) unless params[:info_plist].nil?
+        command.push('--no-reprocessing') unless params[:no_reprocessing].nil?
+        command.push('--force-foreground') unless params[:force_foreground].nil?
+        command.push('--include-sources') unless params[:include_sources].nil?
         command.push('--wait') unless params[:wait].nil?
-        command.push('--upload_symbol_maps') unless params[:upload_symbol_maps].nil?
+        command.push('--upload-symbol-maps') unless params[:upload_symbol_maps].nil?
 
         Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully ran upload-dif")

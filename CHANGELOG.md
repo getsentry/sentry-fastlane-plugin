@@ -2,13 +2,24 @@
 
 ## Unreleased
 
-- fix: sets `--finalize` CLI parameter when `finalize` option is set to `true` ([#40](https://github.com/getsentry/sentry-fastlane-plugin/pull/40))
 - Added sentry cli path as parameter for actions [Finalize PR #42] ([#97](getsentry/sentry-fastlane-plugin/pull/97))
+
+## 1.10.1
+
+### Fixes
+
+- fix: Upload Dif use '-' instead of '_' ([#99](https://github.com/getsentry/sentry-fastlane-plugin/pull/99))
+
+## 1.10.0
 
 ### Features
 
 - feat: Add default value `.` for path param of `sentry_upload_dif` action ([#94](https://github.com/getsentry/sentry-fastlane-plugin/pull/94))
 - feat: Add an action to check sentry-cli is installed([#78](https://github.com/getsentry/sentry-fastlane-plugin/pull/78))
+
+### Fixes
+
+- fix: sets `--finalize` CLI parameter when `finalize` option is set to `true` ([#40](https://github.com/getsentry/sentry-fastlane-plugin/pull/40))
 
 ## 1.9.0
 
