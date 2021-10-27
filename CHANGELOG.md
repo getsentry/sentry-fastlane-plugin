@@ -1,10 +1,10 @@
 # Changelog
 
-## Unreleased:
+## Unreleased
 
 ### Fixes
 
-- fix: Hanging dSYMs upload ([#102](https://github.com/getsentry/sentry-fastlane-plugin/pull/102))
+- fix: Hanging dSYMs upload (#102)
 
 ## 1.10.1
 
