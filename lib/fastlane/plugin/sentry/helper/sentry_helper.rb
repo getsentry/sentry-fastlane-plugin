@@ -1,7 +1,7 @@
 module Fastlane
   module Helper
     class SentryHelper
-      def self.check_sentry_cli!(params)
+      def self.find_and_check_sentry_cli_path!(params)
 
         sentry_path = params[:sentry_cli_path]
         if sentry_path.nil?
@@ -30,7 +30,7 @@ module Fastlane
       end
 
       def self.call_sentry_cli(params, sub_command)
-        sentry_path = self.check_sentry_cli!(params)
+        sentry_path = self.find_and_check_sentry_cli_path!(params)
         command = [sentry_path] + sub_command
         UI.message "Starting sentry-cli..."
         require 'open3'

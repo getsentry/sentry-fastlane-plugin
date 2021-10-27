@@ -2,7 +2,7 @@ module Fastlane
   module Actions
     class SentryCheckCliInstalledAction < Action
       def self.run(params)
-        Helper::SentryHelper.check_sentry_cli!(params)
+        Helper::SentryHelper.find_and_check_sentry_cli_path!(params)
         UI.success("Successfully checked that sentry-cli is installed")
       end
 
