@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- fix: sets `--finalize` CLI parameter when `finalize` option is set to `true` ([#40](https://github.com/getsentry/sentry-fastlane-plugin/pull/40))
 - Added sentry cli path as parameter for actions [Finalize PR #42] ([#97](getsentry/sentry-fastlane-plugin/pull/97))
 
 ### Features
