@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixes
+
+- fix: Hanging dSYMs upload (#102)
+
 ## 1.10.1
 
 ### Fixes
