@@ -2,6 +2,8 @@
 
 ## 1.11.0
 
+We bumped the minimum sentry-cli version to `1.70.1` because it includes an essential fix for hanging dSYMs uploads.
+
 ### Fixes
 
 - fix: Hanging dSYMs upload by setting min sentry-cli version to 1.70.1 (#102)
