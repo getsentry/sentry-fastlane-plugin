@@ -4,7 +4,7 @@
 
 ### Fixes
 
-- fix: Hanging dSYMs upload (#102)
+- fix: Hanging dSYMs upload by setting min sentry-cli version to 1.70.1 (#102)
 
 ## 1.10.1
 
