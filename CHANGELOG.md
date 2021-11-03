@@ -4,7 +4,7 @@
 
 ### Fixes
 
-- fix: Correct link to sentry docs in action description
+- fix: Correct link to sentry docs in action description (#104)
 
 ## 1.11.0
 
