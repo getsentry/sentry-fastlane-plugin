@@ -2,7 +2,21 @@
 
 ## Unreleased
 
+### Features
+
 - Added sentry cli path as parameter for actions [Finalize PR #42] ([#97](getsentry/sentry-fastlane-plugin/pull/97))
+
+### Fixes
+
+- fix: Correct link to sentry docs in action description (#104)
+
+## 1.11.0
+
+We bumped the minimum sentry-cli version to `1.70.1` because it includes an essential fix for hanging dSYMs uploads.
+
+### Fixes
+
+- fix: Hanging dSYMs upload by setting min sentry-cli version to 1.70.1 (#102)
 
 ## 1.10.1
 
