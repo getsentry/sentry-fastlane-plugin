@@ -36,7 +36,7 @@ module Fastlane
       def self.details
         [
           "This action allows you to upload the proguard mapping file to Sentry.",
-          "See https://docs.sentry.io/cli/dif/proguard for more information."
+          "See https://docs.sentry.io/product/cli/dif/#proguard-mapping-upload for more information."
         ].join(" ")
       end
 
