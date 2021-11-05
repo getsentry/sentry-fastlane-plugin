@@ -4,7 +4,7 @@
 
 ### Features
 
-- Added sentry cli path as parameter for actions [Finalize PR #42] ([#97](getsentry/sentry-fastlane-plugin/pull/97))
+- Added sentry cli path as parameter for actions [Finalize PR #42](#97)
 
 ### Fixes
 
