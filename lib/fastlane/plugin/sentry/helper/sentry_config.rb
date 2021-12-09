@@ -6,7 +6,10 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :sentry_cli_path,
                                        env_name: "SENTRY_CLI_PATH",
                                        description: "Path to your sentry-cli. Defaults to `which sentry-cli`",
-                                       optional: true),
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                         UI.user_error! "'#{value}' is not executable" unless FastlaneCore::Helper.executable?(value)
+                                       end),
         ]
       end
 
