@@ -3,19 +3,16 @@ module Fastlane
     class SentryHelper
       def self.find_and_check_sentry_cli_path!(params)
 
-        sentry_path = params[:sentry_cli_path]
+        sentry_path = params[:sentry_cli_path] || FastlaneCore::CommandExecutor.which('sentry-cli')
         if sentry_path.nil?
-          sentry_path = `which sentry-cli`.strip
-          unless sentry_path.include?('sentry-cli')
-            UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
-            UI.error("")
-            UI.error("Install it using:")
-            UI.command("brew install getsentry/tools/sentry-cli")
-            UI.error("OR")
-            UI.command("curl -sL https://sentry.io/get-cli/ | bash")
-            UI.error("If you don't have homebrew, visit http://brew.sh")
-            UI.user_error!("Install sentry-cli and start your lane again!")
-          end
+          UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
+          UI.error("")
+          UI.error("Install it using:")
+          UI.command("brew install getsentry/tools/sentry-cli")
+          UI.error("OR")
+          UI.command("curl -sL https://sentry.io/get-cli/ | bash")
+          UI.error("If you don't have homebrew, visit http://brew.sh")
+          UI.user_error!("Install sentry-cli and start your lane again!")
         end
 
         sentry_cli_version = Gem::Version.new(`#{sentry_path} --version`.scan(/(?:\d+\.?){3}/).first)
