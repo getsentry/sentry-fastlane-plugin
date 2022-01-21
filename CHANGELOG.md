@@ -4,6 +4,7 @@
 
 ### Fixes
 
+- fix: Bug in upload process (#109)
 - fix: Correct link to sentry docs in action description (#104)
 
 ## 1.11.0
