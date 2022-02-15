@@ -4,7 +4,6 @@ module Fastlane
       def self.run(params)
         require 'shellwords'
 
-        Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
@@ -14,7 +13,6 @@ module Fastlane
         file = params[:file]
 
         command = [
-          "sentry-cli",
           "releases",
           "files",
           version,
@@ -24,7 +22,7 @@ module Fastlane
         command.push(params[:file_url]) unless params[:file_url].nil?
         command.push("--dist").push(params[:dist]) unless params[:dist].nil?
 
-        Helper::SentryHelper.call_sentry_cli(command)
+        Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully uploaded files to release: #{version}")
       end
 
@@ -66,7 +64,7 @@ module Fastlane
                                        end),
           FastlaneCore::ConfigItem.new(key: :file_url,
                                        description: "Optional URL we should associate with the file",
-                                       optional: true)
+                                       optional: true),
         ]
       end
 

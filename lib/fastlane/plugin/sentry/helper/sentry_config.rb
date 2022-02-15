@@ -1,6 +1,18 @@
 module Fastlane
   module Helper
     class SentryConfig
+      def self.common_cli_config_items
+        [
+          FastlaneCore::ConfigItem.new(key: :sentry_cli_path,
+                                       env_name: "SENTRY_CLI_PATH",
+                                       description: "Path to your sentry-cli. Defaults to `which sentry-cli`",
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                         UI.user_error! "'#{value}' is not executable" unless FastlaneCore::Helper.executable?(value)
+                                       end),
+        ]
+      end
+
       def self.common_api_config_items
         [
           FastlaneCore::ConfigItem.new(key: :url,
@@ -23,8 +35,8 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :project_slug,
                                        env_name: "SENTRY_PROJECT_SLUG",
                                        description: "Project slug for Sentry",
-                                       optional: true)
-        ]
+                                       optional: true),
+        ] + self.common_cli_config_items
       end
 
       def self.parse_api_params(params)
@@ -45,7 +57,7 @@ module Fastlane
         ENV['SENTRY_LOG_LEVEL'] = 'DEBUG' if FastlaneCore::Globals.verbose?
 
         # Fallback to .sentryclirc if possible when no auth token is provided
-        if !has_api_key && !has_auth_token && fallback_sentry_cli_auth
+        if !has_api_key && !has_auth_token && fallback_sentry_cli_auth(params)
             UI.important("No auth config provided, will fallback to .sentryclirc")
         else
           # Will fail if none or both authentication methods are provided
@@ -68,8 +80,14 @@ module Fastlane
         end
       end
 
-      def self.fallback_sentry_cli_auth
-        sentry_cli_result = JSON.parse(`sentry-cli info --config-status-json`)
+      def self.fallback_sentry_cli_auth(params)
+        sentry_cli_result = JSON.parse(SentryHelper.call_sentry_cli(
+          params, 
+          [
+            "info", 
+            "--config-status-json",
+          ]
+        ))
         return (sentry_cli_result["auth"]["successful"] &&
           !sentry_cli_result["auth"]["type"].nil?)
       end

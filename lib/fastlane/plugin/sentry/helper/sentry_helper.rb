@@ -1,8 +1,10 @@
 module Fastlane
   module Helper
     class SentryHelper
-      def self.check_sentry_cli!
-        unless `which sentry-cli`.include?('sentry-cli')
+      def self.find_and_check_sentry_cli_path!(params)
+
+        sentry_path = params[:sentry_cli_path] || FastlaneCore::CommandExecutor.which('sentry-cli')
+        if sentry_path.nil?
           UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")
           UI.error("")
           UI.error("Install it using:")
@@ -13,27 +15,33 @@ module Fastlane
           UI.user_error!("Install sentry-cli and start your lane again!")
         end
 
-        sentry_cli_version = Gem::Version.new(`sentry-cli --version`.scan(/(?:\d+\.?){3}/).first)
+        sentry_cli_version = Gem::Version.new(`#{sentry_path} --version`.scan(/(?:\d+\.?){3}/).first)
+
         required_version = Gem::Version.new(Fastlane::Sentry::CLI_VERSION)
         if sentry_cli_version < required_version
           UI.user_error!("Your sentry-cli is outdated, please upgrade to at least version #{Fastlane::Sentry::CLI_VERSION} and start your lane again!")
         end
 
         UI.success("sentry-cli #{sentry_cli_version} installed!")
+        sentry_path
       end
 
-      def self.call_sentry_cli(command)
+      def self.call_sentry_cli(params, sub_command)
+        sentry_path = self.find_and_check_sentry_cli_path!(params)
+        command = [sentry_path] + sub_command
         UI.message "Starting sentry-cli..."
         require 'open3'
-        error = []
         if FastlaneCore::Globals.verbose?
           UI.verbose("sentry-cli command:\n\n")
           UI.command(command.to_s)
           UI.verbose("\n\n")
         end
         final_command = command.map { |arg| Shellwords.escape(arg) }.join(" ")
+        out = []
+        error = []
         Open3.popen3(final_command) do |stdin, stdout, stderr, wait_thr|
           while (line = stdout.gets)
+            out << line
             UI.message(line.strip!)
           end
           while (line = stderr.gets)
@@ -44,6 +52,7 @@ module Fastlane
             handle_error(error)
           end
         end
+        out.join
       end
 
       def self.handle_error(errors)

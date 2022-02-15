@@ -4,7 +4,6 @@ module Fastlane
       def self.run(params)
         require 'shellwords'
 
-        Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
@@ -12,13 +11,12 @@ module Fastlane
         version = "#{version}+#{params[:build]}" if params[:build]
 
         command = [
-          "sentry-cli",
           "releases",
           "finalize",
           version
         ]
 
-        Helper::SentryHelper.call_sentry_cli(command)
+        Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully finalized release: #{version}")
       end
 

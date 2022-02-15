@@ -4,7 +4,6 @@ module Fastlane
       def self.run(params)
         require 'shellwords'
 
-        Helper::SentryHelper.check_sentry_cli!
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]
@@ -14,7 +13,6 @@ module Fastlane
         sourcemap = params[:sourcemap]
 
         command = [
-          "sentry-cli",
           "releases",
           "files",
           version,
@@ -41,7 +39,7 @@ module Fastlane
 
         command.push('--ignore-file').push(params[:ignore_file]) unless params[:ignore_file].nil?
 
-        Helper::SentryHelper.call_sentry_cli(command)
+        Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully uploaded files to release: #{version}")
       end
 
@@ -108,7 +106,6 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :ignore_file,
                                        description: "Ignore all files and folders specified in the given ignore file, e.g. .gitignore",
                                        optional: true)
-
         ]
       end
 
