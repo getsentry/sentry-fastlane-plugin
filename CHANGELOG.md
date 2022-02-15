@@ -1,10 +1,12 @@
 # Changelog
 
-## 1.11.1
+## Unreleased
 
 ### Features
 
 - feat: Add sentry cli path as parameter for actions (#97)
+
+## 1.11.1
 
 ### Fixes
 
