@@ -15,7 +15,7 @@ module Fastlane
           UI.user_error!("dSYM does not exist at path: #{path}") unless File.exist? path
         end
 
-        command = ["upload-dsym"]
+        command = ["debug-files", "upload"]
         command.push("--symbol-maps") unless params[:symbol_maps].nil?
         command.push(params[:symbol_maps]) unless params[:symbol_maps].nil?
         command.push("--info-plist") unless params[:info_plist].nil?
