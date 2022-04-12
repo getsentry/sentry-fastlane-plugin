@@ -6,6 +6,10 @@
 
 - feat: Add sentry cli path as parameter for actions (#97)
 
+### Fixes
+
+- fix: handle sentry-cli 2.x breaking changes (#119)
+
 ## 1.11.1
 
 ### Fixes
