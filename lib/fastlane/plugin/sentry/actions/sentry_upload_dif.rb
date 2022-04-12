@@ -10,8 +10,7 @@ module Fastlane
         path = '.' if path.nil?
 
         command = [
-          "debug-files",
-          "upload",
+          "upload-dif",
           path
         ]
         command.push('--type').push(params[:type]) unless params[:type].nil?
@@ -31,7 +30,7 @@ module Fastlane
         command.push('--upload-symbol-maps') unless params[:upload_symbol_maps].nil?
 
         Helper::SentryHelper.call_sentry_cli(params, command)
-        UI.success("Successfully ran debug-files upload")
+        UI.success("Successfully ran upload-dif")
       end
 
       #####################################################
