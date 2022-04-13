@@ -45,13 +45,13 @@ module Fastlane
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :dsym_path,
-                                      env_name: "SENTRY_DSYM_PATH",
-                                      description: "Path to your symbols file. For iOS and Mac provide path to app.dSYM.zip",
-                                      default_value: Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH],
-                                      optional: true,
-                                      verify_block: proc do |value|
-                                        UI.user_error! "Could not find Path to your symbols file at path '#{value}'" unless File.exist?(value)
-                                      end),
+                                       env_name: "SENTRY_DSYM_PATH",
+                                       description: "Path to your symbols file. For iOS and Mac provide path to app.dSYM.zip",
+                                       default_value: Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH],
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                                       UI.user_error! "Could not find Path to your symbols file at path '#{value}'" unless File.exist?(value)
+                                                     end),
           FastlaneCore::ConfigItem.new(key: :dsym_paths,
                                        env_name: "SENTRY_DSYM_PATHS",
                                        description: "Path to an array of your symbols file. For iOS and Mac provide path to app.dSYM.zip",
@@ -59,19 +59,19 @@ module Fastlane
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :symbol_maps,
-                                      env_name: "SENTRY_SYMBOL_MAPS",
-                                      description: "Optional path to bcsymbolmap files which are used to resolve hidden symbols in the actual dsym files. This requires the dsymutil tool to be available",
-                                      optional: true,
-                                      verify_block: proc do |value|
-                                        UI.user_error! "Could not find bcsymbolmap at path '#{value}'" unless File.exist?(value)
-                                      end),
+                                       env_name: "SENTRY_SYMBOL_MAPS",
+                                       description: "Optional path to bcsymbolmap files which are used to resolve hidden symbols in the actual dsym files. This requires the dsymutil tool to be available",
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                                       UI.user_error! "Could not find bcsymbolmap at path '#{value}'" unless File.exist?(value)
+                                                     end),
           FastlaneCore::ConfigItem.new(key: :info_plist,
-                                      env_name: "SENTRY_INFO_PLIST",
-                                      description: "Optional path to Info.plist to add version information when uploading debug symbols",
-                                      optional: true,
-                                      verify_block: proc do |value|
-                                        UI.user_error! "Could not find Info.plist at path '#{value}'" unless File.exist?(value)
-                                      end),
+                                       env_name: "SENTRY_INFO_PLIST",
+                                       description: "Optional path to Info.plist to add version information when uploading debug symbols",
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                                       UI.user_error! "Could not find Info.plist at path '#{value}'" unless File.exist?(value)
+                                                     end)
         ]
       end
 

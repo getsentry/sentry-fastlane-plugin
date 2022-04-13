@@ -46,14 +46,14 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version on Sentry"),
           FastlaneCore::ConfigItem.new(key: :app_identifier,
-                                      short_option: "-a",
-                                      env_name: "SENTRY_APP_IDENTIFIER",
-                                      description: "App Bundle Identifier, prepended to version",
-                                      optional: true),
+                                       short_option: "-a",
+                                       env_name: "SENTRY_APP_IDENTIFIER",
+                                       description: "App Bundle Identifier, prepended to version",
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :build,
-                                      short_option: "-b",
-                                      description: "Release build on Sentry",
-                                      optional: true),
+                                       short_option: "-b",
+                                       description: "Release build on Sentry",
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :dist,
                                        description: "Distribution in release",
                                        optional: true),
@@ -64,7 +64,7 @@ module Fastlane
                                        end),
           FastlaneCore::ConfigItem.new(key: :file_url,
                                        description: "Optional URL we should associate with the file",
-                                       optional: true),
+                                       optional: true)
         ]
       end
 
