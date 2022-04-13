@@ -206,7 +206,6 @@ AllCops:
   Exclude:
     - '**/lib/assets/custom_action_template.rb'
     - './vendor/**/*'
-    - 'spec/**/*'
 
 # They have not to be snake_case
 Style/FileName:
@@ -242,4 +241,7 @@ Style/CollectionMethods:
   Enabled: false
 
 Metrics/PerceivedComplexity:
+  Enabled: false
+
+Style/NumericLiterals:
   Enabled: false

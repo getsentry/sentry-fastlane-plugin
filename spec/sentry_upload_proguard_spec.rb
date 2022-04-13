@@ -4,7 +4,7 @@ describe Fastlane do
       it "fails with API key and auth token" do
         mapping_path = File.absolute_path './assets/AndroidExample.mapping.txt'
         android_manifest_path = File.absolute_path './assets/AndroidManifest.xml'
-        
+
         expect do
           Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_proguard(

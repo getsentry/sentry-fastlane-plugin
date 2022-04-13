@@ -12,7 +12,7 @@ describe Fastlane do
               app_identifier: 'app.idf')
         end").runner.execute(:test)
       end
-      
+
       it "accepts build" do
         allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)

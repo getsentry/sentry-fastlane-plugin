@@ -75,7 +75,7 @@ describe Fastlane do
       it "uses input value for strip_prefix" do
         allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "files", "app.idf@1.0", "upload-sourcemaps", "1.map", "--no-rewrite", "--strip-prefix", "/Users/get-sentry/semtry-fastlane-plugin","--dist", "dem"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "files", "app.idf@1.0", "upload-sourcemaps", "1.map", "--no-rewrite", "--strip-prefix", "/Users/get-sentry/semtry-fastlane-plugin", "--dist", "dem"]).and_return(true)
 
         allow(File).to receive(:exist?).and_call_original
         expect(File).to receive(:exist?).with("1.map").and_return(true)
@@ -97,7 +97,7 @@ describe Fastlane do
       it "accepts strip_common_prefix" do
         allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "files", "app.idf@1.0", "upload-sourcemaps", "1.map", "--no-rewrite","--strip-common-prefix", "--dist", "dem"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "files", "app.idf@1.0", "upload-sourcemaps", "1.map", "--no-rewrite", "--strip-common-prefix", "--dist", "dem"]).and_return(true)
 
         allow(File).to receive(:exist?).and_call_original
         expect(File).to receive(:exist?).with("1.map").and_return(true)
@@ -171,7 +171,6 @@ describe Fastlane do
               rewrite: true)
         end").runner.execute(:test)
       end
-
     end
   end
 end

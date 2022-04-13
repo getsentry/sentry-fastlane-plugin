@@ -14,7 +14,7 @@ describe Fastlane::Helper::SentryHelper do
     it "uses sentry_cli_path passed to check its version" do
       sentry_cli_path = 'path'
       expect(described_class).to receive(:`).with("#{sentry_cli_path} --version").and_return(Fastlane::Sentry::CLI_VERSION)
-      expect(Fastlane::Helper::SentryHelper.find_and_check_sentry_cli_path!({sentry_cli_path: sentry_cli_path})).to eq(sentry_cli_path)
+      expect(Fastlane::Helper::SentryHelper.find_and_check_sentry_cli_path!({ sentry_cli_path: sentry_cli_path })).to eq(sentry_cli_path)
     end
   end
 end
