@@ -2,10 +2,6 @@
 
 ## Unreleased
 
-### Fixes
-
-- fix: Rubocop Configuration (#121)
-
 ### Features
 
 - feat: Add sentry cli path as parameter for actions (#97)
