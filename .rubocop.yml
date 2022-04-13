@@ -241,10 +241,5 @@ Style/IfInsideElse:
 Style/CollectionMethods:
   Enabled: false
 
-# default no_comma
-Style/TrailingCommaInArguments:
-  Enabled: true
-
-# default no_comma
-Style/TrailingCommaInArrayLiteral:
-  Enabled: true
+Metrics/PerceivedComplexity:
+  Enabled: false
