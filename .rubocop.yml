@@ -196,12 +196,17 @@ Style/SpaceAroundOperators:
   Exclude:
     - '**/spec/actions_specs/xcodebuild_spec.rb'
 
+inherit_mode:
+  merge:
+    - Include
+
 AllCops:
   Include:
     - '**/fastlane/Fastfile'
   Exclude:
     - '**/lib/assets/custom_action_template.rb'
     - './vendor/**/*'
+    - 'spec/**/*'
 
 # They have not to be snake_case
 Style/FileName:
@@ -235,3 +240,11 @@ Style/IfInsideElse:
 # Sometimes we just want to 'collect'
 Style/CollectionMethods:
   Enabled: false
+
+# default no_comma
+Style/TrailingCommaInArguments:
+  Enabled: true
+
+# default no_comma
+Style/TrailingCommaInArrayLiteral:
+  Enabled: true
