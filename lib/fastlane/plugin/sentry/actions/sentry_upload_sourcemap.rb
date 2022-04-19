@@ -33,7 +33,11 @@ module Fastlane
             params[:ignore] = [params[:ignore]]
           end
           # no nil or empty strings
-          params[:ignore].reject! { |e| e.strip.empty? rescue true }
+          params[:ignore].reject! do |e|
+            e.strip.empty?
+          rescue StandardError
+            true
+          end
           command.push('--ignore').push(*params[:ignore]) if params[:ignore].any?
         end
 
@@ -68,9 +72,9 @@ module Fastlane
                                        description: "App Bundle Identifier, prepended to version",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :build,
-                                      short_option: "-b",
-                                      description: "Release build on Sentry",
-                                      optional: true),
+                                       short_option: "-b",
+                                       description: "Release build on Sentry",
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :dist,
                                        description: "Distribution in release",
                                        optional: true),

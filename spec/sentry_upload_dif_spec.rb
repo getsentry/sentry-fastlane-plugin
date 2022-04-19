@@ -285,7 +285,6 @@ describe Fastlane do
             )
         end").runner.execute(:test)
       end
-
     end
   end
 end

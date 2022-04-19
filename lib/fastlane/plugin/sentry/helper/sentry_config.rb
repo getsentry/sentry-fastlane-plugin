@@ -9,7 +9,7 @@ module Fastlane
                                        optional: true,
                                        verify_block: proc do |value|
                                          UI.user_error! "'#{value}' is not executable" unless FastlaneCore::Helper.executable?(value)
-                                       end),
+                                       end)
         ]
       end
 
@@ -35,7 +35,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :project_slug,
                                        env_name: "SENTRY_PROJECT_SLUG",
                                        description: "Project slug for Sentry",
-                                       optional: true),
+                                       optional: true)
         ] + self.common_cli_config_items
       end
 
@@ -58,7 +58,7 @@ module Fastlane
 
         # Fallback to .sentryclirc if possible when no auth token is provided
         if !has_api_key && !has_auth_token && fallback_sentry_cli_auth(params)
-            UI.important("No auth config provided, will fallback to .sentryclirc")
+          UI.important("No auth config provided, will fallback to .sentryclirc")
         else
           # Will fail if none or both authentication methods are provided
           if !has_api_key && !has_auth_token
@@ -82,12 +82,12 @@ module Fastlane
 
       def self.fallback_sentry_cli_auth(params)
         sentry_cli_result = JSON.parse(SentryHelper.call_sentry_cli(
-          params, 
-          [
-            "info", 
-            "--config-status-json",
-          ]
-        ))
+                                         params,
+                                         [
+                                           "info",
+                                           "--config-status-json"
+                                         ]
+                                       ))
         return (sentry_cli_result["auth"]["successful"] &&
           !sentry_cli_result["auth"]["type"].nil?)
       end
