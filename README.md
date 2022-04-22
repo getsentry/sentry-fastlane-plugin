@@ -174,6 +174,10 @@ sentry_create_deploy(
 )
 ```
 
+### Specify custom sentry-cli path
+
+For every action, you can specify a custom sentry-cli path by adding `sentry_cli_path` to the action. This defaults to `which sentry-cli`.
+
 ### Checking the sentry-cli is installed
 
 Useful for checking that the sentry-cli is installed and meets the minimum version requirements before starting to build your app in your lane.
