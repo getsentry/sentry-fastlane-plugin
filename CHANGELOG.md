@@ -5,7 +5,10 @@
 ### Features
 
 - feat: Add sentry cli path as parameter for actions (#97)
-- fix: Add missing mac supported platform to sentry_upload_dsym (#115)
+
+### Fixes
+
+- Add missing mac supported platform to sentry_upload_dsym (#115)
 
 ## 1.11.1
 
