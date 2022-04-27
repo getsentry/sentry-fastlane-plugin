@@ -40,14 +40,14 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Release version to finalize on Sentry"),
           FastlaneCore::ConfigItem.new(key: :app_identifier,
-                                      short_option: "-a",
-                                      env_name: "SENTRY_APP_IDENTIFIER",
-                                      description: "App Bundle Identifier, prepended to version",
-                                      optional: true),
+                                       short_option: "-a",
+                                       env_name: "SENTRY_APP_IDENTIFIER",
+                                       description: "App Bundle Identifier, prepended to version",
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :build,
-                                      short_option: "-b",
-                                      description: "Release build to finalize on Sentry",
-                                      optional: true)
+                                       short_option: "-b",
+                                       description: "Release build to finalize on Sentry",
+                                       optional: true)
         ]
       end
 

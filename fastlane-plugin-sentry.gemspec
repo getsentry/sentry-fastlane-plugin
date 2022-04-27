@@ -1,10 +1,9 @@
-# coding: utf-8
-
-lib = File.expand_path("../lib", __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'fastlane/plugin/sentry/version'
 
 Gem::Specification.new do |spec|
+  spec.required_ruby_version = '>= 2.5.0'
   spec.name          = 'fastlane-plugin-sentry'
   spec.version       = Fastlane::Sentry::VERSION
   spec.author        = %q{Sentry}
@@ -18,9 +17,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'pry'
   spec.add_development_dependency 'bundler'
+  spec.add_development_dependency 'fastlane', '>= 2.10.0'
+  spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'fastlane', '>= 2.10.0'
 end

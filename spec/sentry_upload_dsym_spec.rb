@@ -1,7 +1,6 @@
 describe Fastlane do
   describe Fastlane::FastFile do
     describe "upload dsym" do
-      
       it "fails with API key and auth token" do
         dsym_path_1 = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
 

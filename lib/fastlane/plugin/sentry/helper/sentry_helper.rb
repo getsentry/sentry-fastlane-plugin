@@ -2,7 +2,6 @@ module Fastlane
   module Helper
     class SentryHelper
       def self.find_and_check_sentry_cli_path!(params)
-
         sentry_path = params[:sentry_cli_path] || FastlaneCore::CommandExecutor.which('sentry-cli')
         if sentry_path.nil?
           UI.error("You have to install sentry-cli version #{Fastlane::Sentry::CLI_VERSION} to use this plugin")

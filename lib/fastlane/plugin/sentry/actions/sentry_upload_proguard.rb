@@ -41,19 +41,19 @@ module Fastlane
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :mapping_path,
-                                      env_name: "ANDROID_MAPPING_PATH",
-                                      description: "Path to your proguard mapping.txt file",
-                                      optional: false,
-                                      verify_block: proc do |value|
-                                        UI.user_error! "Could not find your mapping file at path '#{value}'" unless File.exist?(value)
-                                      end),
+                                       env_name: "ANDROID_MAPPING_PATH",
+                                       description: "Path to your proguard mapping.txt file",
+                                       optional: false,
+                                       verify_block: proc do |value|
+                                                       UI.user_error! "Could not find your mapping file at path '#{value}'" unless File.exist?(value)
+                                                     end),
           FastlaneCore::ConfigItem.new(key: :android_manifest_path,
-                                      env_name: "ANDROID_MANIFEST_PATH",
-                                      description: "Path to your merged AndroidManifest file. This is usually found under `app/build/intermediates/manifests/full`",
-                                      optional: false,
-                                      verify_block: proc do |value|
-                                        UI.user_error! "Could not find your merged AndroidManifest file at path '#{value}'" unless File.exist?(value)
-                                      end)
+                                       env_name: "ANDROID_MANIFEST_PATH",
+                                       description: "Path to your merged AndroidManifest file. This is usually found under `app/build/intermediates/manifests/full`",
+                                       optional: false,
+                                       verify_block: proc do |value|
+                                                       UI.user_error! "Could not find your merged AndroidManifest file at path '#{value}'" unless File.exist?(value)
+                                                     end)
         ]
       end
 

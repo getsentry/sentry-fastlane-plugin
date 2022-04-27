@@ -114,8 +114,6 @@ describe Fastlane do
               version: '1.0')
         end").runner.execute(:test)
       end
-
-
     end
   end
 end
