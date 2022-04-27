@@ -9,6 +9,7 @@
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-sentry)
 [![Tests](https://img.shields.io/github/workflow/status/getsentry/sentry-fastlane/test?label=Tests)](https://github.com/getsentry/sentry-fastlane/actions?query=workflow%3A"test")
 [![Gem Version](https://badge.fury.io/rb/fastlane-plugin-sentry.svg)](https://badge.fury.io/rb/fastlane-plugin-sentry)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgetsentry%2Fsentry-fastlane-plugin.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgetsentry%2Fsentry-fastlane-plugin?ref=badge_shield)
 
 ## Getting Started
 
@@ -197,3 +198,7 @@ For more information about how the `fastlane` plugin system works, check out the
 ## About `fastlane`
 
 `fastlane` automates building, testing, and releasing your app for beta and app store distributions. To learn more about `fastlane`, check out [fastlane.tools](https://fastlane.tools).
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgetsentry%2Fsentry-fastlane-plugin.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgetsentry%2Fsentry-fastlane-plugin?ref=badge_large)
