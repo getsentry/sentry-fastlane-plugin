@@ -9,3 +9,13 @@ lane :test_big do
     dsym_path: './assets/Big.app.dSYM.zip'
   )
 end
+
+lane :integration_test do
+  sentry_upload_dif(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    path: './assets/SwiftExample.app.dSYM.zip',
+    url: "http://127.0.0.1:8000"
+  )
+end
