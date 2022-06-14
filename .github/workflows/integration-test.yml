@@ -17,9 +17,15 @@ jobs:
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.6'
-      - uses: maierj/fastlane-action@v2.2.0
 
       - name: Install sentry-cli
         run: curl -sL https://sentry.io/get-cli/ | bash
 
-      - run: ./integration.sh
+      - name: Install Google API Client
+        run: sudo gem install google-api-client
+
+      - name: Install Fastlane
+        run: sudo gem install fastlane -NV
+
+      - name: Run integration tests
+        run: ./integration.sh
