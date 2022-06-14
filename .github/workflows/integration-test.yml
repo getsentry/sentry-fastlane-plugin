@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-18.04
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v4
@@ -20,9 +20,9 @@ jobs:
 
       - name: Install sentry-cli
         run: curl -sL https://sentry.io/get-cli/ | bash
-        
+
       - name: Install Fastlane
-        run: sudo gem install fastlane -NV
+        run: sudo gem install fastlane
 
       - name: Run integration tests
         run: ./integration.sh
