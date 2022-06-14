@@ -11,14 +11,11 @@ lane :test_big do
 end
 
 lane :integration_test_upload_dif do
-
-  UI.user_error!("Test failing fastlane call...")
-
-  # sentry_upload_dif(
-  #   org_slug: 'sentry-sdks',
-  #   project_slug: 'sentry-fastlane-plugin',
-  #   auth_token: 'dummy-auth-token',
-  #   path: './assets/SwiftExample.app.dSYM.zip',
-  #   url: "http://127.0.0.1:8000"
-  # )
+  sentry_upload_dif(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    path: './assets/SwiftExample.app.dSYM.zip',
+    url: "http://127.0.0.1:8000"
+  )
 end
