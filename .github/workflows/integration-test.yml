@@ -17,6 +17,7 @@ jobs:
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.6'
+      - uses: maierj/fastlane-action@v2.2.0
 
       - name: Install sentry-cli
         run: curl -sL https://sentry.io/get-cli/ | bash
