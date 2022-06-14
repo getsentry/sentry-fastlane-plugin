@@ -10,7 +10,7 @@ lane :test_big do
   )
 end
 
-lane :integration_test do
+lane :integration_test_upload_dif do
   sentry_upload_dif(
     org_slug: 'sentry-sdks',
     project_slug: 'sentry-fastlane-plugin',
