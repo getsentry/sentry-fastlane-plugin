@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'fastlane/plugin/sentry/version'
 
 Gem::Specification.new do |spec|
-  spec.required_ruby_version = '>= 2.5.0'
+  spec.required_ruby_version = '>= 2.6.0'
   spec.name          = 'fastlane-plugin-sentry'
   spec.version       = Fastlane::Sentry::VERSION
   spec.author        = %q{Sentry}
