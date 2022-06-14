@@ -14,16 +14,13 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10.5'
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1.2'
 
       - name: Install sentry-cli
         run: curl -sL https://sentry.io/get-cli/ | bash
-
-      - name: Install Google API Client
-        run: sudo gem install google-api-client
-
+        
       - name: Install Fastlane
         run: sudo gem install fastlane -NV
 
