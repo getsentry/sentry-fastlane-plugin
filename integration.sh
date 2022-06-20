@@ -8,14 +8,17 @@ stop_server() {
 	curl http://127.0.0.1:8000/STOP
 }
 
-integration_test_upload_diff() {
-	fastlane integration_test_upload_dif
-}
+start_server &
 
-if ! (start_server & integration_test_upload_diff) ; then
+if ! (fastlane integration_test_upload_dif) ; then
 	stop_server
   	exit 1
-else 
-	stop_server
-	exit 0
 fi
+
+if ! (fastlane integration_test_create_release) ; then
+	stop_server
+  	exit 1
+fi
+
+stop_server
+exit 0

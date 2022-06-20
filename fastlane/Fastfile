@@ -19,3 +19,14 @@ lane :integration_test_upload_dif do
     url: "http://127.0.0.1:8000"
   )
 end
+
+lane :integration_test_create_release do
+  sentry_create_release(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    version: '1.1.0',
+    app_identifier: "com.sentry.fastlane.app",
+    url: "http://127.0.0.1:8000"
+  )
+end

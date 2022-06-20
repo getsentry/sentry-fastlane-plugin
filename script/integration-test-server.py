@@ -57,6 +57,10 @@ class Handler(BaseHTTPRequestHandler):
                                  value['debug_id'], value['name'])
             jsonResponse = jsonResponse.rstrip(',') + '}'
             self.writeJSON(jsonResponse)
+        elif self.isApi('api/0/projects/{}/{}/releases/'.format(apiOrg, apiProject)):
+            release_file = open("script/release.json", "r")
+            self.writeJSON(release_file.read())
+            release_file.close()
         else:
             self.end_headers()
 
