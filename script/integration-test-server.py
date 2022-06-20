@@ -11,13 +11,15 @@ import json
 apiOrg = 'sentry-sdks'
 apiProject = 'sentry-fastlane-plugin'
 uri = urlparse(sys.argv[1] if len(sys.argv) > 1 else 'http://127.0.0.1:8000')
-
+version="1.1.0"
 
 class Handler(BaseHTTPRequestHandler):
     body = None
 
     def do_GET(self):
         self.start_response(HTTPStatus.OK)
+
+        
 
         if self.path == "/STOP":
             print("HTTP server stopping!")
@@ -29,6 +31,14 @@ class Handler(BaseHTTPRequestHandler):
                            '"chunkSize":8388608,"chunksPerRequest":64,"maxFileSize":2147483648,'
                            '"maxRequestSize":33554432,"concurrency":1,"hashAlgorithm":"sha1","compression":["gzip"],'
                            '"accept":["debug_files","release_files","pdbs","sources","bcsymbolmaps"]}')
+        elif self.isApi('/api/0/organizations/{}/repos/?cursor='.format(apiOrg)):
+            json_file = open("script/repos.json", "r")
+            self.writeJSON(json_file.read())
+            json_file.close()
+        elif self.isApi('/api/0/organizations/{}/releases/{}/previous-with-commits/'.format(apiOrg, version)):
+            json_file = open("script/release.json", "r")
+            self.writeJSON(json_file.read())
+            json_file.close()
         else:
             self.end_headers()
 
@@ -58,9 +68,21 @@ class Handler(BaseHTTPRequestHandler):
             jsonResponse = jsonResponse.rstrip(',') + '}'
             self.writeJSON(jsonResponse)
         elif self.isApi('api/0/projects/{}/{}/releases/'.format(apiOrg, apiProject)):
-            release_file = open("script/release.json", "r")
-            self.writeJSON(release_file.read())
-            release_file.close()
+            json_file = open("script/release.json", "r")
+            self.writeJSON(json_file.read())
+            json_file.close()
+        else:
+            self.end_headers()
+
+        self.flushLogs()
+
+    def do_PUT(self):
+        self.start_response(HTTPStatus.OK)
+
+        if self.isApi('/api/0/organizations/{}/releases/{}/'.format(apiOrg, version)):
+            json_file = open("script/release.json", "r")
+            self.writeJSON(json_file.read())
+            json_file.close()
         else:
             self.end_headers()
 

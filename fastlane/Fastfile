@@ -14,9 +14,9 @@ lane :integration_test_upload_dif do
   sentry_upload_dif(
     org_slug: 'sentry-sdks',
     project_slug: 'sentry-fastlane-plugin',
+    url: "http://127.0.0.1:8000",
     auth_token: 'dummy-auth-token',
-    path: './assets/SwiftExample.app.dSYM.zip',
-    url: "http://127.0.0.1:8000"
+    path: './assets/SwiftExample.app.dSYM.zip'
   )
 end
 
@@ -25,8 +25,18 @@ lane :integration_test_create_release do
     org_slug: 'sentry-sdks',
     project_slug: 'sentry-fastlane-plugin',
     auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
     version: '1.1.0',
-    app_identifier: "com.sentry.fastlane.app",
-    url: "http://127.0.0.1:8000"
+    app_identifier: "com.sentry.fastlane.app"
+  )
+end
+
+lane :integration_test_set_commits do
+  sentry_set_commits(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
+    version: '1.1.0'
   )
 end
