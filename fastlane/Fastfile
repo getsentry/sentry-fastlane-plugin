@@ -40,3 +40,15 @@ lane :integration_test_set_commits do
     version: '1.1.0'
   )
 end
+
+lane :integration_test_create_deploy do
+  sentry_create_deploy(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
+    version: '1.1.0',
+    app_identifier: "com.sentry.fastlane.app",
+    env: 'production'
+  )
+end

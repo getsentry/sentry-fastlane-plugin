@@ -11,7 +11,8 @@ import json
 apiOrg = 'sentry-sdks'
 apiProject = 'sentry-fastlane-plugin'
 uri = urlparse(sys.argv[1] if len(sys.argv) > 1 else 'http://127.0.0.1:8000')
-version="1.1.0"
+version='1.1.0'
+appIdentifier='com.sentry.fastlane.app'
 
 class Handler(BaseHTTPRequestHandler):
     body = None
@@ -69,6 +70,10 @@ class Handler(BaseHTTPRequestHandler):
             self.writeJSON(jsonResponse)
         elif self.isApi('api/0/projects/{}/{}/releases/'.format(apiOrg, apiProject)):
             json_file = open("script/release.json", "r")
+            self.writeJSON(json_file.read())
+            json_file.close()
+        elif self.isApi('/api/0/organizations/{}/releases/{}@{}/deploys/'.format(apiOrg, appIdentifier, version)):
+            json_file = open("script/deploy.json", "r")
             self.writeJSON(json_file.read())
             json_file.close()
         else:

@@ -25,5 +25,10 @@ if ! (fastlane integration_test_set_commits) ; then
   	exit 1
 fi
 
+if ! (fastlane integration_test_create_deploy) ; then
+	stop_server
+  	exit 1
+fi
+
 stop_server
 exit 0
