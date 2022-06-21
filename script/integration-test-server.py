@@ -76,6 +76,10 @@ class Handler(BaseHTTPRequestHandler):
             json_file = open("script/deploy.json", "r")
             self.writeJSON(json_file.read())
             json_file.close()
+        elif self.isApi('/api/0/projects/{}/{}/releases/{}@{}/files/'.format(apiOrg, apiProject,appIdentifier, version)):
+            json_file = open("script/artifact.json", "r")
+            self.writeJSON(json_file.read())
+            json_file.close()
         else:
             self.end_headers()
 

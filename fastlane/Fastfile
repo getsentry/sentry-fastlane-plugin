@@ -52,3 +52,15 @@ lane :integration_test_create_deploy do
     env: 'production'
   )
 end
+
+lane :integration_test_upload_file do
+  sentry_upload_file(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
+    version: '1.1.0',
+    app_identifier: "com.sentry.fastlane.app",
+    file: 'assets/AndroidExample.mapping.txt'
+  )
+end
