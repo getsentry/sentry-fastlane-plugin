@@ -64,3 +64,27 @@ lane :integration_test_upload_file do
     file: 'assets/AndroidExample.mapping.txt'
   )
 end
+
+lane :integration_test_upload_sourcemap do
+  sentry_upload_sourcemap(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
+    version: '1.1.0',
+    app_identifier: "com.sentry.fastlane.app",
+    sourcemap: 'assets/AndroidExample.mapping.txt'
+  )
+end
+
+lane :integration_test_upload_proguard do
+  sentry_upload_proguard(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
+    android_manifest_path: "assets/AndroidManifest.xml",
+    mapping_path: 'assets/AndroidExample.mapping.txt'
+  )
+end
+

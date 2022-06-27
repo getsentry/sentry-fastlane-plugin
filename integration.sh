@@ -35,5 +35,15 @@ if ! (fastlane integration_test_upload_file) ; then
   	exit 1
 fi
 
+if ! (fastlane integration_test_upload_sourcemap) ; then
+	stop_server
+  	exit 1
+fi
+
+if ! (fastlane integration_test_upload_proguard) ; then
+	stop_server
+  	exit 1
+fi
+
 stop_server
 exit 0
