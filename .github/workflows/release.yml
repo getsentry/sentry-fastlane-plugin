@@ -10,8 +10,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -19,7 +19,7 @@ jobs:
     - name: Build gem source
       run: bundle install && gem build fastlane-plugin-sentry.gemspec
     - name: Archive Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ github.sha }}
         path: '*.gem'
