@@ -33,11 +33,12 @@ class Handler(BaseHTTPRequestHandler):
                            '"maxRequestSize":33554432,"concurrency":1,"hashAlgorithm":"sha1","compression":["gzip"],'
                            '"accept":["debug_files","release_files","pdbs","sources","bcsymbolmaps"]}')
         elif self.isApi('/api/0/organizations/{}/repos/?cursor='.format(apiOrg)):
-            json_file = open("script/repos.json", "r")
+            json_file = open("test/assets/repos.json", "r")
             self.writeJSON(json_file.read())
             json_file.close()
         elif self.isApi('/api/0/organizations/{}/releases/{}/previous-with-commits/'.format(apiOrg, version)):
-            json_file = open("script/release.json", "r")
+            json_file = open("test/assets/release.json", "r")
+            self.log_message(json_file.read())
             self.writeJSON(json_file.read())
             json_file.close()
         else:
@@ -69,27 +70,27 @@ class Handler(BaseHTTPRequestHandler):
             jsonResponse = jsonResponse.rstrip(',') + '}'
             self.writeJSON(jsonResponse)
         elif self.isApi('api/0/projects/{}/{}/releases/'.format(apiOrg, apiProject)):
-            json_file = open("script/release.json", "r")
+            json_file = open("test/assets/release.json", "r")
             self.writeJSON(json_file.read())
             json_file.close()
         elif self.isApi('/api/0/organizations/{}/releases/{}@{}/deploys/'.format(apiOrg, appIdentifier, version)):
-            json_file = open("script/deploy.json", "r")
+            json_file = open("test/assets/deploy.json", "r")
             self.writeJSON(json_file.read())
             json_file.close()
         elif self.isApi('/api/0/projects/{}/{}/releases/{}@{}/files/'.format(apiOrg, apiProject, appIdentifier, version)):
-            json_file = open("script/artifact.json", "r")
+            json_file = open("test/assets/artifact.json", "r")
             self.writeJSON(json_file.read())
             json_file.close()
         elif self.isApi('/api/0/organizations/{}/releases/{}/assemble/'.format(apiOrg, version)):
-            json_file = open("script/assemble-artifacts-response.json", "r")
+            json_file = open("test/assets/assemble-artifacts-response.json", "r")
             self.writeJSON(json_file.read())
             json_file.close()
         elif self.isApi('/api/0/projects/{}/{}/files/dsyms/'.format(apiOrg, apiProject)):
-            json_file = open("script/debug-info-files.json", "r")
+            json_file = open("test/assets/debug-info-files.json", "r")
             self.writeJSON(json_file.read())
             json_file.close()
         elif self.isApi('/api/0/projects/{}/{}/files/dsyms/associate/'.format(apiOrg, apiProject)):
-            json_file = open("script/associate-dsyms-response.json", "r")
+            json_file = open("test/assets/associate-dsyms-response.json", "r")
             self.writeJSON(json_file.read())
             json_file.close()
         else:
@@ -101,7 +102,7 @@ class Handler(BaseHTTPRequestHandler):
         self.start_response(HTTPStatus.OK)
 
         if self.isApi('/api/0/organizations/{}/releases/{}/'.format(apiOrg, version)):
-            json_file = open("script/release.json", "r")
+            json_file = open("test/assets/release.json", "r")
             self.writeJSON(json_file.read())
             json_file.close()
         else:

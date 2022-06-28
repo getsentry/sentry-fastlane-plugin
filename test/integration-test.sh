@@ -1,7 +1,7 @@
 #! /bin/bash
 
 start_server() {
-	python3 script/integration-test-server.py
+	python3 test/integration-test-server.py
 }
 
 stop_server() {
