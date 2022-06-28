@@ -87,4 +87,3 @@ lane :integration_test_upload_proguard do
     mapping_path: 'assets/AndroidExample.mapping.txt'
   )
 end
-
