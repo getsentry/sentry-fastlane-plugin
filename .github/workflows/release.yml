@@ -19,7 +19,7 @@ jobs:
     - name: Build gem source
       run: bundle install && gem build fastlane-plugin-sentry.gemspec
     - name: Archive Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ github.sha }}
         path: '*.gem'
