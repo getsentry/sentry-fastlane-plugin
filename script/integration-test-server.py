@@ -85,7 +85,11 @@ class Handler(BaseHTTPRequestHandler):
             self.writeJSON(json_file.read())
             json_file.close()
         elif self.isApi('/api/0/projects/{}/{}/files/dsyms/'.format(apiOrg, apiProject)):
-            json_file = open("script/debug-info-file.json", "r")
+            json_file = open("script/debug-info-files.json", "r")
+            self.writeJSON(json_file.read())
+            json_file.close()
+        elif self.isApi('/api/0/projects/{}/{}/files/dsyms/associate/'.format(apiOrg, apiProject)):
+            json_file = open("script/associate-dsyms-response.json", "r")
             self.writeJSON(json_file.read())
             json_file.close()
         else:

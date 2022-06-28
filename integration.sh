@@ -45,6 +45,5 @@ if ! (fastlane integration_test_upload_proguard) ; then
   	exit 1
 fi
 
-
 stop_server
 exit 0
