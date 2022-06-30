@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.12.1
+
+### Fixes
+
+- fix: Prevent buffers deadlock by merging stdout and stderr (#138)
+
 ## 1.12.0
 
 ### Features

@@ -30,43 +30,22 @@ module Fastlane
         command = [sentry_path] + sub_command
         UI.message "Starting sentry-cli..."
         require 'open3'
-        if FastlaneCore::Globals.verbose?
-          UI.verbose("sentry-cli command:\n\n")
-          UI.command(command.to_s)
-          UI.verbose("\n\n")
-        end
+
         final_command = command.map { |arg| Shellwords.escape(arg) }.join(" ")
-        out = []
-        error = []
-        Open3.popen3(final_command) do |stdin, stdout, stderr, wait_thr|
-          while (line = stdout.gets)
-            out << line
+
+        if FastlaneCore::Globals.verbose?
+          UI.command(final_command)
+        end
+
+        Open3.popen2e(final_command) do |stdin, stdout_and_stderr, status_thread|
+          stdout_and_stderr.each_line do |line|
             UI.message(line.strip!)
           end
-          while (line = stderr.gets)
-            error << line.strip!
-          end
-          exit_status = wait_thr.value
-          unless exit_status.success? && error.empty?
-            handle_error(error)
-          end
-        end
-        out.join
-      end
 
-      def self.handle_error(errors)
-        fatal = false
-        for error in errors do
-          if error
-            if error =~ /error/
-              UI.error(error.to_s)
-              fatal = true
-            else
-              UI.verbose(error.to_s)
-            end
+          unless status_thread.value.success?
+            UI.user_error!('Error while calling Sentry CLI')
           end
         end
-        UI.user_error!('Error while calling Sentry CLI') if fatal
       end
     end
   end
