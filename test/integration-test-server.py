@@ -19,9 +19,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self.start_response(HTTPStatus.OK)
-
         
-
         if self.path == "/STOP":
             print("HTTP server stopping!")
             threading.Thread(target=self.server.shutdown).start()
@@ -33,13 +31,9 @@ class Handler(BaseHTTPRequestHandler):
                            '"maxRequestSize":33554432,"concurrency":1,"hashAlgorithm":"sha1","compression":["gzip"],'
                            '"accept":["debug_files","release_files","pdbs","sources","bcsymbolmaps"]}')
         elif self.isApi('/api/0/organizations/{}/repos/?cursor='.format(apiOrg)):
-            json_file = open("test/assets/repos.json", "r")
-            self.writeJSON(json_file.read())
-            json_file.close()
+            self.writeJSONFile("test/assets/repos.json")
         elif self.isApi('/api/0/organizations/{}/releases/{}/previous-with-commits/'.format(apiOrg, version)):
-            json_file = open("test/assets/release.json", "r")
-            self.writeJSON(json_file.read())
-            json_file.close()
+            self.writeJSONFile("test/assets/release.json")
         else:
             self.end_headers()
 
@@ -69,29 +63,17 @@ class Handler(BaseHTTPRequestHandler):
             jsonResponse = jsonResponse.rstrip(',') + '}'
             self.writeJSON(jsonResponse)
         elif self.isApi('api/0/projects/{}/{}/releases/'.format(apiOrg, apiProject)):
-            json_file = open("test/assets/release.json", "r")
-            self.writeJSON(json_file.read())
-            json_file.close()
+            self.writeJSONFile("test/assets/release.json")
         elif self.isApi('/api/0/organizations/{}/releases/{}@{}/deploys/'.format(apiOrg, appIdentifier, version)):
-            json_file = open("test/assets/deploy.json", "r")
-            self.writeJSON(json_file.read())
-            json_file.close()
+            self.writeJSONFile("test/assets/deploy.json")
         elif self.isApi('/api/0/projects/{}/{}/releases/{}@{}/files/'.format(apiOrg, apiProject, appIdentifier, version)):
-            json_file = open("test/assets/artifact.json", "r")
-            self.writeJSON(json_file.read())
-            json_file.close()
+            self.writeJSONFile("test/assets/artifact.json")
         elif self.isApi('/api/0/organizations/{}/releases/{}/assemble/'.format(apiOrg, version)):
-            json_file = open("test/assets/assemble-artifacts-response.json", "r")
-            self.writeJSON(json_file.read())
-            json_file.close()
+            self.writeJSONFile("test/assets/assemble-artifacts-response.json")
         elif self.isApi('/api/0/projects/{}/{}/files/dsyms/'.format(apiOrg, apiProject)):
-            json_file = open("test/assets/debug-info-files.json", "r")
-            self.writeJSON(json_file.read())
-            json_file.close()
+            self.writeJSONFile("test/assets/debug-info-files.json")
         elif self.isApi('/api/0/projects/{}/{}/files/dsyms/associate/'.format(apiOrg, apiProject)):
-            json_file = open("test/assets/associate-dsyms-response.json", "r")
-            self.writeJSON(json_file.read())
-            json_file.close()
+            self.writeJSONFile("test/assets/associate-dsyms-response.json")
         else:
             self.end_headers()
 
@@ -101,9 +83,7 @@ class Handler(BaseHTTPRequestHandler):
         self.start_response(HTTPStatus.OK)
 
         if self.isApi('/api/0/organizations/{}/releases/{}/'.format(apiOrg, version)):
-            json_file = open("test/assets/release.json", "r")
-            self.writeJSON(json_file.read())
-            json_file.close()
+            self.writeJSONFile("test/assets/release.json")
         else:
             self.end_headers()
 
@@ -139,6 +119,11 @@ class Handler(BaseHTTPRequestHandler):
             self.log_message("Matched API endpoint {}".format(api))
             return True
         return False
+
+    def writeJSONFile(self, file_name: str):
+        json_file = open(file_name, "r")
+        self.writeJSON(json_file.read())
+        json_file.close()
 
     def writeJSON(self, string: str):
         self.send_header("Content-type", "application/json")
