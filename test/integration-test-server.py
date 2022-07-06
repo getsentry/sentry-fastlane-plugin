@@ -38,7 +38,6 @@ class Handler(BaseHTTPRequestHandler):
             json_file.close()
         elif self.isApi('/api/0/organizations/{}/releases/{}/previous-with-commits/'.format(apiOrg, version)):
             json_file = open("test/assets/release.json", "r")
-            self.log_message(json_file.read())
             self.writeJSON(json_file.read())
             json_file.close()
         else:
