@@ -38,13 +38,23 @@ module Fastlane
         end
 
         Open3.popen2e(final_command) do |stdin, stdout_and_stderr, status_thread|
+          # While most of the commands are just a pass-through for stdout/stderr
+          # we do rely on parsing stdout in `fallback_sentry_cli_auth` helper
+          # We can ignore `stderr`, which is responsible for logging
+          # as `sentry-cli info --config-status-json` which we use, doesnt allow `--verbose`.
+          output = []
+
           stdout_and_stderr.each_line do |line|
-            UI.message(line.strip!)
+            l = line.strip!
+            UI.message(l)
+            output << l
           end
 
           unless status_thread.value.success?
             UI.user_error!('Error while calling Sentry CLI')
           end
+
+          output.join
         end
       end
     end
