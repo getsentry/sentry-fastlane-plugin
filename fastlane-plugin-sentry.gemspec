@@ -13,7 +13,8 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/getsentry/sentry-fastlane-plugin"
   spec.license       = "MIT"
 
-  spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
+  spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE bin/sentry-cli)
+  spec.executables   << 'sentry-cli.rb'
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
