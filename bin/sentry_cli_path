@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+bin_dir = File.expand_path(File.dirname(__FILE__))
+executable_path = File.join(bin_dir, 'sentry-cli')
+print executable_path
