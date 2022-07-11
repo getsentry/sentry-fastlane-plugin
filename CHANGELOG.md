@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.12.2
+
+### Fixes
+
+- fix: Return output from `call_sentry_cli` to allow parsing in `fallback_sentry_cli_auth` (#140)
+
 ## 1.12.1
 
 ### Fixes
@@ -14,7 +20,7 @@
 
 ### Fixes
 
-- Add missing mac supported platform to sentry_upload_dsym (#115)
+- Add missing mac supported platform to `sentry_upload_dsym` (#115)
 
 ## 1.11.1
 
