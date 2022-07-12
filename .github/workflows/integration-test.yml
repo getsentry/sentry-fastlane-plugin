@@ -24,5 +24,8 @@ jobs:
       - name: Install Fastlane
         run: sudo gem install fastlane
 
+      - name: Run bundle install
+        run: bundle install
+
       - name: Run integration tests
         run: ./integration.sh
