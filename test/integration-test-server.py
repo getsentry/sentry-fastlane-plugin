@@ -11,14 +11,15 @@ import json
 apiOrg = 'sentry-sdks'
 apiProject = 'sentry-fastlane-plugin'
 uri = urlparse(sys.argv[1] if len(sys.argv) > 1 else 'http://127.0.0.1:8000')
-
+version='1.1.0'
+appIdentifier='com.sentry.fastlane.app'
 
 class Handler(BaseHTTPRequestHandler):
     body = None
 
     def do_GET(self):
         self.start_response(HTTPStatus.OK)
-
+        
         if self.path == "/STOP":
             print("HTTP server stopping!")
             threading.Thread(target=self.server.shutdown).start()
@@ -29,6 +30,10 @@ class Handler(BaseHTTPRequestHandler):
                            '"chunkSize":8388608,"chunksPerRequest":64,"maxFileSize":2147483648,'
                            '"maxRequestSize":33554432,"concurrency":1,"hashAlgorithm":"sha1","compression":["gzip"],'
                            '"accept":["debug_files","release_files","pdbs","sources","bcsymbolmaps"]}')
+        elif self.isApi('/api/0/organizations/{}/repos/?cursor='.format(apiOrg)):
+            self.writeJSONFile("test/assets/repos.json")
+        elif self.isApi('/api/0/organizations/{}/releases/{}/previous-with-commits/'.format(apiOrg, version)):
+            self.writeJSONFile("test/assets/release.json")
         else:
             self.end_headers()
 
@@ -57,6 +62,28 @@ class Handler(BaseHTTPRequestHandler):
                                  value['debug_id'], value['name'])
             jsonResponse = jsonResponse.rstrip(',') + '}'
             self.writeJSON(jsonResponse)
+        elif self.isApi('api/0/projects/{}/{}/releases/'.format(apiOrg, apiProject)):
+            self.writeJSONFile("test/assets/release.json")
+        elif self.isApi('/api/0/organizations/{}/releases/{}@{}/deploys/'.format(apiOrg, appIdentifier, version)):
+            self.writeJSONFile("test/assets/deploy.json")
+        elif self.isApi('/api/0/projects/{}/{}/releases/{}@{}/files/'.format(apiOrg, apiProject, appIdentifier, version)):
+            self.writeJSONFile("test/assets/artifact.json")
+        elif self.isApi('/api/0/organizations/{}/releases/{}/assemble/'.format(apiOrg, version)):
+            self.writeJSONFile("test/assets/assemble-artifacts-response.json")
+        elif self.isApi('/api/0/projects/{}/{}/files/dsyms/'.format(apiOrg, apiProject)):
+            self.writeJSONFile("test/assets/debug-info-files.json")
+        elif self.isApi('/api/0/projects/{}/{}/files/dsyms/associate/'.format(apiOrg, apiProject)):
+            self.writeJSONFile("test/assets/associate-dsyms-response.json")
+        else:
+            self.end_headers()
+
+        self.flushLogs()
+
+    def do_PUT(self):
+        self.start_response(HTTPStatus.OK)
+
+        if self.isApi('/api/0/organizations/{}/releases/{}/'.format(apiOrg, version)):
+            self.writeJSONFile("test/assets/release.json")
         else:
             self.end_headers()
 
@@ -92,6 +119,11 @@ class Handler(BaseHTTPRequestHandler):
             self.log_message("Matched API endpoint {}".format(api))
             return True
         return False
+
+    def writeJSONFile(self, file_name: str):
+        json_file = open(file_name, "r")
+        self.writeJSON(json_file.read())
+        json_file.close()
 
     def writeJSON(self, string: str):
         self.send_header("Content-type", "application/json")
