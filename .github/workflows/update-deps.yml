@@ -1,0 +1,19 @@
+name: Update Dependencies
+
+ on:
+   # Run every day.
+   schedule:
+     - cron: '0 3 * * *'
+   # And on on every PR merge so we get the updated dependencies ASAP, and to make sure the changelog doesn't conflict.
+   push:
+     branches:
+       - master
+
+ jobs:
+   cli:
+     uses: getsentry/github-workflows/.github/workflows/updater.yml@v1
+     with:
+       path: script/sentry-cli.properties
+       name: CLI
+     secrets:
+       api_token: ${{ secrets.CI_DEPLOY_KEY }}
