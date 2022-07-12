@@ -18,7 +18,7 @@ describe Fastlane::Helper::SentryHelper do
       sentry_cli_path = 'path'
       expect(described_class).to receive(:`).with("bundle exec sentry_cli_path").and_return(bundled_sentry_cli_path) # Called in test
       expect(described_class).to receive(:`).with("#{bundled_sentry_cli_path} --version").and_return(bundled_sentry_cli_path) # Called for bundled version
-      expect(described_class).to receive(:`).with("#{sentry_cli_path} --version").and_return(bundled_sentry_cli_version) # Called sentry_cli_path parmeter 
+      expect(described_class).to receive(:`).with("#{sentry_cli_path} --version").and_return(bundled_sentry_cli_version) # Called sentry_cli_path parmeter
 
       expect(Fastlane::Helper::SentryHelper.find_and_check_sentry_cli_path!({ sentry_cli_path: sentry_cli_path })).to eq(sentry_cli_path)
     end
