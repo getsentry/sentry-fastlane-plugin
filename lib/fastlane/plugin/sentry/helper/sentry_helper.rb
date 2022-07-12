@@ -2,18 +2,19 @@ module Fastlane
   module Helper
     class SentryHelper
       def self.find_and_check_sentry_cli_path!(params)
-        sentry_path = params[:sentry_cli_path] || `bundle exec sentry_cli_path`
+        bundled_sentry_cli_path = `bundle exec sentry_cli_path`
+        bundled_sentry_cli_version = Gem::Version.new(`#{bundled_sentry_cli_path} --version`.scan(/(?:\d+\.?){3}/).first)
 
-        sentry_cli_version = Gem::Version.new(`#{sentry_path} --version`.scan(/(?:\d+\.?){3}/).first)
+        sentry_cli_path = params[:sentry_cli_path] || bundled_sentry_cli_path
 
-        required_version = Gem::Version.new(Fastlane::Sentry::CLI_VERSION)
+        sentry_cli_version = Gem::Version.new(`#{sentry_cli_path} --version`.scan(/(?:\d+\.?){3}/).first)
 
-        if sentry_cli_version < required_version
-          UI.user_error!("Your sentry-cli is outdated, please upgrade to at least version #{Fastlane::Sentry::CLI_VERSION} and start your lane again!")
+        if sentry_cli_version < bundled_sentry_cli_version
+          UI.user_error!("Your sentry-cli is outdated, please upgrade to at least version #{bundled_sentry_cli_version} and start your lane again!")
         end
 
         UI.success("Using sentry-cli #{sentry_cli_version}")
-        sentry_path
+        sentry_cli_path
       end
 
       def self.call_sentry_cli(params, sub_command)
