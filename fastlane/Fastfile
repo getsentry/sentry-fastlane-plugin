@@ -14,8 +14,77 @@ lane :integration_test_upload_dif do
   sentry_upload_dif(
     org_slug: 'sentry-sdks',
     project_slug: 'sentry-fastlane-plugin',
+    url: "http://127.0.0.1:8000",
     auth_token: 'dummy-auth-token',
-    path: './assets/SwiftExample.app.dSYM.zip',
-    url: "http://127.0.0.1:8000"
+    path: './assets/SwiftExample.app.dSYM.zip'
+  )
+end
+
+lane :integration_test_create_release do
+  sentry_create_release(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
+    version: '1.1.0',
+    app_identifier: "com.sentry.fastlane.app"
+  )
+end
+
+lane :integration_test_set_commits do
+  sentry_set_commits(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
+    version: '1.1.0',
+    commit: "sentry/sentry-fastlane-plugin@369affccf9e6570cb52275d1c0dfb7e016fe6cb8"
+  )
+end
+
+lane :integration_test_create_deploy do
+  sentry_create_deploy(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
+    version: '1.1.0',
+    app_identifier: "com.sentry.fastlane.app",
+    env: 'production'
+  )
+end
+
+lane :integration_test_upload_file do
+  sentry_upload_file(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
+    version: '1.1.0',
+    app_identifier: "com.sentry.fastlane.app",
+    file: 'assets/AndroidExample.mapping.txt'
+  )
+end
+
+lane :integration_test_upload_sourcemap do
+  sentry_upload_sourcemap(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
+    version: '1.1.0',
+    app_identifier: "com.sentry.fastlane.app",
+    sourcemap: 'assets/AndroidExample.mapping.txt'
+  )
+end
+
+lane :integration_test_upload_proguard do
+  sentry_upload_proguard(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    auth_token: 'dummy-auth-token',
+    url: "http://127.0.0.1:8000",
+    android_manifest_path: "assets/AndroidManifest.xml",
+    mapping_path: 'assets/AndroidExample.mapping.txt'
   )
 end
