@@ -1,3 +1,9 @@
 #!/usr/bin/env ruby
 
-print File.join(__dir__, 'sentry-cli')
+require 'os'
+
+if OS.windows?
+  print File.join(__dir__, 'sentry-cli-Windows-x86_64.exe')
+else
+  print File.join(__dir__, 'sentry-cli-Darwin-universal')
+end
