@@ -21,9 +21,6 @@ jobs:
         with:
           ruby-version: '3.1.2'
 
-      - name: Install Fastlane
-        run: sudo gem install fastlane
-
       - if: matrix.os == 'macos-latest'
         name: Install Fastlane (macOS)
         run: sudo gem install fastlane
