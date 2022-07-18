@@ -21,11 +21,16 @@ jobs:
         with:
           ruby-version: '3.1.2'
 
-      - name: Install sentry-cli
-        run: curl -sL https://sentry.io/get-cli/ | bash
-
       - name: Install Fastlane
         run: sudo gem install fastlane
+
+      - if: matrix.os == 'macos-latest'
+        name: Install Fastlane (macOS)
+        run: sudo gem install fastlane
+
+      - if: matrix.os == 'windows-latest'
+        name: Install Fastlane (Windows)
+        run: gem install fastlane
 
       - name: Run bundle install
         run: bundle install
