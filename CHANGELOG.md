@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Enha: Pin/Bundle sentry-cli Version (#143)
+
 ## 1.12.2
 
 ### Fixes
