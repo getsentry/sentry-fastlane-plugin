@@ -4,7 +4,7 @@ describe Fastlane::Helper::SentryHelper do
       sentry_cli_path = 'path'
       options = {}
       expect(Fastlane::Helper::SentryHelper).to receive(:find_and_check_sentry_cli_path!).with(options).and_return(sentry_cli_path)
-      expect(Open3).to receive(:popen2e).with("#{sentry_cli_path} subcommand")
+      expect(Open3).to receive(:popen3).with("#{sentry_cli_path} subcommand")
 
       Fastlane::Helper::SentryHelper.call_sentry_cli(options, ["subcommand"])
     end
