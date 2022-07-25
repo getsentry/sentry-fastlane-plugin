@@ -75,8 +75,10 @@ module Fastlane
         if has_org && has_project
           ENV['SENTRY_ORG'] = Shellwords.escape(org) unless org.to_s.empty?
           ENV['SENTRY_PROJECT'] = Shellwords.escape(project) unless project.to_s.empty?
-        else
-          UI.important("No org/project config provided, will fallback to .sentryclirc")
+        elsif !has_org
+          UI.important("Missing 'org_slug' parameter. Provide both 'org_slug' and 'project_slug'. Falling back to .sentryclirc")
+        elsif !has_project
+          UI.important("Missing 'project_slug' parameter. Provide both 'org_slug' and 'project_slug'. Falling back to .sentryclirc")
         end
       end
 
