@@ -22,11 +22,11 @@ jobs:
           ruby-version: '3.1.2'
 
       - if: matrix.os == 'macos-latest'
-        name: Install Fastlane (macOS)
+        name: Install Fastlane {{ matrix.os }}
         run: sudo gem install fastlane
 
       - if: matrix.os == 'windows-latest'
-        name: Install Fastlane (Windows)
+        name: Install Fastlane {{ matrix.os }}
         run: gem install fastlane
 
       - name: Run bundle install
