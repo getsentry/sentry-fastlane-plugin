@@ -12,7 +12,7 @@
 
 ## Getting Started
 
-This project is a [fastlane](https://github.com/fastlane/fastlane) plugin. To get started with fastlane-plugin-sentry, you can eiterh add it globally for all projects, or locally to an individual project.
+This project is a [fastlane](https://github.com/fastlane/fastlane) plugin. To get started with fastlane-plugin-sentry, you can either add it globally for all projects, or locally to an individual project.
 
 ### Globally
 
