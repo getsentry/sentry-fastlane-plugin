@@ -4,6 +4,12 @@
 
 - Enha: Pin/Bundle sentry-cli Version (#143)
 
+## 1.12.3
+
+### Fixes
+
+- fix: Use threads to read `sentry-cli` output (#147)
+
 ## 1.12.2
 
 ### Fixes
