@@ -34,6 +34,8 @@ class Handler(BaseHTTPRequestHandler):
             self.writeJSONFile("test/assets/repos.json")
         elif self.isApi('/api/0/organizations/{}/releases/{}/previous-with-commits/'.format(apiOrg, version)):
             self.writeJSONFile("test/assets/release.json")
+        elif self.isApi('/api/0/projects/{}/{}/releases/{}/files/?cursor='.format(apiOrg, apiProject, version)):
+            self.writeJSONFile("test/assets/artifacts.json")
         else:
             self.end_headers()
 

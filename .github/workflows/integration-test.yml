@@ -8,7 +8,10 @@ on:
 
 jobs:
   integration-test:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -18,11 +21,13 @@ jobs:
         with:
           ruby-version: '3.1.2'
 
-      - name: Install sentry-cli
-        run: curl -sL https://sentry.io/get-cli/ | bash
-
-      - name: Install Fastlane
+      - if: matrix.os == 'macos-latest'
+        name: Install Fastlane {{ matrix.os }}
         run: sudo gem install fastlane
+
+      - if: matrix.os == 'windows-latest'
+        name: Install Fastlane {{ matrix.os }}
+        run: gem install fastlane
 
       - name: Run bundle install
         run: bundle install
