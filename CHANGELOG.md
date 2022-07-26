@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+### Features
+
 - Enha: Pin/Bundle sentry-cli Version (#143)
 
 ## 1.12.3
