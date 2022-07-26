@@ -202,7 +202,7 @@ sentry_create_deploy(
 
 ### Specify custom sentry-cli path
 
-For every action, you can specify a custom sentry-cli path by adding `sentry_cli_path` to the action. This defaults to `which sentry-cli`.
+Starting with version `1.13.0`, the plugin bundles both macOS and Windows 64 bit executables of `sentry-cli`. You can also specify a custom `sentry-cli` path by adding `sentry_cli_path` to any action.
 
 ### Checking the sentry-cli is installed
 
