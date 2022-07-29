@@ -82,7 +82,7 @@ Further options:
 - __derived_data__: Optional. Search for debug symbols in Xcode's derived data.
 - __no_zips__: Do not search in ZIP files.
 - __info_plist__: Optional. Optional path to the Info.plist. We will try to find this automatically if run from Xcode.  Providing this information will associate the debug symbols with a specific ITC application and build in Sentry.  Note that if you provide the plist explicitly it must already be processed.
-- __no_reprocessing__: Optional. Do not trigger reprocessing after uploading.                           
+- __no_reprocessing__: Optional. Do not trigger reprocessing after uploading.
 - __force_foreground__: Optional. Wait for the process to finish. By default, the upload process will detach and continue in the background when triggered from Xcode.  When an error happens, a dialog is shown.  If this parameter is passed Xcode will wait for the process to finish before the build finishes and output will be shown in the Xcode build output.
 - __include_sources__: Optional. Include sources from the local file system and upload them as source bundles.
 - __wait__: Wait for the server to fully process uploaded files. Errors can only be displayed if --wait is specified, but this will significantly slow down the upload process.
@@ -146,6 +146,25 @@ sentry_upload_sourcemap(
   build: '...', # Optionally pass in the build number of your app
   dist: '...', # optional distribution of the release usually the buildnumber
   sourcemap: 'main.jsbundle.map', # sourcemap to upload
+  rewrite: true
+)
+```
+
+The `sourcemap` argument also accepts an array of files for uploading multiple
+source maps or bundle files simultaneously. This is required at least when
+using Hermes with React Native on Android.
+
+```ruby
+sentry_upload_sourcemap(
+  api_key: '...',
+  auth_token: '...',
+  org_slug: '...',
+  project_slug: '...',
+  version: '...',
+  app_identifier: '...', # pass in the bundle_identifer of your app
+  build: '...', # Optionally pass in the build number of your app
+  dist: '...', # optional distribution of the release usually the buildnumber
+  sourcemap: ['index.android.bundle', 'index.android.bundle.map'], # sourcemaps to upload
   rewrite: true
 )
 ```

@@ -10,14 +10,14 @@ module Fastlane
         version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
         version = "#{version}+#{params[:build]}" if params[:build]
 
-        sourcemap = params[:sourcemap]
+        sourcemaps = params[:sourcemap]
 
         command = [
           "releases",
           "files",
           version,
           "upload-sourcemaps",
-          sourcemap.to_s
+          *sourcemaps.map(&:to_s)
         ]
 
         command.push('--rewrite') if params[:rewrite]
@@ -52,12 +52,12 @@ module Fastlane
       #####################################################
 
       def self.description
-        "Upload a sourcemap to a release of a project on Sentry"
+        "Upload one or more sourcemap(s) to a release of a project on Sentry"
       end
 
       def self.details
         [
-          "This action allows you to upload a sourcemap to a release of a project on Sentry.",
+          "This action allows you to upload one or more sourcemap(s) to a release of a project on Sentry.",
           "See https://docs.sentry.io/learn/cli/releases/#upload-sourcemaps for more information."
         ].join(" ")
       end
@@ -79,9 +79,11 @@ module Fastlane
                                        description: "Distribution in release",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :sourcemap,
-                                       description: "Path to the sourcemap to upload",
-                                       verify_block: proc do |value|
-                                         UI.user_error! "Could not find sourcemap at path '#{value}'" unless File.exist?(value)
+                                       description: "Path or an array of paths to the sourcemap(s) to upload",
+                                       verify_block: proc do |values|
+                                        [*values].each do |value|
+                                          UI.user_error! "Could not find sourcemap at path '#{value}'" unless File.exist?(value)
+                                        end
                                        end),
           FastlaneCore::ConfigItem.new(key: :rewrite,
                                        description: "Rewrite the sourcemaps before upload",
