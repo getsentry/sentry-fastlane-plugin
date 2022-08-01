@@ -19,9 +19,10 @@ jobs:
     secrets:
       api_token: ${{ secrets.CI_DEPLOY_KEY }}
   update-binaries:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: update-cli
     steps:
+      - uses: actions/checkout@v3
       - name: Download latest binaries.
         if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
         run: script/sentry-cli-download.sh
