@@ -8,11 +8,10 @@ on:
   push:
     branches:
       -master
-  pull_request: # TODO: remove me, this is added temporarily to test updater outputs
 
 jobs:
   update-cli:
-    uses: denrase/github-workflows/.github/workflows/updater.yml@9f98d2bca80719220d03f18740c052b9ae6ebbaa
+    uses: denrase/github-workflows/.github/workflows/updater.yml@9f98d2bca80719220d03f18740c052b9ae6ebbaa # TODO: Use sentry workflow when merged.
     with:
       path: script/sentry-cli.properties
       name: CLI
