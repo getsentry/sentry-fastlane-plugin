@@ -12,7 +12,7 @@ on:
 
 jobs:
   update-cli:
-    uses: denrase/github-workflows/.github/workflows/updater.yml@3c963ed1d8557c99dc25467b05bdeae51ef6e28b
+    uses: denrase/github-workflows/.github/workflows/updater.yml@9f98d2bca80719220d03f18740c052b9ae6ebbaa
     with:
       path: script/sentry-cli.properties
       name: CLI
@@ -22,4 +22,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: update-cli
     steps:
-      - run: echo ${{ needs.update-cli.outputs.url }} ${{ needs.update-cli.outputs.branch_name }} ${{ needs.update-cli.outputs.originalTag }} ${{ needs.update-cli.outputs.latestTag }}
+      - name: Download latest binaries.
+        if: jobs.update-cli.outputs.originalTag != jobs.update-cli.outputs.latestTag
+        run: /script/sentry-cli-download.sh
+      - name: Show changes with git diff.
+        if: jobs.update-cli.outputs.originalTag != jobs.update-cli.outputs.latestTag
+        run: git --no-pager diff
+      - name: Commit latest binaries.
+        if: jobs.update-cli.outputs.originalTag != jobs.update-cli.outputs.latestTag
+        uses: peter-evans/create-pull-request@f22a7da129c901513876a2380e2dae9f8e145330
+        with:
+          base: ${{ jobs.update-cli.outputs.baseBranch }}
+          branch: ${{ jobs.update-cli.outputs.prBranch }}
+          commit-message: 'bump bundled binaries'
