@@ -20,4 +20,5 @@ jobs:
       api_token: ${{ secrets.CI_DEPLOY_KEY }}
   update-binaries:
     needs: update-cli
-    - run: echo ${{ needs.update-cli.outputs.url }} ${{ needs.update-cli.outputs.branch_name }} ${{ needs.update-cli.outputs.originalTag }} ${{ needs.update-cli.outputs.latestTag }}
+    steps:
+      - run: echo ${{ needs.update-cli.outputs.url }} ${{ needs.update-cli.outputs.branch_name }} ${{ needs.update-cli.outputs.originalTag }} ${{ needs.update-cli.outputs.latestTag }}
