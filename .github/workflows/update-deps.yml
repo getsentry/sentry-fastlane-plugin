@@ -26,7 +26,7 @@ jobs:
         if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
         uses: actions/checkout@v3
         with:
-          path: ${{ needs.update-cli.outputs.prBranch }}
+          ref: ${{ needs.update-cli.outputs.prBranch }}
       - name: Print direcotry content. # TODO: REMOVE ME
         run: ls -a
       - name: Print script content. # TODO: REMOVE ME
