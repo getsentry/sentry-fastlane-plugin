@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Download latest binaries.
         if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
-        run: /script/sentry-cli-download.sh
+        run: script/sentry-cli-download.sh
       - name: Show changes with git diff.
         if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
         run: git --no-pager diff
