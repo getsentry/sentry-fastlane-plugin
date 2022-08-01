@@ -32,8 +32,6 @@ jobs:
         run: script/sentry-cli-download.sh
       - name: Commit latest binaries.
         if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
-        uses: peter-evans/create-pull-request@923ad837f191474af6b1721408744feb989a4c27 #https://github.com/peter-evans/create-pull-request/commit/923ad837f191474af6b1721408744feb989a4c27
+        uses: stefanzweifel/git-auto-commit-action@49620cd3ed21ee620a48530e81dba0d139c9cb80 # https://github.com/stefanzweifel/git-auto-commit-action/releases/tag/v4.14.1
         with:
-          base: ${{ needs.update-cli.outputs.baseBranch }}
-          branch: ${{ needs.update-cli.outputs.prBranch }}
-          commit-message: 'bump bundled binaries'
+          commit_message: bump bundled binaries
