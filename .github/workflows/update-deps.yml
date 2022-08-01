@@ -22,13 +22,14 @@ jobs:
     runs-on: macos-latest
     needs: update-cli
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout PR branch
+        if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
+        uses: actions/checkout@v3
+        with:
+          path: ${{ needs.update-cli.outputs.prBranch }}
       - name: Download latest binaries.
         if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
         run: script/sentry-cli-download.sh
-      - name: Show changes with git diff.
-        if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
-        run: git --no-pager diff
       - name: Commit latest binaries.
         if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
         uses: peter-evans/create-pull-request@f22a7da129c901513876a2380e2dae9f8e145330
