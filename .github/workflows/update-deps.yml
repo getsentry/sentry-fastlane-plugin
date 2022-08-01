@@ -27,16 +27,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ needs.update-cli.outputs.prBranch }}
-      - name: Print direcotry content. # TODO: REMOVE ME
-        run: ls -a
-      - name: Print script content. # TODO: REMOVE ME
-        run: cat script/sentry-cli-download.sh
       - name: Download latest binaries.
         if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
         run: script/sentry-cli-download.sh
       - name: Commit latest binaries.
         if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
-        uses: peter-evans/create-pull-request@f22a7da129c901513876a2380e2dae9f8e145330
+        uses: peter-evans/create-pull-request@923ad837f191474af6b1721408744feb989a4c27 #https://github.com/peter-evans/create-pull-request/commit/923ad837f191474af6b1721408744feb989a4c27
         with:
           base: ${{ needs.update-cli.outputs.baseBranch }}
           branch: ${{ needs.update-cli.outputs.prBranch }}
