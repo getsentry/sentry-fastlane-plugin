@@ -8,12 +8,16 @@ on:
   push:
     branches:
       -master
+  pull_request: # TODO: remove me, this is added temporarily to test updater outputs
 
 jobs:
   update-cli:
-    uses: getsentry/github-workflows/.github/workflows/updater.yml@v1
+    uses: denrase/github-workflows/.github/workflows/updater.yml@3c963ed1d8557c99dc25467b05bdeae51ef6e28b
     with:
       path: script/sentry-cli.properties
       name: CLI
     secrets:
       api_token: ${{ secrets.CI_DEPLOY_KEY }}
+  update-binaries:
+    needs: update-cli
+    - run: echo ${{ needs.update-cli.outputs.url }} ${{ needs.update-cli.outputs.branch_name }} ${{ needs.update-cli.outputs.originalTag }} ${{ needs.update-cli.outputs.latestTag }}
