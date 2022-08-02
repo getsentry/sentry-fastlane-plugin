@@ -8,7 +8,8 @@ on:
   push:
     branches:
       - master
-
+  pull_request: # TODO: remove me, this is added temporarily to test updater outputs
+  
 jobs:
   update-cli:
     uses: getsentry/github-workflows/.github/workflows/updater.yml@v1
