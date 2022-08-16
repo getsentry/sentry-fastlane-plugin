@@ -1,0 +1,35 @@
+name: Update Dependencies
+
+on:
+  # Run every day.
+  schedule:
+    - cron: '0 3 * * *'
+  # And on on every PR merge so we get the updated dependencies ASAP, and to make sure the changelog doesn't conflict.
+  push:
+    branches:
+      - master
+
+jobs:
+  update-cli:
+    uses: getsentry/github-workflows/.github/workflows/updater.yml@v1
+    with:
+      path: script/sentry-cli.properties
+      name: CLI
+    secrets:
+      api_token: ${{ secrets.CI_DEPLOY_KEY }}
+  update-binaries:
+    runs-on: ubuntu-latest
+    needs: update-cli
+    if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.update-cli.outputs.prBranch }}
+      - name: Download latest binaries.
+        run: script/sentry-cli-download.sh
+      - name: Commit latest binaries.
+        uses: stefanzweifel/git-auto-commit-action@49620cd3ed21ee620a48530e81dba0d139c9cb80 # https://github.com/stefanzweifel/git-auto-commit-action/releases/tag/v4.14.1
+        with:
+          branch: ${{ needs.update-cli.outputs.prBranch }}
+          commit_message: bump bundled binaries
