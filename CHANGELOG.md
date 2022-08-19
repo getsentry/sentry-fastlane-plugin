@@ -5,6 +5,7 @@
 ### Features
 
 - Enha: Pin/Bundle sentry-cli Version (#143)
+- Bump CLI from v1.72.0 to v2.5.2 (#158)
 
 ## 1.12.3
 
