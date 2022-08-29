@@ -145,26 +145,7 @@ sentry_upload_sourcemap(
   app_identifier: '...', # pass in the bundle_identifer of your app
   build: '...', # Optionally pass in the build number of your app
   dist: '...', # optional distribution of the release usually the buildnumber
-  sourcemap: 'main.jsbundle.map', # sourcemap to upload
-  rewrite: true
-)
-```
-
-The `sourcemap` argument also accepts an array of files for uploading multiple
-source maps or bundle files simultaneously. This is required at least when
-using Hermes with React Native on Android.
-
-```ruby
-sentry_upload_sourcemap(
-  api_key: '...',
-  auth_token: '...',
-  org_slug: '...',
-  project_slug: '...',
-  version: '...',
-  app_identifier: '...', # pass in the bundle_identifer of your app
-  build: '...', # Optionally pass in the build number of your app
-  dist: '...', # optional distribution of the release usually the buildnumber
-  sourcemap: ['index.android.bundle', 'index.android.bundle.map'], # sourcemaps to upload
+  sourcemap: 'main.jsbundle.map', # Sourcemap(s) to upload. Path(s) can be a comma-separated string or an array of strings.
   rewrite: true
 )
 ```

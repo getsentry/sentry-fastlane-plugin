@@ -172,12 +172,13 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-      it "accepts multiple source maps" do
+      it "accepts multiple source maps as an array" do
         allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "files", "app.idf@1.0", "upload-sourcemaps", "1.bundle", "1.map", "--no-rewrite", "--dist", "dem"]).and_return(true)
 
         allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("1.bundle").and_return(true)
         expect(File).to receive(:exist?).with("1.map").and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
@@ -188,6 +189,27 @@ describe Fastlane do
               version: '1.0',
               dist: 'dem',
               sourcemap: ['1.bundle', '1.map'],
+              app_identifier: 'app.idf')
+        end").runner.execute(:test)
+      end
+
+      it "accepts multiple source maps as a comma-separated string" do
+        allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "files", "app.idf@1.0", "upload-sourcemaps", "1.bundle", "1.map", "--no-rewrite", "--dist", "dem"]).and_return(true)
+
+        allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("1.bundle").and_return(true)
+        expect(File).to receive(:exist?).with("1.map").and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_sourcemap(
+              org_slug: 'some_org',
+              api_key: 'something123',
+              project_slug: 'some_project',
+              version: '1.0',
+              dist: 'dem',
+              sourcemap: '1.bundle,1.map',
               app_identifier: 'app.idf')
         end").runner.execute(:test)
       end

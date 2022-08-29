@@ -16,9 +16,9 @@ module Fastlane
           "releases",
           "files",
           version,
-          "upload-sourcemaps",
-          *sourcemaps.map(&:to_s)
+          "upload-sourcemaps"
         ]
+        command += sourcemaps
 
         command.push('--rewrite') if params[:rewrite]
         command.push('--no-rewrite') unless params[:rewrite]
@@ -80,10 +80,11 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :sourcemap,
                                        description: "Path or an array of paths to the sourcemap(s) to upload",
+                                       type: Array,
                                        verify_block: proc do |values|
-                                        [*values].each do |value|
-                                          UI.user_error! "Could not find sourcemap at path '#{value}'" unless File.exist?(value)
-                                        end
+                                         [*values].each do |value|
+                                           UI.user_error! "Could not find sourcemap at path '#{value}'" unless File.exist?(value)
+                                         end
                                        end),
           FastlaneCore::ConfigItem.new(key: :rewrite,
                                        description: "Rewrite the sourcemaps before upload",
