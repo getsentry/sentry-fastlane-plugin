@@ -6,6 +6,7 @@
 
 - Enha: Pin/Bundle sentry-cli Version (#143)
 - Bump CLI from v1.72.0 to v2.5.2 (#158)
+- Enha: Support uploading multiple source map files simultaneously (#151)
 
 ## 1.12.3
 
