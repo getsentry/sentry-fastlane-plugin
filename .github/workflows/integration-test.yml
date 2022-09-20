@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-latest, windows-latest, ubuntu-latest]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -21,7 +21,7 @@ jobs:
         with:
           ruby-version: '3.1.2'
 
-      - if: matrix.os == 'macos-latest'
+      - if: matrix.os != 'windows-latest'
         name: Install Fastlane {{ matrix.os }}
         run: sudo gem install fastlane
 
