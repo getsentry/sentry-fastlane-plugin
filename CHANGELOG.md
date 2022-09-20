@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixes
+
+- fix: Bundle correct sentry-cli os/arch (#164)
+
 ## 1.13.0
 
 ### Features
