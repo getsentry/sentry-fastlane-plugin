@@ -2,8 +2,18 @@
 
 require 'os'
 
-if OS.windows?
-  print File.join(__dir__, 'sentry-cli-Windows-x86_64.exe')
-else
+if OS.mac?
   print File.join(__dir__, 'sentry-cli-Darwin-universal')
+elsif OS.windows?
+  if OS.bits == 64
+    print File.join(__dir__, 'sentry-cli-Windows-x86_64.exe')
+  else
+    print File.join(__dir__, 'sentry-cli-Windows-i686.exe')
+  end
+else
+  if OS.bits == 64
+    print File.join(__dir__, 'sentry-cli-Linux-x86_64')
+  else
+    print File.join(__dir__, 'sentry-cli-Linux-i686')
+  end
 end

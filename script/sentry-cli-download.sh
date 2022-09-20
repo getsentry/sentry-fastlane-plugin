@@ -7,7 +7,7 @@ function prop {
 }
 
 base_url="$(prop 'repo')/releases/download/$(prop 'version')"
-platforms=(Darwin-universal Windows-x86_64.exe)
+platforms=(Darwin-universal Linux-i686 Linux-x86_64 Windows-i686.exe Windows-x86_64.exe)
 target_dir="bin"
 
 for platform in "${platforms[@]}"
