@@ -2,7 +2,7 @@
 
 require 'os'
 
-elsif OS.mac?
+if OS.mac?
   print File.join(__dir__, 'sentry-cli-Darwin-universal')
 elsif OS.windows?
   if OS.bits == 64
