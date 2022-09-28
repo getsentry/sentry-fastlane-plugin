@@ -1,8 +1,10 @@
+require 'os'
+
 module Fastlane
   module Helper
     class SentryHelper
       def self.find_and_check_sentry_cli_path!(params)
-        bundled_sentry_cli_path = `bundle exec sentry_cli_path`
+        bundled_sentry_cli_path = self.bundled_sentry_cli_path
         bundled_sentry_cli_version = Gem::Version.new(`#{bundled_sentry_cli_path} --version`.scan(/(?:\d+\.?){3}/).first)
 
         sentry_cli_path = params[:sentry_cli_path] || bundled_sentry_cli_path
@@ -54,6 +56,24 @@ module Fastlane
 
           err_reader.join
           out_reader.value
+        end
+      end
+
+      def self.bundled_sentry_cli_path
+        if OS.mac?
+          File.expand_path('../../../../../bin/sentry-cli-Darwin-universal', File.dirname(__FILE__))
+        elsif OS.windows?
+          if OS.bits == 64
+            File.expand_path('../../../../../bin/sentry-cli-Windows-x86_64.exe', File.dirname(__FILE__))
+          else
+            File.expand_path('../../../../../bin/sentry-cli-Windows-i686.exe', File.dirname(__FILE__))
+          end
+        else
+          if OS.bits == 64
+            File.expand_path('../../../../../bin/sentry-cli-Linux-x86_64', File.dirname(__FILE__))
+          else
+            File.expand_path('../../../../../bin/sentry-cli-Linux-i686', File.dirname(__FILE__))
+          end
         end
       end
     end
