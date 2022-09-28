@@ -61,20 +61,24 @@ module Fastlane
 
       def self.bundled_sentry_cli_path
         if OS.mac?
-          File.expand_path('../../../../../bin/sentry-cli-Darwin-universal', File.dirname(__FILE__))
+          self.bin_folder('sentry-cli-Darwin-universal')
         elsif OS.windows?
           if OS.bits == 64
-            File.expand_path('../../../../../bin/sentry-cli-Windows-x86_64.exe', File.dirname(__FILE__))
+            self.bin_folder('sentry-cli-Windows-x86_64.exe')
           else
-            File.expand_path('../../../../../bin/sentry-cli-Windows-i686.exe', File.dirname(__FILE__))
+            self.bin_folder('sentry-cli-Windows-i686.exe')
           end
         else
           if OS.bits == 64
-            File.expand_path('../../../../../bin/sentry-cli-Linux-x86_64', File.dirname(__FILE__))
+            self.bin_folder('sentry-cli-Linux-x86_64')
           else
-            File.expand_path('../../../../../bin/sentry-cli-Linux-i686', File.dirname(__FILE__))
+            self.bin_folder('sentry-cli-Linux-i686')
           end
         end
+      end
+
+      def self.bin_folder(filename)
+        File.expand_path("../../../../../bin/#{filename}", File.dirname(__FILE__))
       end
     end
   end
