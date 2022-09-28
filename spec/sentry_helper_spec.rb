@@ -12,7 +12,6 @@ describe Fastlane::Helper::SentryHelper do
 
   describe "find_and_check_sentry_cli_path!" do
     it "uses sentry_cli_path passed to check its version" do
-
       bundled_sentry_cli_path = Fastlane::Helper::SentryHelper.bundled_sentry_cli_path
       bundled_sentry_cli_version = `#{bundled_sentry_cli_path} --version`
 
