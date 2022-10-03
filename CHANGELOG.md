@@ -4,7 +4,7 @@
 
 ### Fixes
 
-- fix: No such file or directory (#168)
+- No such file or directory (#168)
 
 ## 1.13.1
 
