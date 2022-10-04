@@ -77,6 +77,7 @@ module Fastlane
         end
       end
 
+      # Get path for files in bin folder. Paths are resolved relative to this file, for which there are also unit tests.
       def self.bin_folder(filename)
         File.expand_path("../../../../../bin/#{filename}", File.dirname(__FILE__))
       end
