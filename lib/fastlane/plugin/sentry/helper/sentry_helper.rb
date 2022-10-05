@@ -1,8 +1,10 @@
+require 'os'
+
 module Fastlane
   module Helper
     class SentryHelper
       def self.find_and_check_sentry_cli_path!(params)
-        bundled_sentry_cli_path = `bundle exec sentry_cli_path`
+        bundled_sentry_cli_path = self.bundled_sentry_cli_path
         bundled_sentry_cli_version = Gem::Version.new(`#{bundled_sentry_cli_path} --version`.scan(/(?:\d+\.?){3}/).first)
 
         sentry_cli_path = params[:sentry_cli_path] || bundled_sentry_cli_path
@@ -55,6 +57,29 @@ module Fastlane
           err_reader.join
           out_reader.value
         end
+      end
+
+      def self.bundled_sentry_cli_path
+        if OS.mac?
+          self.bin_folder('sentry-cli-Darwin-universal')
+        elsif OS.windows?
+          if OS.bits == 64
+            self.bin_folder('sentry-cli-Windows-x86_64.exe')
+          else
+            self.bin_folder('sentry-cli-Windows-i686.exe')
+          end
+        else
+          if OS.bits == 64
+            self.bin_folder('sentry-cli-Linux-x86_64')
+          else
+            self.bin_folder('sentry-cli-Linux-i686')
+          end
+        end
+      end
+
+      # Get path for files in bin folder. Paths are resolved relative to this file, for which there are also unit tests.
+      def self.bin_folder(filename)
+        File.expand_path("../../../../../bin/#{filename}", File.dirname(__FILE__))
       end
     end
   end

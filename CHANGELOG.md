@@ -8,6 +8,10 @@
   - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#260)
   - [diff](https://github.com/getsentry/sentry-cli/compare/2.5.2...2.6.0)
 
+### Fixes
+
+- No such file or directory (#168)
+
 ## 1.13.1
 
 ### Fixes
