@@ -29,7 +29,7 @@ jobs:
       - name: Download latest binaries.
         run: script/sentry-cli-download.sh
       - name: Commit latest binaries.
-        uses: stefanzweifel/git-auto-commit-action@0049e3fa4059ca715255fbbcb7dea4516f02ce0a # https://github.com/stefanzweifel/git-auto-commit-action/releases/tag/v4.14.1
+        uses: stefanzweifel/git-auto-commit-action@0b007fbd1180b8e3a3668b21c6517392fe8f26eb # https://github.com/stefanzweifel/git-auto-commit-action/releases/tag/v4.14.1
         with:
           branch: ${{ needs.update-cli.outputs.prBranch }}
           commit_message: bump bundled binaries
