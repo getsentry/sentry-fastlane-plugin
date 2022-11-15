@@ -12,6 +12,28 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
+      it "supports mupltiple paths as array" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-dif", "fixture-path", "fixture-path-2"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_dif(
+              path: ['fixture-path', 'fixture-path-2']
+            )
+        end").runner.execute(:test)
+      end
+
+      it "supports mupltiple paths as comma seperated values" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-dif", "fixture-path", "fixture-path-2"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_dif(
+              path: 'fixture-path,fixture-path-2'
+            )
+        end").runner.execute(:test)
+      end
+
       it "includes --path fallback if not present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-dif", "."]).and_return(true)

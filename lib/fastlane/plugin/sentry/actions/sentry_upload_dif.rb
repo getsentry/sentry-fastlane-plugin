@@ -6,13 +6,14 @@ module Fastlane
 
         Helper::SentryConfig.parse_api_params(params)
 
-        path = params[:path]
-        path = '.' if path.nil?
+        paths = params[:path]
+        paths = ['.'] if paths.nil?
 
         command = [
-          "upload-dif",
-          path
+          "upload-dif"
         ]
+        command += paths
+
         command.push('--type').push(params[:type]) unless params[:type].nil?
         command.push('--no-unwind') unless params[:no_unwind].nil?
         command.push('--no-debug') unless params[:no_debug].nil?
@@ -51,7 +52,8 @@ module Fastlane
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :path,
-                                       description: "A path to search recursively for symbol files",
+                                       description: "Path or an array of paths to search recursively for symbol files",
+                                       type: Array,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :type,
                                        short_option: "-t",

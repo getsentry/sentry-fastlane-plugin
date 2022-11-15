@@ -64,7 +64,7 @@ sentry_upload_dif(
   auth_token: '...', # Do not use if using api_key
   org_slug: '...',
   project_slug: '...',
-  path: '/path/to/files', # Optional. We'll default to '.' when no value is provided.
+  path: '/path/to/files', # Optional. Defaults to '.' when no value is provided. Path(s) can be a string, a comma-separated string, or an array of strings.
 )
 ```
 
