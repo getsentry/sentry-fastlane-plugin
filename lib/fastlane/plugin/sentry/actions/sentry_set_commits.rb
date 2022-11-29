@@ -18,6 +18,7 @@ module Fastlane
 
         command.push('--auto') if params[:auto]
         command.push('--clear') if params[:clear]
+        command.push('--ignore-missing') if params[:ignore_previous_commits]
         command.push('--commit').push(params[:commit]) unless params[:commit].nil?
 
         Helper::SentryHelper.call_sentry_cli(params, command)
