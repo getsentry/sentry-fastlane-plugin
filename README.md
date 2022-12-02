@@ -175,6 +175,7 @@ sentry_set_commits(
   auto: false, # enable completely automated commit management
   clear: false, # clear all current commits from the release
   commit: '...', # commit spec, see `sentry-cli releases help set-commits` for more information
+  ignore_previous_commits: true # Boolean value: Let sentry to ignore previous unknown commits
 )
 ```
 
