@@ -114,6 +114,37 @@ describe Fastlane do
               version: '1.0')
         end").runner.execute(:test)
       end
+      
+      it "includes --ignore-missing when true" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0", "--ignore-missing"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_set_commits(
+              version: '1.0',
+              ignore_previous_commits: true)
+        end").runner.execute(:test)
+      end
+
+      it "omits --ignore-missing when not present" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0"]).and_return(true)
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_set_commits(
+              version: '1.0')
+        end").runner.execute(:test)
+      end
+
+      it "omits --ignore-missing when false" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0"]).and_return(true)
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_set_commits(
+              version: '1.0',
+              ignore_previous_commits: false)
+        end").runner.execute(:test)
+      end
+      
     end
   end
 end
