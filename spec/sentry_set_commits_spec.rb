@@ -122,7 +122,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
-              ignore_previous_commits: true)
+              ignore_missing: true)
         end").runner.execute(:test)
       end
 
@@ -141,7 +141,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
-              ignore_previous_commits: false)
+              ignore_missing: false)
         end").runner.execute(:test)
       end
       
