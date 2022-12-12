@@ -4,9 +4,9 @@
 
 ### Features
 
-- Bump CLI from v2.7.0 to v2.9.0 ([#173](https://github.com/getsentry/sentry-fastlane-plugin/pull/173), [#175](https://github.com/getsentry/sentry-fastlane-plugin/pull/175), [#178](https://github.com/getsentry/sentry-fastlane-plugin/pull/178))
-  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#290)
-  - [diff](https://github.com/getsentry/sentry-cli/compare/2.7.0...2.9.0)
+- Bump CLI from v2.7.0 to v2.10.0 ([#173](https://github.com/getsentry/sentry-fastlane-plugin/pull/173), [#175](https://github.com/getsentry/sentry-fastlane-plugin/pull/175), [#178](https://github.com/getsentry/sentry-fastlane-plugin/pull/178), [#181](https://github.com/getsentry/sentry-fastlane-plugin/pull/181))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2100)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.7.0...2.10.0)
 - Support multiple paths in `upload_dif` command (#177)
 
 ## 1.14.0
