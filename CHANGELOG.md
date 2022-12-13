@@ -8,7 +8,7 @@
   - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2100)
   - [diff](https://github.com/getsentry/sentry-cli/compare/2.7.0...2.10.0)
 - Support multiple paths in `upload_dif` command (#177)
-- set_commits supports --ignore missing (#180)
+- `set_commits` supports `--ignore missing` ([#180](https://github.com/getsentry/sentry-fastlane-plugin/pull/180))
 
 ## 1.14.0
 
