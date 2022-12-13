@@ -114,7 +114,7 @@ describe Fastlane do
               version: '1.0')
         end").runner.execute(:test)
       end
-      
+
       it "includes --ignore-missing when true" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0", "--ignore-missing"]).and_return(true)
@@ -144,7 +144,6 @@ describe Fastlane do
               ignore_missing: false)
         end").runner.execute(:test)
       end
-      
     end
   end
 end
