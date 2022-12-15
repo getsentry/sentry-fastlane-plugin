@@ -175,6 +175,7 @@ sentry_set_commits(
   auto: false, # enable completely automated commit management
   clear: false, # clear all current commits from the release
   commit: '...', # commit spec, see `sentry-cli releases help set-commits` for more information
+  ignore_missing: false # Optional boolean value: When the flag is set and the previous release commit was not found in the repository, will create a release with the default commits count (or the one specified with `--initial-depth`) instead of failing the command.
 )
 ```
 
