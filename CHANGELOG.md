@@ -4,9 +4,9 @@
 
 ### Features
 
-- Bump CLI from v2.10.0 to v2.12.0 ([#185](https://github.com/getsentry/sentry-fastlane-plugin/pull/185), [#187](https://github.com/getsentry/sentry-fastlane-plugin/pull/187))
-  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2120)
-  - [diff](https://github.com/getsentry/sentry-cli/compare/2.10.0...2.12.0)
+- Bump CLI from v2.10.0 to v2.13.0 ([#185](https://github.com/getsentry/sentry-fastlane-plugin/pull/185), [#187](https://github.com/getsentry/sentry-fastlane-plugin/pull/187), [#188](https://github.com/getsentry/sentry-fastlane-plugin/pull/188))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2130)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.10.0...2.13.0)
 
 ## 1.15.0
 
