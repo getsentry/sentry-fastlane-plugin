@@ -50,7 +50,7 @@ A subset of actions provided by the CLI: https://docs.sentry.io/learn/cli/
 
 ### Authentication & Configuration
 
-`auth_token` is the preferred way to authentication method with Sentry. This can be obtained on https://sentry.io/api/.
+`auth_token` is the preferred authentication method with Sentry. This can be obtained on https://sentry.io/api/.
 `api_key` still works but will eventually become deprecated. This can be obtained through the settings of your project.
 Also note that as of version `1.2.0` you no longer have to provide the required parameters, we will try to fallback to your `.sentryclirc` config file if possible.
 
