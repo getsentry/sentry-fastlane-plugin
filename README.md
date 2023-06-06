@@ -122,20 +122,6 @@ sentry_create_release(
 Useful for uploading build artifacts and JS sourcemaps for react-native apps built using fastlane.
 
 ```ruby
-sentry_upload_file(
-  api_key: '...',
-  auth_token: '...',
-  org_slug: '...',
-  project_slug: '...',
-  version: '...',
-  app_identifier: '...', # pass in the bundle_identifer of your app
-  build: '...', # Optionally pass in the build number of your app
-  dist: '...', # optional distribution of the release usually the buildnumber
-  file: 'main.jsbundle' # file to upload
-)
-```
-
-```ruby
 sentry_upload_sourcemap(
   api_key: '...',
   auth_token: '...',
@@ -145,7 +131,7 @@ sentry_upload_sourcemap(
   app_identifier: '...', # pass in the bundle_identifer of your app
   build: '...', # Optionally pass in the build number of your app
   dist: '...', # optional distribution of the release usually the buildnumber
-  sourcemap: 'main.jsbundle.map', # Sourcemap(s) to upload. Path(s) can be a comma-separated string or an array of strings.
+  sourcemap: ['main.jsbundle', 'main.jsbundle.map'], # Sourcemap(s) to upload. Path(s) can be a comma-separated string or an array of strings.
   rewrite: true
 )
 ```
