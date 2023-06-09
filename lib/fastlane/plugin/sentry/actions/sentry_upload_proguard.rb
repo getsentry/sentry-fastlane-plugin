@@ -7,6 +7,7 @@ module Fastlane
         # Params - mapping & manifest
         mapping_path = params[:mapping_path]
         android_manifest_path = params[:android_manifest_path]
+        proguard_uuid = params[:uuid]
 
         # Verify files
         UI.user_error!("Mapping file does not exist at path: #{mapping_path}") unless File.exist? mapping_path
@@ -18,6 +19,7 @@ module Fastlane
           android_manifest_path,
           mapping_path
         ]
+        command.push("--uuid").push(proguard_uuid) unless proguard_uuid.nil?
 
         Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully uploaded mapping file!")

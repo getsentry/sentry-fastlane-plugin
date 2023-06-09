@@ -146,6 +146,7 @@ sentry_upload_proguard(
   project_slug: '...',
   android_manifest_path: 'path to merged AndroidManifest file', # found in `app/build/intermediates/manifests/full`
   mapping_path: 'path to mapping.txt to upload',
+  uuid: '...', # Optional
 )
 ```
 
