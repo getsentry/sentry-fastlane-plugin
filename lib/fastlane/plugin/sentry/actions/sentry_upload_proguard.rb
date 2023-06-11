@@ -55,7 +55,11 @@ module Fastlane
                                        optional: false,
                                        verify_block: proc do |value|
                                                        UI.user_error! "Could not find your merged AndroidManifest file at path '#{value}'" unless File.exist?(value)
-                                                     end)
+                                                     end),
+          FastlaneCore::ConfigItem.new(key: :uuid,
+                                       env_name: "ANDROID_PROGUARD_UUID",
+                                       description: "Explicitly override the UUID of the mapping file with another one",
+                                       optional: true)
         ]
       end
 
