@@ -16,7 +16,7 @@ jobs:
       path: script/sentry-cli.properties
       name: CLI
     secrets:
-      api_token: ${{ secrets.CI_DEPLOY_KEY }}
+      api-token: ${{ secrets.CI_DEPLOY_KEY }}
   update-binaries:
     runs-on: ubuntu-latest
     needs: update-cli
