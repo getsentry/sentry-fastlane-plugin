@@ -70,7 +70,7 @@ class Handler(BaseHTTPRequestHandler):
             self.writeJSONFile("test/assets/deploy.json")
         elif self.isApi('/api/0/projects/{}/{}/releases/{}@{}/files/'.format(apiOrg, apiProject, appIdentifier, version)):
             self.writeJSONFile("test/assets/artifact.json")
-        elif self.isApi('/api/0/organizations/{}/releases/{}/assemble/'.format(apiOrg, version)):
+        elif self.isApi('/api/0/organizations/{}/releases/{}@{}/assemble/'.format(apiOrg, appIdentifier, version)):
             self.writeJSONFile("test/assets/assemble-artifacts-response.json")
         elif self.isApi('/api/0/projects/{}/{}/files/dsyms/'.format(apiOrg, apiProject)):
             self.writeJSONFile("test/assets/debug-info-files.json")
