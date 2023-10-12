@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.16.0
 
 ### Features
 
@@ -9,7 +9,6 @@
   - [diff](https://github.com/getsentry/sentry-cli/compare/2.10.0...2.21.2)
 
 ### Dependencies
-
 
 ## 1.15.0
 
