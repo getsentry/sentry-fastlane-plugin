@@ -4,9 +4,9 @@
 
 ### Dependencies
 
-- Bump CLI from v2.21.2 to v2.22.3 ([#218](https://github.com/getsentry/sentry-fastlane-plugin/pull/218), [#219](https://github.com/getsentry/sentry-fastlane-plugin/pull/219), [#221](https://github.com/getsentry/sentry-fastlane-plugin/pull/221), [#222](https://github.com/getsentry/sentry-fastlane-plugin/pull/222))
-  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2223)
-  - [diff](https://github.com/getsentry/sentry-cli/compare/2.21.2...2.22.3)
+- Bump CLI from v2.21.2 to v2.23.0 ([#218](https://github.com/getsentry/sentry-fastlane-plugin/pull/218), [#219](https://github.com/getsentry/sentry-fastlane-plugin/pull/219), [#221](https://github.com/getsentry/sentry-fastlane-plugin/pull/221), [#222](https://github.com/getsentry/sentry-fastlane-plugin/pull/222), [#223](https://github.com/getsentry/sentry-fastlane-plugin/pull/223))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2230)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.21.2...2.23.0)
 
 ## 1.16.0
 
