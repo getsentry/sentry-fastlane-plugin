@@ -26,7 +26,7 @@ module Fastlane
         command.push('--info-plist').push(params[:info_plist]) unless params[:info_plist].nil?
         command.push('--no-reprocessing') unless params[:no_reprocessing].nil?
         command.push('--force-foreground') unless params[:force_foreground].nil?
-        command.push('--include-sources') unless params[:include_sources] != 'true'
+        command.push('--include-sources') unless params[:include_sources] != true
         command.push('--wait') unless params[:wait].nil?
         command.push('--upload-symbol-maps') unless params[:upload_symbol_maps].nil?
 
