@@ -284,7 +284,7 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-      it "dont includes --include_sources when false" do
+      it "dont include --include_sources when false" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-dif", "fixture-path"]).and_return(true)
 
