@@ -284,6 +284,18 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
+      it "dont include --include_sources when false" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-dif", "fixture-path"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_dif(
+              path: 'fixture-path',
+              include_sources: false
+            )
+        end").runner.execute(:test)
+      end
+
       it "includes --wait when true" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-dif", "fixture-path", "--wait"]).and_return(true)

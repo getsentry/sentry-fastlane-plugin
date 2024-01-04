@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixes
+
+- Don't upload code source if "include_source" is false (#231)
+
 ## 1.17.0
 
 ### Dependencies
