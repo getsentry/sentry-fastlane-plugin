@@ -6,6 +6,12 @@
 
 - Don't upload code source if "include_source" is false (#231)
 
+### Dependencies
+
+- Bump CLI from v2.23.0 to v2.24.1 ([#232](https://github.com/getsentry/sentry-fastlane-plugin/pull/232))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2241)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.23.0...2.24.1)
+
 ## 1.17.0
 
 ### Dependencies
