@@ -1,6 +1,6 @@
 module Fastlane
   module Actions
-    class SentryUploadDifAction < Action
+    class SentryDebugFilesUploadAction < Action
       def self.run(params)
         require 'shellwords'
 
@@ -10,7 +10,8 @@ module Fastlane
         paths = ['.'] if paths.nil?
 
         command = [
-          "upload-dif"
+          "debug-files",
+          "upload"
         ]
         command += paths
 
@@ -31,7 +32,7 @@ module Fastlane
         command.push('--upload-symbol-maps') unless params[:upload_symbol_maps].nil?
 
         Helper::SentryHelper.call_sentry_cli(params, command)
-        UI.success("Successfully ran upload-dif")
+        UI.success("Successfully ran debug-files upload")
       end
 
       #####################################################
@@ -44,7 +45,7 @@ module Fastlane
 
       def self.details
         [
-          "Files can be uploaded using the upload-dif command. This command will scan a given folder recursively for files and upload them to Sentry.",
+          "Files can be uploaded using the `debug-files upload` command. This command will scan a given folder recursively for files and upload them to Sentry.",
           "See https://docs.sentry.io/product/cli/dif/#uploading-files for more information."
         ].join(" ")
       end
