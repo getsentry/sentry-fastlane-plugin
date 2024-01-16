@@ -1,4 +1,3 @@
-
 lane :integration_test_debug_files_upload do
   sentry_debug_files_upload(
     org_slug: 'sentry-sdks',
