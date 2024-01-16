@@ -10,7 +10,7 @@ stop_server() {
 
 start_server &
 
-if ! (fastlane integration_test_upload_dif) ; then
+if ! (fastlane integration_test_debug_files_upload) ; then
     stop_server
     exit 1
 fi
