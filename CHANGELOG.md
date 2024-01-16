@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Features
+
+- Replace `upload-dif`/`upload-dsym` with `debug-files upload`(#234)
+  - Breaking Change: Removes deprecated `uplad_dif` and `upload-dsym` commands
+
 ### Fixes
 
 - Don't upload code source if "include_source" is false (#231)
