@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.18.0
 
 ### Features
 
@@ -10,6 +10,12 @@
 ### Fixes
 
 - Don't upload code source if "include_source" is false (#231)
+
+### Dependencies
+
+- Bump CLI from v2.23.0 to v2.25.3 ([#236](https://github.com/getsentry/sentry-fastlane-plugin/pull/236))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2253)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.23.0...2.25.3)
 
 ## 1.17.0
 
