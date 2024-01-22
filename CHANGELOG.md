@@ -1,11 +1,12 @@
 # Changelog
 
-## 1.18.0
+## Unreleased
 
 ### Features
 
-- Replace `upload-dif`/`upload-dsym` with `debug-files upload`(#234)
-  - Breaking Change: Removes deprecated `uplad_dif` and `upload-dsym` commands
+- Replace `upload-dif`/`upload-dsym` with `debug-files upload` ([#234](https://github.com/getsentry/sentry-fastlane-plugin/pull/234))
+
+## 1.18.0
 
 ### Fixes
 
