@@ -4,7 +4,7 @@
 
 ### Features
 
-- Replace `upload-dif`/`upload-dsym` with `debug-files upload` ([#234](https://github.com/getsentry/sentry-fastlane-plugin/pull/234))
+- Replace `upload-dif`/`upload-dsym` with `debug-files upload`(#234)
 
 ## 1.18.0
 
