@@ -88,7 +88,7 @@ Further options:
 - __wait__: Wait for the server to fully process uploaded files. Errors can only be displayed if --wait is specified, but this will significantly slow down the upload process.
 - __upload_symbol_maps__: Optional. Upload any BCSymbolMap files found to allow Sentry to resolve hidden symbols, e.g. when it downloads dSYMs directly from App Store Connect or when you upload dSYMs without first resolving the hidden symbols using --symbol-maps.
 
-Or the soon to be deprecated ways:
+Or the deprecated ways, which will be removed in the next major update:
 
 ```ruby
 sentry_upload_dif(
