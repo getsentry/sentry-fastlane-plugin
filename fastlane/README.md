@@ -13,18 +13,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### test
+### integration_test_upload_dif
 
 ```sh
-[bundle exec] fastlane test
-```
-
-
-
-### test_big
-
-```sh
-[bundle exec] fastlane test_big
+[bundle exec] fastlane integration_test_upload_dif
 ```
 
 
@@ -32,9 +24,8 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 ### integration_test_upload_dif
 
 ```sh
-[bundle exec] fastlane integration_test_upload_dif
+[bundle exec] fastlane integration_test_debug_files_upload
 ```
-
 
 
 ### integration_test_create_release
