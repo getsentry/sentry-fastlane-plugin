@@ -59,7 +59,7 @@ The following environment variables may be used in place of parameters: `SENTRY_
 ### Uploading Debug Information Files
 
 ```ruby
-sentry_upload_dif(
+sentry_debug_files_upload(
   api_key: '...', # Do not use if using auth_token
   auth_token: '...', # Do not use if using api_key
   org_slug: '...',
@@ -88,8 +88,17 @@ Further options:
 - __wait__: Wait for the server to fully process uploaded files. Errors can only be displayed if --wait is specified, but this will significantly slow down the upload process.
 - __upload_symbol_maps__: Optional. Upload any BCSymbolMap files found to allow Sentry to resolve hidden symbols, e.g. when it downloads dSYMs directly from App Store Connect or when you upload dSYMs without first resolving the hidden symbols using --symbol-maps.
 
+Or the deprecated ways, which will be removed in the next major update:
 
-Or the soon to be deprecated way:
+```ruby
+sentry_upload_dif(
+  api_key: '...', # Do not use if using auth_token
+  auth_token: '...', # Do not use if using api_key
+  org_slug: '...',
+  project_slug: '...',
+  path: '/path/to/files', # Optional. Defaults to '.' when no value is provided. Path(s) can be a string, a comma-separated string, or an array of strings.
+)
+```
 
 ```ruby
 sentry_upload_dsym(

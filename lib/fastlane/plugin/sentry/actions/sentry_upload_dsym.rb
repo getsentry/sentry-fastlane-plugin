@@ -2,6 +2,8 @@ module Fastlane
   module Actions
     class SentryUploadDsymAction < Action
       def self.run(params)
+        UI.deprecated("This action is deprecated. Please use the `sentry_debug_files_upload` action.")
+
         Helper::SentryConfig.parse_api_params(params)
 
         # Params - dSYM

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- Replace `upload-dif`/`upload-dsym` with `debug-files upload`(#234)
+
 ## 1.19.0
 
 ### Dependencies

@@ -1,17 +1,15 @@
-lane :test do
-  sentry_upload_dsym(
-    dsym_path: './assets/SwiftExample.app.dSYM.zip'
-  )
-end
-
-lane :test_big do
-  sentry_upload_dsym(
-    dsym_path: './assets/Big.app.dSYM.zip'
-  )
-end
-
 lane :integration_test_upload_dif do
   sentry_upload_dif(
+    org_slug: 'sentry-sdks',
+    project_slug: 'sentry-fastlane-plugin',
+    url: "http://127.0.0.1:8000",
+    auth_token: 'dummy-auth-token',
+    path: './assets/SwiftExample.app.dSYM.zip'
+  )
+end
+
+lane :integration_test_debug_files_upload do
+  sentry_debug_files_upload(
     org_slug: 'sentry-sdks',
     project_slug: 'sentry-fastlane-plugin',
     url: "http://127.0.0.1:8000",
