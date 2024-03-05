@@ -6,6 +6,12 @@
 
 - Replace `upload-dif`/`upload-dsym` with `debug-files upload`(#234)
 
+### Dependencies
+
+- Bump CLI from v2.28.6 to v2.29.1 ([#246](https://github.com/getsentry/sentry-fastlane-plugin/pull/246))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2291)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.28.6...2.29.1)
+
 ## 1.19.0
 
 ### Dependencies
