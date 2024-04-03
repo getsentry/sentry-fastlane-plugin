@@ -38,7 +38,7 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :log_level,
                                        env_name: "SENTRY_LOG_LEVEL",
-                                       description: "Configures the log level for the SDK",
+                                       description: "Configures the log level used by sentry-cli",
                                        optional: true,
                                        verify_block: proc do |value|
                                          UI.user_error! "Invalid log level '#{value}'" unless ['trace', 'debug', 'info', 'warn', 'error'].include? value.downcase
