@@ -8,38 +8,38 @@ describe Fastlane::Helper::SentryConfig do
 
   describe "parse_api_params" do
     it "does not set env if no value" do
-      Fastlane::Helper::SentryConfig.parse_api_params({})
+      Fastlane::Helper::SentryConfig.parse_api_params({ api_key: 'fixture-api-key' })
       expect(ENV['SENTRY_LOG_LEVEL']).to be_nil
     end
 
     it "sets debug env if Fastlane is set to verbose" do
       FastlaneCore::Globals.verbose = true
-      Fastlane::Helper::SentryConfig.parse_api_params({ auth_token: 'fixture-auth-token' })
+      Fastlane::Helper::SentryConfig.parse_api_params({ api_key: 'fixture-api-key' })
       expect(ENV['SENTRY_LOG_LEVEL']).to eq('debug')
     end
 
     it "sets trace env" do
-      Fastlane::Helper::SentryConfig.parse_api_params({ auth_token: 'fixture-auth-token', log_level: 'trace' })
+      Fastlane::Helper::SentryConfig.parse_api_params({ api_key: 'fixture-api-key', log_level: 'trace' })
       expect(ENV['SENTRY_LOG_LEVEL']).to eq('trace')
     end
 
     it "sets debug env" do
-      Fastlane::Helper::SentryConfig.parse_api_params({ auth_token: 'fixture-auth-token', log_level: 'debug' })
+      Fastlane::Helper::SentryConfig.parse_api_params({ api_key: 'fixture-api-key', log_level: 'debug' })
       expect(ENV['SENTRY_LOG_LEVEL']).to eq('debug')
     end
 
     it "sets info env" do
-      Fastlane::Helper::SentryConfig.parse_api_params({ auth_token: 'fixture-auth-token', log_level: 'info' })
+      Fastlane::Helper::SentryConfig.parse_api_params({ api_key: 'fixture-api-key', log_level: 'info' })
       expect(ENV['SENTRY_LOG_LEVEL']).to eq('info')
     end
 
     it "sets warn env" do
-      Fastlane::Helper::SentryConfig.parse_api_params({ auth_token: 'fixture-auth-token', log_level: 'warn' })
+      Fastlane::Helper::SentryConfig.parse_api_params({ api_key: 'fixture-api-key', log_level: 'warn' })
       expect(ENV['SENTRY_LOG_LEVEL']).to eq('warn')
     end
 
     it "sets error env" do
-      Fastlane::Helper::SentryConfig.parse_api_params({ auth_token: 'fixture-auth-token', log_level: 'error' })
+      Fastlane::Helper::SentryConfig.parse_api_params({ api_key: 'fixture-api-key', log_level: 'error' })
       expect(ENV['SENTRY_LOG_LEVEL']).to eq('error')
     end
 
@@ -47,7 +47,7 @@ describe Fastlane::Helper::SentryConfig do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
           sentry_debug_files_upload(
-            auth_token: 'fixture-auth-token',
+            api_key: 'fixture-api-key',
             log_level: 'unknown'
           )
         end").runner.execute(:test)
