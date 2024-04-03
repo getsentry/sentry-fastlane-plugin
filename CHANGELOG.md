@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- Add option to control the log output ([#253](https://github.com/getsentry/sentry-fastlane-plugin/pull/253))
+
 ## 1.21.0
 
 ### Dependencies
