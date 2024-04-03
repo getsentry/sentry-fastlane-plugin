@@ -208,6 +208,10 @@ Useful for checking that the sentry-cli is installed and meets the minimum versi
 sentry_check_cli_installed()
 ```
 
+### Logging
+
+You can set the `sentry-cli` [configuration value](https://docs.sentry.io/product/cli/configuration/#configuration-values) `SENTRY_LOG_LEVEL` by adding `log_level` to any action. Supported values are 'trace', 'debug', 'info', 'warn' and 'error'.
+
 ## Issues and Feedback
 
 For any other issues and feedback about this plugin, please submit it to this repository.
