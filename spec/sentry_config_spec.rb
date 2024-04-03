@@ -7,41 +7,40 @@ describe Fastlane::Helper::SentryConfig do
   end
 
   describe "parse_api_params" do
-
     it "does not set env if no value" do
-        Fastlane::Helper::SentryConfig.parse_api_params({})
-        expect(ENV['SENTRY_LOG_LEVEL']).to be_nil
+      Fastlane::Helper::SentryConfig.parse_api_params({})
+      expect(ENV['SENTRY_LOG_LEVEL']).to be_nil
     end
 
     it "sets debug env if Fastlane is set to verbose" do
-        FastlaneCore::Globals.verbose = true
-        Fastlane::Helper::SentryConfig.parse_api_params({})
-        expect(ENV['SENTRY_LOG_LEVEL']).to eq('debug')
+      FastlaneCore::Globals.verbose = true
+      Fastlane::Helper::SentryConfig.parse_api_params({})
+      expect(ENV['SENTRY_LOG_LEVEL']).to eq('debug')
     end
 
     it "sets trace env" do
-        Fastlane::Helper::SentryConfig.parse_api_params({log_level: 'trace'})
-        expect(ENV['SENTRY_LOG_LEVEL']).to eq('trace')
+      Fastlane::Helper::SentryConfig.parse_api_params({ log_level: 'trace' })
+      expect(ENV['SENTRY_LOG_LEVEL']).to eq('trace')
     end
 
     it "sets debug env" do
-        Fastlane::Helper::SentryConfig.parse_api_params({log_level: 'debug'})
-        expect(ENV['SENTRY_LOG_LEVEL']).to eq('debug')
+      Fastlane::Helper::SentryConfig.parse_api_params({ log_level: 'debug' })
+      expect(ENV['SENTRY_LOG_LEVEL']).to eq('debug')
     end
 
     it "sets info env" do
-        Fastlane::Helper::SentryConfig.parse_api_params({log_level: 'info'})
-        expect(ENV['SENTRY_LOG_LEVEL']).to eq('info')
+      Fastlane::Helper::SentryConfig.parse_api_params({ log_level: 'info' })
+      expect(ENV['SENTRY_LOG_LEVEL']).to eq('info')
     end
 
     it "sets warn env" do
-        Fastlane::Helper::SentryConfig.parse_api_params({log_level: 'warn'})
-        expect(ENV['SENTRY_LOG_LEVEL']).to eq('warn')
+      Fastlane::Helper::SentryConfig.parse_api_params({ log_level: 'warn' })
+      expect(ENV['SENTRY_LOG_LEVEL']).to eq('warn')
     end
 
     it "sets error env" do
-        Fastlane::Helper::SentryConfig.parse_api_params({log_level: 'error'})
-        expect(ENV['SENTRY_LOG_LEVEL']).to eq('error')
+      Fastlane::Helper::SentryConfig.parse_api_params({ log_level: 'error' })
+      expect(ENV['SENTRY_LOG_LEVEL']).to eq('error')
     end
 
     it "raise error on invalid log_level" do

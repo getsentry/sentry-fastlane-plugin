@@ -64,9 +64,9 @@ module Fastlane
         ENV['SENTRY_URL'] = url unless url.to_s.empty?
 
         if log_level.to_s.empty?
-            ENV['SENTRY_LOG_LEVEL'] = 'debug' if FastlaneCore::Globals.verbose?
+          ENV['SENTRY_LOG_LEVEL'] = 'debug' if FastlaneCore::Globals.verbose?
         else
-            ENV['SENTRY_LOG_LEVEL'] = log_level
+          ENV['SENTRY_LOG_LEVEL'] = log_level
         end
 
         # Fallback to .sentryclirc if possible when no auth token is provided
