@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Features
+
+- Add option to control the log output ([#253](https://github.com/getsentry/sentry-fastlane-plugin/pull/253))
+
 ### Dependencies
 
 - Bump CLI from v2.30.4 to v2.31.0 ([#252](https://github.com/getsentry/sentry-fastlane-plugin/pull/252))

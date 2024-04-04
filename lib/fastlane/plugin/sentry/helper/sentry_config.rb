@@ -35,7 +35,14 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :project_slug,
                                        env_name: "SENTRY_PROJECT_SLUG",
                                        description: "Project slug for Sentry",
-                                       optional: true)
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :log_level,
+                                       env_name: "SENTRY_LOG_LEVEL",
+                                       description: "Configures the log level used by sentry-cli",
+                                       optional: true,
+                                       verify_block: proc do |value|
+                                         UI.user_error! "Invalid log level '#{value}'" unless ['trace', 'debug', 'info', 'warn', 'error'].include? value.downcase
+                                       end)
         ] + self.common_cli_config_items
       end
 
@@ -47,6 +54,7 @@ module Fastlane
         api_key = params[:api_key]
         org = params[:org_slug]
         project = params[:project_slug]
+        log_level = params[:log_level]
 
         has_org = !org.to_s.empty?
         has_project = !project.to_s.empty?
@@ -54,7 +62,12 @@ module Fastlane
         has_auth_token = !auth_token.to_s.empty?
 
         ENV['SENTRY_URL'] = url unless url.to_s.empty?
-        ENV['SENTRY_LOG_LEVEL'] = 'DEBUG' if FastlaneCore::Globals.verbose?
+
+        if log_level.to_s.empty?
+          ENV['SENTRY_LOG_LEVEL'] = 'debug' if FastlaneCore::Globals.verbose?
+        else
+          ENV['SENTRY_LOG_LEVEL'] = log_level
+        end
 
         # Fallback to .sentryclirc if possible when no auth token is provided
         if !has_api_key && !has_auth_token && fallback_sentry_cli_auth(params)
