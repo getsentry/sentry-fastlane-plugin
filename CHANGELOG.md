@@ -6,6 +6,12 @@
 
 - Add option to control the log output ([#253](https://github.com/getsentry/sentry-fastlane-plugin/pull/253))
 
+### Dependencies
+
+- Bump CLI from v2.30.4 to v2.31.0 ([#252](https://github.com/getsentry/sentry-fastlane-plugin/pull/252))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2310)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.30.4...2.31.0)
+
 ## 1.21.0
 
 ### Dependencies
