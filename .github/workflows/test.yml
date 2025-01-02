@@ -21,9 +21,8 @@ jobs:
         with:
           ruby-version: '3.1.4'
 
-      - run: gem update bundler
+      - run: gem install bundler -v '2.4.10'
       - run: bundle install
-      - run: bundle update
       - run: sentry-cli info --config-status-json
       - run: bundle exec rubocop
       - run: rspec
