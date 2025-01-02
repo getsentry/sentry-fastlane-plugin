@@ -8,6 +8,8 @@
   - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2400)
   - [diff](https://github.com/getsentry/sentry-cli/compare/2.36.3...2.40.0)
 
+With this change, the force-foreground flag is no longer needed, since we always upload in the foreground. The flag is now a deprecated no-op.
+
 ## 1.25.1
 
 ### Dependencies
