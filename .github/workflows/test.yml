@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - test/fix-rspec
 
   pull_request:
 
@@ -21,7 +20,7 @@ jobs:
         with:
           ruby-version: '3.1.4'
 
-      - run: gem install bundler -v '2.4.10'
+      - run: gem install bundler -v '2.5.23'
       - run: bundle install
       - run: sentry-cli info --config-status-json
       - run: bundle exec rubocop
