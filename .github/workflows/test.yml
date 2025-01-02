@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - test/fix-rspec
 
   pull_request:
 
@@ -22,6 +23,7 @@ jobs:
 
       - run: gem update bundler
       - run: bundle install
+      - run: bundle update
       - run: sentry-cli info --config-status-json
       - run: bundle exec rubocop
       - run: rspec
