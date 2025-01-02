@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - test/fix-rspec
 
   pull_request:
 
