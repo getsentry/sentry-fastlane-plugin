@@ -25,11 +25,11 @@ Metrics/ModuleLength:
   Enabled: false
 
 # certificate_1 is an okay variable name
-Style/VariableNumber:
+Naming/VariableNumber:
   Enabled: false
 
 # This is used a lot across the fastlane code base for config files
-Style/MissingSuper:
+Lint/MissingSuper:
   Enabled: false
 Style/MissingRespondToMissing:
   Enabled: false
@@ -65,7 +65,7 @@ Lint/UselessAssignment:
     - '**/spec/**/*'
 
 # HoundCI doesn't like this rule
-Style/DotPosition:
+Layout/DotPosition:
   Enabled: false
 
 # We allow !! as it's an easy way to convert ot boolean
@@ -135,7 +135,7 @@ Metrics/ClassLength:
 
 
 # Configuration parameters: AllowURI, URISchemes.
-Metrics/LineLength:
+Layout/LineLength:
   Max: 370
 
 # Configuration parameters: CountKeywordArgs.
@@ -180,7 +180,7 @@ Security/Eval:
 
 # This would reject is_ in front of methods
 # We use `is_supported?` everywhere already
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: false
 
 # We allow the $
@@ -192,7 +192,7 @@ Style/RedundantPercentQ:
   Enabled: false
 
 # Disable '+ should be surrounded with a single space' for xcodebuild_spec.rb
-Style/SpaceAroundOperators:
+Layout/SpaceAroundOperators:
   Exclude:
     - '**/spec/actions_specs/xcodebuild_spec.rb'
 
@@ -209,7 +209,7 @@ AllCops:
     - './vendor/**/*'
 
 # They have not to be snake_case
-Style/FileName:
+Naming/FileName:
   Exclude:
     - '*.gemspec'
     - '**/Dangerfile'
@@ -239,9 +239,6 @@ Style/IfInsideElse:
 
 # Sometimes we just want to 'collect'
 Style/CollectionMethods:
-  Enabled: false
-
-Metrics/PerceivedComplexity:
   Enabled: false
 
 Style/NumericLiterals:
