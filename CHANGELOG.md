@@ -1,5 +1,45 @@
 # Changelog
 
+## Unreleased
+
+### Dependencies
+
+- Bump CLI from v2.43.0 to v2.43.1 ([#314](https://github.com/getsentry/sentry-fastlane-plugin/pull/314))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2431)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.43.0...2.43.1)
+
+## 1.29.0
+
+### Dependencies
+
+- Bump CLI from v2.42.4 to v2.43.0 ([#309](https://github.com/getsentry/sentry-fastlane-plugin/pull/309))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2430)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.42.4...2.43.0)
+
+## 1.28.1
+
+### Dependencies
+
+- Bump CLI from v2.42.2 to v2.42.4 ([#305](https://github.com/getsentry/sentry-fastlane-plugin/pull/305), [#306](https://github.com/getsentry/sentry-fastlane-plugin/pull/306))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2424)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.42.2...2.42.4)
+
+## 1.28.0
+
+### Dependencies
+
+- Bump CLI from v2.41.1 to v2.42.2 ([#303](https://github.com/getsentry/sentry-fastlane-plugin/pull/303))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2422)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.41.1...2.42.2)
+
+## 1.27.1
+
+### Dependencies
+
+- Bump CLI from v2.41.0 to v2.41.1 ([#294](https://github.com/getsentry/sentry-fastlane-plugin/pull/294))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2411)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.41.0...2.41.1)
+
 ## 1.27.0
 
 ### Dependencies
