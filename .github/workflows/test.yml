@@ -20,8 +20,7 @@ jobs:
         with:
           ruby-version: '3.1.4'
 
-      # Rspec fails with bundler v 2.6.x, so we pin it to the latest version that works.
-      - run: gem install bundler -v '2.5.20'
+      - run: gem update bundler
       - run: bundle install
       - run: sentry-cli info --config-status-json
       - run: bundle exec rubocop
