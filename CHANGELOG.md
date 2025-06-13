@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- Add `sentry_upload_mobile_app` action to upload iOS app archives (.xcarchive) using `sentry-cli mobile-app upload` command [#320](https://github.com/getsentry/sentry-fastlane-plugin/pull/320)
+
 ## 1.30.0
 
 ### Dependencies
