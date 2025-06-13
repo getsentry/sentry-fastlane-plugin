@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Features
+
+- Add `sentry_upload_mobile_app` action to upload iOS app archives (.xcarchive) using `sentry-cli mobile-app upload` command [#320](https://github.com/getsentry/sentry-fastlane-plugin/pull/320)
+
 ### Dependencies
 
 - Bump CLI from v2.51.0 to v2.53.0 ([#331](https://github.com/getsentry/sentry-fastlane-plugin/pull/331), [#334](https://github.com/getsentry/sentry-fastlane-plugin/pull/334))
@@ -283,7 +287,7 @@ We bumped the minimum sentry-cli version to `1.70.1` because it includes an esse
 
 ### Fixes
 
-- fix: Upload Dif use '-' instead of '_' ([#99](https://github.com/getsentry/sentry-fastlane-plugin/pull/99))
+- fix: Upload Dif use '-' instead of '\_' ([#99](https://github.com/getsentry/sentry-fastlane-plugin/pull/99))
 
 ## 1.10.0
 
