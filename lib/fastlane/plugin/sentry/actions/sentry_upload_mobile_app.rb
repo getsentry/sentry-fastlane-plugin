@@ -2,8 +2,6 @@ module Fastlane
   module Actions
     class SentryUploadMobileAppAction < Action
       def self.run(params)
-        require 'shellwords'
-
         Helper::SentryConfig.parse_api_params(params)
 
         # Verify xcarchive path
@@ -30,9 +28,7 @@ module Fastlane
       end
 
       def self.details
-        [
-          "This action allows you to upload iOS app archives (.xcarchive) to Sentry."
-        ].join(" ")
+        "This action allows you to upload iOS app archives (.xcarchive) to Sentry."
       end
 
       def self.available_options

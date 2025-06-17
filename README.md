@@ -126,7 +126,7 @@ sentry_upload_mobile_app(
 )
 ```
 
-By default the `SharedValue::XCODEBUILD_ARCHIVE` sets the `xarchive_path` parameter if set by a prior lane.
+By default the `SharedValue::XCODEBUILD_ARCHIVE` sets the `xarchive_path` parameter if set by a prior lane such as `build_app`.
 
 This action is only supported on iOS platform.
 
