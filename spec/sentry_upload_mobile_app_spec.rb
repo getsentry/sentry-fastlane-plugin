@@ -1,3 +1,15 @@
+module Fastlane
+  module Actions
+    def self.lane_context
+      @lane_context ||= {}
+    end
+  end
+
+  module SharedValues
+    XCODEBUILD_ARCHIVE ||= :xcodebuild_archive
+  end
+end
+
 describe Fastlane do
   describe Fastlane::FastFile do
     describe "upload mobile app" do
@@ -58,16 +70,18 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-      it "uses environment variables for xcarchive path" do
+      it "uses SharedValues::XCODEBUILD_ARCHIVE as default if xcarchive_path is not provided" do
+        require 'fastlane'
         mock_path = './assets/Test.xcarchive'
 
-        # Stub environment variables
-        stub_const('ENV', {
-                     'SENTRY_XCARCHIVE_PATH' => mock_path
-                   })
+        # Set the shared value on the correct module BEFORE parsing the lane
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = mock_path
 
+        # Stubs for file checks
         allow(File).to receive(:exist?).with(mock_path).and_return(true)
+        allow(File).to receive(:exist?).with("").and_return(false)
         allow(File).to receive(:extname).with(mock_path).and_return('.xcarchive')
+        allow(File).to receive(:extname).with("").and_return('')
 
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(

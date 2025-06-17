@@ -31,25 +31,19 @@ module Fastlane
 
       def self.details
         [
-          "This action allows you to upload iOS app archives (.xcarchive) to Sentry.",
-          "The uploaded archive can be used for various Sentry features including improved symbolication and source context."
+          "This action allows you to upload iOS app archives (.xcarchive) to Sentry."
         ].join(" ")
       end
 
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :xcarchive_path,
-                                       env_name: "SENTRY_XCARCHIVE_PATH",
                                        description: "Path to your iOS app archive (.xcarchive)",
+                                       default_value: Actions.lane_context[SharedValues::XCODEBUILD_ARCHIVE],
                                        verify_block: proc do |value|
                                          UI.user_error!("Could not find xcarchive at path '#{value}'") unless File.exist?(value)
                                          UI.user_error!("Path '#{value}' is not an xcarchive") unless File.extname(value) == '.xcarchive'
-                                       end),
-          FastlaneCore::ConfigItem.new(key: :no_upload,
-                                       description: "Only process the archive without uploading",
-                                       is_string: false,
-                                       default_value: false,
-                                       optional: true)
+                                       end)
         ]
       end
 
@@ -58,7 +52,7 @@ module Fastlane
       end
 
       def self.authors
-        ["nelsonosacky"]
+        ["runningcode"]
       end
 
       def self.is_supported?(platform)

@@ -126,7 +126,7 @@ sentry_upload_mobile_app(
 )
 ```
 
-The `SENTRY_XCARCHIVE_PATH` environment variable may be used in place of the `xcarchive_path` parameter.
+By default the `SharedValue::XCODEBUILD_ARCHIVE` sets the `xarchive_path` parameter if set by a prior lane.
 
 This action is only supported on iOS platform.
 
