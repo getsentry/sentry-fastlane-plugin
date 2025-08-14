@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Dependencies
+
+- Bump CLI from v2.51.0 to v2.52.0 ([#331](https://github.com/getsentry/sentry-fastlane-plugin/pull/331))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#2520)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.51.0...2.52.0)
+
 ## 1.33.0
 
 ### Dependencies
