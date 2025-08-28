@@ -10,7 +10,7 @@ module Fastlane
         UI.user_error!("Path '#{xcarchive_path}' is not an xcarchive") unless File.extname(xcarchive_path) == '.xcarchive'
 
         command = [
-          "mobile-app",
+          "build",
           "upload",
           File.absolute_path(xcarchive_path)
         ]

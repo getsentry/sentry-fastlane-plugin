@@ -58,7 +58,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
           anything,
-          ["mobile-app", "upload", anything]
+          ["build", "upload", anything]
         ).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
@@ -86,7 +86,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
           anything,
-          ["mobile-app", "upload", anything]
+          ["build", "upload", anything]
         ).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
