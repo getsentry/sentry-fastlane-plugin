@@ -23,7 +23,7 @@ jobs:
     if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
     steps:
       - name: Checkout PR branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ needs.update-cli.outputs.prBranch }}
       - name: Download latest binaries.
