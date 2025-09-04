@@ -6,6 +6,10 @@
 
 - Add `sentry upload build` action to upload iOS app archives (.xcarchive) to Sentry [#320](https://github.com/getsentry/sentry-fastlane-plugin/pull/320)
 
+### Internal
+
+- Refactor Danger setup to use reusable workflow ([#336](https://github.com/getsentry/sentry-fastlane-plugin/pull/336))
+
 ### Dependencies
 
 - Bump CLI from v2.51.0 to v2.53.0 ([#331](https://github.com/getsentry/sentry-fastlane-plugin/pull/331), [#334](https://github.com/getsentry/sentry-fastlane-plugin/pull/334))
