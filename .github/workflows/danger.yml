@@ -13,6 +13,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Set an explicit permissions block to the workflow file at the root level (before jobs:), declaring the minimal set of permissions required for the workflow to function.
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   danger:
     name: Danger
