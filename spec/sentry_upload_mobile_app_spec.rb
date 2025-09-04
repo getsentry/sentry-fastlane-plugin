@@ -96,6 +96,36 @@ describe Fastlane do
             project_slug: 'test-project')
         end").runner.execute(:test)
       end
+
+      it "calls sentry-cli with git parameters when provided" do
+        mock_path = './assets/Test.xcarchive'
+
+        allow(File).to receive(:exist?).with(mock_path).and_return(true)
+        allow(File).to receive(:extname).with(mock_path).and_return('.xcarchive')
+
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+          anything,
+          ["build", "upload", anything, "--head-sha", "abc123", "--base-sha", "def456", "--vcs-provider", "github", "--head-repo-name", "test/repo", "--base-repo-name", "test/repo", "--head-ref", "feature", "--base-ref", "main", "--pr-number", "123", "--build-configuration", "Release"]
+        ).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+          sentry_upload_mobile_app(
+            auth_token: 'test-token',
+            org_slug: 'test-org',
+            project_slug: 'test-project',
+            xcarchive_path: '#{mock_path}',
+            head_sha: 'abc123',
+            base_sha: 'def456',
+            vcs_provider: 'github',
+            head_repo_name: 'test/repo',
+            base_repo_name: 'test/repo',
+            head_ref: 'feature',
+            base_ref: 'main',
+            pr_number: '123',
+            build_configuration: 'Release')
+        end").runner.execute(:test)
+      end
     end
   end
 end

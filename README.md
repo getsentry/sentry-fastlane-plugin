@@ -123,6 +123,16 @@ sentry_upload_mobile_app(
   org_slug: '...',
   project_slug: '...',
   xcarchive_path: './build/MyApp.xcarchive', # Path to your .xcarchive file
+  # Optional git context parameters
+  head_sha: 'abc123...', # The SHA of the head of the current branch
+  base_sha: 'def456...', # The SHA of the base branch
+  vcs_provider: 'github', # Version control system provider (e.g., 'github', 'gitlab')
+  head_repo_name: 'owner/repo-name', # Name of the head repository
+  base_repo_name: 'owner/repo-name', # Name of the base repository
+  head_ref: 'feature-branch', # Name of the head branch
+  base_ref: 'main', # Name of the base branch
+  pr_number: '123', # Pull request number
+  build_configuration: 'Release' # Build configuration (e.g., 'Release', 'Debug')
 )
 ```
 
