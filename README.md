@@ -112,12 +112,12 @@ sentry_upload_dsym(
 )
 ```
 
-### Uploading iOS App Archives
+### Uploading iOS Build Archives
 
-Upload iOS app archives (.xcarchive) to Sentry for improved symbolication and source context.
+Upload iOS build archives (.xcarchive) to Sentry for improved symbolication and source context.
 
 ```ruby
-sentry_upload_mobile_app(
+sentry_upload_build(
   api_key: '...', # Do not use if using auth_token
   auth_token: '...', # Do not use if using api_key
   org_slug: '...',

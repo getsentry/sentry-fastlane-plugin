@@ -12,7 +12,7 @@ end
 
 describe Fastlane do
   describe Fastlane::FastFile do
-    describe "upload mobile app" do
+    describe "upload build" do
       # We'll use the dSYM file as a mock xcarchive for testing since we need an existing file
       let(:mock_xcarchive_path) { File.absolute_path './assets/SwiftExample.app.dSYM.zip' }
 
@@ -21,7 +21,7 @@ describe Fastlane do
 
         expect do
           Fastlane::FastFile.new.parse("lane :test do
-            sentry_upload_mobile_app(
+            sentry_upload_build(
               auth_token: 'test-token',
               org_slug: 'test-org',
               project_slug: 'test-project',
@@ -39,7 +39,7 @@ describe Fastlane do
 
         expect do
           Fastlane::FastFile.new.parse("lane :test do
-            sentry_upload_mobile_app(
+            sentry_upload_build(
               auth_token: 'test-token',
               org_slug: 'test-org',
               project_slug: 'test-project',
@@ -62,7 +62,7 @@ describe Fastlane do
         ).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
-          sentry_upload_mobile_app(
+          sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',
             project_slug: 'test-project',
@@ -90,7 +90,7 @@ describe Fastlane do
         ).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
-          sentry_upload_mobile_app(
+          sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',
             project_slug: 'test-project')
@@ -110,7 +110,7 @@ describe Fastlane do
         ).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
-          sentry_upload_mobile_app(
+          sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',
             project_slug: 'test-project',
