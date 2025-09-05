@@ -1,6 +1,6 @@
 module Fastlane
   module Actions
-    class SentryUploadMobileAppAction < Action
+    class SentryUploadBuildAction < Action
       def self.run(params)
         Helper::SentryConfig.parse_api_params(params)
 
@@ -27,7 +27,7 @@ module Fastlane
         command << "--build-configuration" << params[:build_configuration] if params[:build_configuration]
 
         Helper::SentryHelper.call_sentry_cli(params, command)
-        UI.success("Successfully uploaded mobile app archive: #{xcarchive_path}")
+        UI.success("Successfully uploaded build archive: #{xcarchive_path}")
       end
 
       #####################################################
@@ -35,17 +35,17 @@ module Fastlane
       #####################################################
 
       def self.description
-        "Upload iOS app archive to Sentry with optional git context"
+        "Upload iOS build archive to Sentry with optional git context"
       end
 
       def self.details
-        "This action allows you to upload iOS app archives (.xcarchive) to Sentry with optional git-related parameters for enhanced context including commit SHAs, branch names, repository information, and pull request details."
+        "This action allows you to upload iOS build archives (.xcarchive) to Sentry with optional git-related parameters for enhanced context including commit SHAs, branch names, repository information, and pull request details."
       end
 
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :xcarchive_path,
-                                       description: "Path to your iOS app archive (.xcarchive)",
+                                       description: "Path to your iOS build archive (.xcarchive)",
                                        default_value: Actions.lane_context[SharedValues::XCODEBUILD_ARCHIVE],
                                        verify_block: proc do |value|
                                          UI.user_error!("Could not find xcarchive at path '#{value}'") unless File.exist?(value)
