@@ -123,16 +123,16 @@ sentry_upload_build(
   org_slug: '...',
   project_slug: '...',
   xcarchive_path: './build/MyApp.xcarchive', # Path to your .xcarchive file
-  # Optional git context parameters
-  head_sha: 'abc123...', # The SHA of the head of the current branch
-  base_sha: 'def456...', # The SHA of the base branch
-  vcs_provider: 'github', # Version control system provider (e.g., 'github', 'gitlab')
-  head_repo_name: 'owner/repo-name', # Name of the head repository
-  base_repo_name: 'owner/repo-name', # Name of the base repository
-  head_ref: 'feature-branch', # Name of the head branch
-  base_ref: 'main', # Name of the base branch
-  pr_number: '123', # Pull request number
-  build_configuration: 'Release' # Build configuration (e.g., 'Release', 'Debug')
+  # Optional git context parameters (can also be set via environment variables)
+  head_sha: 'abc123...', # The SHA of the head of the current branch (or SENTRY_HEAD_SHA)
+  base_sha: 'def456...', # The SHA of the base branch (or SENTRY_BASE_SHA)
+  vcs_provider: 'github', # Version control system provider (e.g., 'github', 'gitlab') (or SENTRY_VCS_PROVIDER)
+  head_repo_name: 'owner/repo-name', # Name of the head repository (or SENTRY_HEAD_REPO_NAME)
+  base_repo_name: 'owner/repo-name', # Name of the base repository (or SENTRY_BASE_REPO_NAME)
+  head_ref: 'feature-branch', # Name of the head branch (or SENTRY_HEAD_REF)
+  base_ref: 'main', # Name of the base branch (or SENTRY_BASE_REF)
+  pr_number: '123', # Pull request number (or SENTRY_PR_NUMBER)
+  build_configuration: 'Release' # Build configuration (e.g., 'Release', 'Debug') (or SENTRY_BUILD_CONFIGURATION)
 )
 ```
 
