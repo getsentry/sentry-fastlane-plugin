@@ -6,6 +6,7 @@
 
 - Add `sentry upload build` action to upload iOS app archives (.xcarchive) to Sentry [#320](https://github.com/getsentry/sentry-fastlane-plugin/pull/320)
 - Add git context parameters to `sentry_upload_build` action for enhanced context including commit SHAs, branch names, repository information, and pull request details [#335](https://github.com/getsentry/sentry-fastlane-plugin/pull/335)
+- Add environment variable support for git parameters in `sentry_upload_build` action (SENTRY_HEAD_SHA, SENTRY_BASE_SHA, SENTRY_VCS_PROVIDER, SENTRY_HEAD_REPO_NAME, SENTRY_BASE_REPO_NAME, SENTRY_HEAD_REF, SENTRY_BASE_REF, SENTRY_PR_NUMBER, SENTRY_BUILD_CONFIGURATION) [#342](https://github.com/getsentry/sentry-fastlane-plugin/pull/342)
 
 ### Dependencies
 
