@@ -16,6 +16,6 @@ concurrency:
 jobs:
   danger:
     name: Danger
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: getsentry/github-workflows/danger@v3
