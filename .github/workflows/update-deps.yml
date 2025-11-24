@@ -3,21 +3,28 @@ name: Update Dependencies
 on:
   # Run every day.
   schedule:
-    - cron: '0 3 * * *'
-  # And on on every PR merge so we get the updated dependencies ASAP, and to make sure the changelog doesn't conflict.
+    - cron: "0 3 * * *"
+  # And on every PR merge so we get the updated dependencies ASAP, and to make sure the changelog doesn't conflict.
   push:
     branches:
       - master
   workflow_dispatch:
 
+permissions:
+  contents: write # To modify files and create commits
+  pull-requests: write # To create and update pull requests
+  actions: write # To cancel previous workflow runs
+
 jobs:
   update-cli:
-    uses: getsentry/github-workflows/updater@v3
-    with:
-      path: script/sentry-cli.properties
-      name: CLI
-    secrets:
-      api-token: ${{ secrets.CI_DEPLOY_KEY }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: getsentry/github-workflows/updater@v3
+        with:
+          path: script/sentry-cli.properties
+          name: CLI
+          api-token: ${{ secrets.CI_DEPLOY_KEY }}
+
   update-binaries:
     runs-on: ubuntu-latest
     needs: update-cli
