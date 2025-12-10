@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- Set `SENTRY_PIPELINE` environment variable for all sentry-cli invocations to identify the plugin and version ([#365](https://github.com/getsentry/sentry-fastlane-plugin/pull/365))
+
 ## 1.36.0
 
 ### Dependencies
