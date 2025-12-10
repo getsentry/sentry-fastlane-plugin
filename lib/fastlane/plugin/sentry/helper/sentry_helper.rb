@@ -31,7 +31,8 @@ module Fastlane
           UI.command(final_command)
         end
 
-        Open3.popen3(final_command) do |stdin, stdout, stderr, status_thread|
+        env = { 'SENTRY_PIPELINE' => "sentry-fastlane-plugin/#{Fastlane::Sentry::VERSION}" }
+        Open3.popen3(env, final_command) do |stdin, stdout, stderr, status_thread|
           out_reader = Thread.new do
             output = []
 
