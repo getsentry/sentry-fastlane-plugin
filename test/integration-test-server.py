@@ -64,6 +64,8 @@ class Handler(BaseHTTPRequestHandler):
                                  value['debug_id'], value['name'])
             jsonResponse = jsonResponse.rstrip(',') + '}'
             self.writeJSON(jsonResponse)
+        elif self.isApi('api/0/organizations/{}/releases/'.format(apiOrg)):
+            self.writeJSONFile("test/assets/release.json")
         elif self.isApi('api/0/projects/{}/{}/releases/'.format(apiOrg, apiProject)):
             self.writeJSONFile("test/assets/release.json")
         elif self.isApi('/api/0/organizations/{}/releases/{}@{}/deploys/'.format(apiOrg, appIdentifier, version)):
