@@ -13,14 +13,13 @@ module Fastlane
         sourcemaps = params[:sourcemap]
 
         command = [
-          "releases",
-          "files",
-          version,
-          "upload-sourcemaps"
+          "sourcemaps",
+          "upload",
+          "--release",
+          version
         ]
         command += sourcemaps
 
-        command.push('--rewrite') if params[:rewrite]
         command.push('--no-rewrite') unless params[:rewrite]
         command.push('--strip-prefix').push(params[:strip_prefix]) if params[:strip_prefix]
         command.push('--strip-common-prefix') if params[:strip_common_prefix]
@@ -38,7 +37,9 @@ module Fastlane
           rescue StandardError
             true
           end
-          command.push('--ignore').push(*params[:ignore]) if params[:ignore].any?
+          params[:ignore].each do |pattern|
+            command.push('--ignore').push(pattern)
+          end
         end
 
         command.push('--ignore-file').push(params[:ignore_file]) unless params[:ignore_file].nil?

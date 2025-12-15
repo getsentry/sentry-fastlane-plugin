@@ -82,7 +82,6 @@ lane :integration_test_upload_proguard do
     project_slug: 'sentry-fastlane-plugin',
     auth_token: 'dummy-auth-token',
     url: "http://127.0.0.1:8000",
-    android_manifest_path: "assets/AndroidManifest.xml",
     mapping_path: 'assets/AndroidExample.mapping.txt'
   )
 end

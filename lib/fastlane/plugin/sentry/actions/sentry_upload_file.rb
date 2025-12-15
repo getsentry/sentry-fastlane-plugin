@@ -4,6 +4,8 @@ module Fastlane
       def self.run(params)
         require 'shellwords'
 
+        UI.deprecated("This action is deprecated. The 'releases files' command has been removed in sentry-cli 3.0.0. Use `sentry_upload_sourcemap` for source maps or other specialized upload commands.")
+
         Helper::SentryConfig.parse_api_params(params)
 
         version = params[:version]

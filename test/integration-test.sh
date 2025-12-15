@@ -35,11 +35,9 @@ if ! (fastlane integration_test_create_deploy) ; then
     stop_server
     exit 1
 fi
-    
-if ! (fastlane integration_test_upload_file) ; then
-    stop_server
-    exit 1
-fi
+
+# Skipped: integration_test_upload_file - deprecated in sentry-cli 3.0.0
+# The 'releases files' command has been removed.
 
 if ! (fastlane integration_test_upload_sourcemap) ; then
     stop_server
