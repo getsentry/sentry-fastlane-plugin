@@ -4,17 +4,10 @@ module Fastlane
       def self.run(params)
         Helper::SentryConfig.parse_api_params(params)
 
-        # Params - mapping & manifest
         mapping_path = params[:mapping_path]
-        android_manifest_path = params[:android_manifest_path]
 
-        # Verify files
+        # Verify file exists
         UI.user_error!("Mapping file does not exist at path: #{mapping_path}") unless File.exist? mapping_path
-
-        unless android_manifest_path.nil?
-          UI.deprecated("The 'android_manifest_path' parameter is deprecated. The --android-manifest argument was removed in sentry-cli 3.0.0 and is no longer needed.")
-          UI.user_error!("AndroidManifest.xml file does not exist at path: #{android_manifest_path}") unless File.exist? android_manifest_path
-        end
 
         command = [
           "upload-proguard",
@@ -48,13 +41,6 @@ module Fastlane
                                        optional: false,
                                        verify_block: proc do |value|
                                                        UI.user_error! "Could not find your mapping file at path '#{value}'" unless File.exist?(value)
-                                                     end),
-          FastlaneCore::ConfigItem.new(key: :android_manifest_path,
-                                       env_name: "ANDROID_MANIFEST_PATH",
-                                       description: "[DEPRECATED] Path to your merged AndroidManifest file. This parameter is no longer used as of sentry-cli 3.0.0",
-                                       optional: true,
-                                       verify_block: proc do |value|
-                                                       UI.user_error! "Could not find your merged AndroidManifest file at path '#{value}'" unless File.exist?(value)
                                                      end)
         ]
       end
