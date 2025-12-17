@@ -6,6 +6,16 @@
 
 - Set `SENTRY_PIPELINE` environment variable for all sentry-cli invocations to identify the plugin and version ([#365](https://github.com/getsentry/sentry-fastlane-plugin/pull/365))
 
+### Breaking Changes
+
+Due to sentry-cli 3.0.0 upgrade, the following breaking changes have been made ([#370](https://github.com/getsentry/sentry-fastlane-plugin/pull/370)):
+
+- **`sentry_upload_file` action is deprecated**: The `releases files` commands were removed in sentry-cli 3.0.0. Users should migrate to `sentry_upload_sourcemap` for source maps or other specialized upload actions.
+- **`sentry_upload_sourcemap` internal command changed**: Now uses `sourcemaps upload --release <version>` instead of `releases files <version> upload-sourcemaps`. This is an internal change and should not affect users unless they are mocking or testing the CLI commands.
+- **`android_manifest_path` parameter in `sentry_upload_proguard` is now optional and deprecated**: The `--android-manifest` argument was removed in sentry-cli 3.0.0. The parameter is now optional for backwards compatibility but will show a deprecation warning if used.
+
+See the [sentry-cli 3.0.0 release notes](https://github.com/getsentry/sentry-cli/releases/tag/3.0.0) for more details on CLI changes.
+
 ### Dependencies
 
 - Bump CLI from v2.58.2 to v3.0.0 ([#366](https://github.com/getsentry/sentry-fastlane-plugin/pull/366), [#367](https://github.com/getsentry/sentry-fastlane-plugin/pull/367), [#369](https://github.com/getsentry/sentry-fastlane-plugin/pull/369))
