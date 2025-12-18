@@ -21,9 +21,9 @@ See the [sentry-cli 3.0.0 release notes](https://github.com/getsentry/sentry-cli
 
 ### Dependencies
 
-- Bump CLI from v2.58.2 to v3.0.0 ([#366](https://github.com/getsentry/sentry-fastlane-plugin/pull/366), [#367](https://github.com/getsentry/sentry-fastlane-plugin/pull/367), [#369](https://github.com/getsentry/sentry-fastlane-plugin/pull/369))
-  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#300)
-  - [diff](https://github.com/getsentry/sentry-cli/compare/2.58.2...3.0.0)
+- Bump CLI from v2.58.2 to v3.0.1 ([#366](https://github.com/getsentry/sentry-fastlane-plugin/pull/366), [#367](https://github.com/getsentry/sentry-fastlane-plugin/pull/367), [#369](https://github.com/getsentry/sentry-fastlane-plugin/pull/369), [#371](https://github.com/getsentry/sentry-fastlane-plugin/pull/371))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#301)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/2.58.2...3.0.1)
 
 ## 1.36.0
 
