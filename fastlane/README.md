@@ -21,11 +21,12 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### integration_test_upload_dif
+### integration_test_debug_files_upload
 
 ```sh
 [bundle exec] fastlane integration_test_debug_files_upload
 ```
+
 
 
 ### integration_test_create_release

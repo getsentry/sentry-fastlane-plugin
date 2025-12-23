@@ -4,18 +4,13 @@ module Fastlane
       def self.run(params)
         Helper::SentryConfig.parse_api_params(params)
 
-        # Params - mapping & manifest
         mapping_path = params[:mapping_path]
-        android_manifest_path = params[:android_manifest_path]
 
-        # Verify files
+        # Verify file exists
         UI.user_error!("Mapping file does not exist at path: #{mapping_path}") unless File.exist? mapping_path
-        UI.user_error!("AndroidManifest.xml file does not exist at path: #{android_manifest_path}") unless File.exist? android_manifest_path
 
         command = [
           "upload-proguard",
-          "--android-manifest",
-          android_manifest_path,
           mapping_path
         ]
 
@@ -46,13 +41,6 @@ module Fastlane
                                        optional: false,
                                        verify_block: proc do |value|
                                                        UI.user_error! "Could not find your mapping file at path '#{value}'" unless File.exist?(value)
-                                                     end),
-          FastlaneCore::ConfigItem.new(key: :android_manifest_path,
-                                       env_name: "ANDROID_MANIFEST_PATH",
-                                       description: "Path to your merged AndroidManifest file. This is usually found under `app/build/intermediates/manifests/full`",
-                                       optional: false,
-                                       verify_block: proc do |value|
-                                                       UI.user_error! "Could not find your merged AndroidManifest file at path '#{value}'" unless File.exist?(value)
                                                      end)
         ]
       end

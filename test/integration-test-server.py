@@ -29,7 +29,7 @@ class Handler(BaseHTTPRequestHandler):
             self.writeJSON('{"url":"' + uri.geturl() + self.path + '",'
                            '"chunkSize":8388608,"chunksPerRequest":64,"maxFileSize":2147483648,'
                            '"maxRequestSize":33554432,"concurrency":1,"hashAlgorithm":"sha1","compression":["gzip"],'
-                           '"accept":["debug_files","release_files","pdbs","sources","bcsymbolmaps"]}')
+                           '"accept":["debug_files","release_files","pdbs","sources","bcsymbolmaps","proguard","artifact_bundles"]}')
         elif self.isApi('/api/0/organizations/{}/repos/?cursor='.format(apiOrg)):
             self.writeJSONFile("test/assets/repos.json")
         elif self.isApi('/api/0/organizations/{}/releases/{}/previous-with-commits/'.format(apiOrg, version)):
@@ -60,16 +60,24 @@ class Handler(BaseHTTPRequestHandler):
             for key, value in jsonRequest.items():
                 jsonResponse += '"{}":{{"state":"ok","missingChunks":[]}},'.format(
                     key)
-                self.log_message('Received: %40s %40s %s', key,
-                                 value['debug_id'], value['name'])
+                # Proguard files don't have debug_id, only name
+                if 'debug_id' in value:
+                    self.log_message('Received dif: %40s %40s %s', key,
+                                     value['debug_id'], value['name'])
+                else:
+                    self.log_message('Received proguard: %40s %s', key, value['name'])
             jsonResponse = jsonResponse.rstrip(',') + '}'
             self.writeJSON(jsonResponse)
+        elif self.isApi('api/0/organizations/{}/releases/'.format(apiOrg)):
+            self.writeJSONFile("test/assets/release.json")
         elif self.isApi('api/0/projects/{}/{}/releases/'.format(apiOrg, apiProject)):
             self.writeJSONFile("test/assets/release.json")
         elif self.isApi('/api/0/organizations/{}/releases/{}@{}/deploys/'.format(apiOrg, appIdentifier, version)):
             self.writeJSONFile("test/assets/deploy.json")
         elif self.isApi('/api/0/projects/{}/{}/releases/{}@{}/files/'.format(apiOrg, apiProject, appIdentifier, version)):
             self.writeJSONFile("test/assets/artifact.json")
+        elif self.isApi('/api/0/organizations/{}/artifactbundle/assemble/'.format(apiOrg)):
+            self.writeJSONFile("test/assets/assemble-artifacts-response.json")
         elif self.isApi('/api/0/organizations/{}/releases/{}@{}/assemble/'.format(apiOrg, appIdentifier, version)):
             self.writeJSONFile("test/assets/assemble-artifacts-response.json")
         elif self.isApi('/api/0/projects/{}/{}/files/dsyms/'.format(apiOrg, apiProject)):
