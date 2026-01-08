@@ -53,6 +53,7 @@ module Fastlane
                                        optional: true,
                                        verify_block: proc do |value|
                                                        return if value.nil? || value.to_s.empty?
+
                                                        # Try both the original path and absolute path
                                                        path_exists = File.exist?(value) || File.exist?(File.expand_path(value))
                                                        UI.user_error! "Could not find Path to your symbols file at path '#{value}'" unless path_exists

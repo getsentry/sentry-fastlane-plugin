@@ -48,7 +48,7 @@ describe Fastlane do
       it "uses DSYM_OUTPUT_PATH from lane context when path is not provided" do
         require 'fastlane'
         mock_dsym_path = './assets/SwiftExample.app.dSYM.zip'
-        
+
         # Set the shared value on the correct module BEFORE parsing the lane
         Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::DSYM_OUTPUT_PATH] = mock_dsym_path
 
@@ -64,7 +64,7 @@ describe Fastlane do
 
       it "falls back to '.' when DSYM_OUTPUT_PATH is empty string" do
         require 'fastlane'
-        
+
         # Set the shared value to empty string
         Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::DSYM_OUTPUT_PATH] = ''
 
@@ -80,7 +80,7 @@ describe Fastlane do
 
       it "falls back to '.' when DSYM_OUTPUT_PATH is nil" do
         require 'fastlane'
-        
+
         # Set the shared value to nil explicitly
         Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::DSYM_OUTPUT_PATH] = nil
 
@@ -98,7 +98,7 @@ describe Fastlane do
         require 'fastlane'
         mock_dsym_path = './assets/SwiftExample.app.dSYM.zip'
         explicit_path = './explicit/path'
-        
+
         # Set the shared value, but explicit path should override it
         Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::DSYM_OUTPUT_PATH] = mock_dsym_path
 
