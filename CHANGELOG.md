@@ -2,16 +2,13 @@
 
 ## Unreleased
 
-### Improvements
-
-- **`path` parameter default behavior improved in `sentry_debug_files_upload`**: The `path` parameter now defaults to `DSYM_OUTPUT_PATH` from fastlane's lane context if available (set by actions like `build_app` or `ipa`), otherwise falls back to `'.'` (current directory). This provides a smarter default that narrows the search path when running in typical fastlane workflows, addressing issue [#290](https://github.com/getsentry/sentry-fastlane-plugin/issues/290).
-
 ### Breaking Changes
 
 Due to sentry-cli 3.0.0 upgrade, the following breaking changes have been made ([#370](https://github.com/getsentry/sentry-fastlane-plugin/pull/370)):
 
 - **`sentry_upload_file` action has been removed**: The `releases files` commands were removed in sentry-cli 3.0.0. Users should migrate to `sentry_upload_sourcemap` for source maps or other specialized upload actions.
 - **`android_manifest_path` parameter in `sentry_upload_proguard` has been removed**: The `--android-manifest` argument was removed in sentry-cli 3.0.0 and is no longer needed. Any Fastfiles still using this parameter will need to remove it.
+- **`path` parameter default behavior changed in `sentry_debug_files_upload`**: The `path` parameter now defaults to `DSYM_OUTPUT_PATH` from fastlane's lane context if available (set by actions like `build_app` or `ipa`), otherwise falls back to `'.'` (current directory). This changes the default behavior when `DSYM_OUTPUT_PATH` is set, which may affect users who were relying on the previous behavior of always searching from the current directory. Users can explicitly specify `path: '.'` to maintain the previous behavior. This addresses issue [#290](https://github.com/getsentry/sentry-fastlane-plugin/issues/290).
 
 See the [sentry-cli 3.0.0 release notes](https://github.com/getsentry/sentry-cli/releases/tag/3.0.0) for more details on CLI changes.
 
