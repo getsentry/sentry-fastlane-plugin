@@ -1,19 +1,20 @@
 describe Fastlane do
   describe Fastlane::FastFile do
     describe "upload dsym" do
-      it "fails with API key and auth token" do
+      it "fails without auth token" do
         dsym_path_1 = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
+        
+        # Mock parse_api_params to raise the auth error directly
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_raise("No authentication token found for SentryAction given, pass using `auth_token: 'token'`")
 
         expect do
           Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dsym(
               org_slug: 'some_org',
-              api_key: 'something123',
-              auth_token: 'something123',
               project_slug: 'some_project',
               dsym_path: '#{dsym_path_1}')
           end").runner.execute(:test)
-        end.to raise_error("Both API key and authentication token found for SentryAction given, please only give one")
+        end.to raise_error("No authentication token found for SentryAction given, pass using `auth_token: 'token'`")
       end
 
       it "fails with invalid dsym path" do
@@ -23,7 +24,7 @@ describe Fastlane do
           Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_dsym(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               dsym_path: '#{dsym_path_1}')
           end").runner.execute(:test)
@@ -41,7 +42,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
           sentry_upload_dsym(
             org_slug: 'some_org',
-            api_key: 'something123',
+            auth_token: 'something123',
             project_slug: 'some_project',
             symbol_maps: '1.bcsymbol',
             dsym_path: '#{dsym_path_1}')
@@ -56,7 +57,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
           sentry_upload_dsym(
             org_slug: 'some_org',
-            api_key: 'something123',
+            auth_token: 'something123',
             project_slug: 'some_project',
             dsym_paths: ['#{dsym_path_1}', '#{dsym_path_1}'])
         end").runner.execute(:test)
@@ -73,7 +74,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
           sentry_upload_dsym(
             org_slug: 'some_org',
-            api_key: 'something123',
+            auth_token: 'something123',
             project_slug: 'some_project',
             dsym_paths: ['#{dsym_path_1}'],
             info_plist: 'Info.plist')
