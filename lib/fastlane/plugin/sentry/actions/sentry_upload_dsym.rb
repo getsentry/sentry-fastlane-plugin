@@ -52,7 +52,10 @@ module Fastlane
                                        default_value: Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH],
                                        optional: true,
                                        verify_block: proc do |value|
-                                                       UI.user_error! "Could not find Path to your symbols file at path '#{value}'" unless File.exist?(value)
+                                                       return if value.nil? || value.to_s.empty?
+                                                       # Try both the original path and absolute path
+                                                       path_exists = File.exist?(value) || File.exist?(File.expand_path(value))
+                                                       UI.user_error! "Could not find Path to your symbols file at path '#{value}'" unless path_exists
                                                      end),
           FastlaneCore::ConfigItem.new(key: :dsym_paths,
                                        env_name: "SENTRY_DSYM_PATHS",

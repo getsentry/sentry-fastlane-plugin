@@ -49,6 +49,10 @@ describe Fastlane do
       end
 
       it "multiple dsym paths" do
+        require 'fastlane'
+        # Clear any existing DSYM_OUTPUT_PATH from lane context
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::DSYM_OUTPUT_PATH] = nil
+        
         dsym_path_1 = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
 
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-dsym", dsym_path_1, dsym_path_1]).and_return(true)
@@ -63,6 +67,10 @@ describe Fastlane do
       end
 
       it "Info.plist should exist" do
+        require 'fastlane'
+        # Clear any existing DSYM_OUTPUT_PATH from lane context
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::DSYM_OUTPUT_PATH] = nil
+        
         dsym_path_1 = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
 
         allow(File).to receive(:exist?).and_call_original
