@@ -8,6 +8,8 @@ Due to sentry-cli 3.0.0 upgrade, the following breaking changes have been made (
 
 - **`sentry_upload_file` action has been removed**: The `releases files` commands were removed in sentry-cli 3.0.0. Users should migrate to `sentry_upload_sourcemap` for source maps or other specialized upload actions.
 - **`android_manifest_path` parameter in `sentry_upload_proguard` has been removed**: The `--android-manifest` argument was removed in sentry-cli 3.0.0 and is no longer needed. Any Fastfiles still using this parameter will need to remove it.
+- **`api_key` parameter has been removed**: The `api_key` parameter has been removed in favor of `auth_token`. All actions now require `auth_token` for authentication. Users should update their Fastfiles to use `auth_token` instead of `api_key`.
+- **`force_foreground` parameter has been removed**: This parameter was deprecated as a no-op since v1.26.0 and has now been removed from `sentry_debug_files_upload`. Users should remove this parameter from their Fastfiles.
 
 See the [sentry-cli 3.0.0 release notes](https://github.com/getsentry/sentry-cli/releases/tag/3.0.0) for more details on CLI changes.
 
