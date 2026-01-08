@@ -3,7 +3,7 @@ describe Fastlane do
     describe "upload dsym" do
       it "fails without auth token" do
         dsym_path_1 = File.absolute_path './assets/SwiftExample.app.dSYM.zip'
-        
+
         # Mock parse_api_params to raise the auth error directly
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_raise("No authentication token found for SentryAction given, pass using `auth_token: 'token'`")
 

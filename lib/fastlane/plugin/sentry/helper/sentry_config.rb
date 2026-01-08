@@ -68,7 +68,7 @@ module Fastlane
           UI.important("No auth config provided, will fallback to .sentryclirc")
         else
           # Will fail if no authentication token is provided
-          if !has_auth_token
+          unless has_auth_token
             UI.user_error!("No authentication token found for SentryAction given, pass using `auth_token: 'token'`")
           end
           ENV['SENTRY_AUTH_TOKEN'] = auth_token unless auth_token.to_s.empty?

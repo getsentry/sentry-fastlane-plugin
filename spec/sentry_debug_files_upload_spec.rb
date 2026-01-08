@@ -260,7 +260,6 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-
       it "includes --include_sources when true" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--include-sources"]).and_return(true)
