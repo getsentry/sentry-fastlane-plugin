@@ -60,11 +60,10 @@ The following environment variables may be used in place of parameters: `SENTRY_
 
 ```ruby
 sentry_debug_files_upload(
-  api_key: '...', # Do not use if using auth_token
-  auth_token: '...', # Do not use if using api_key
+  auth_token: '...',
   org_slug: '...',
   project_slug: '...',
-  path: '/path/to/files', # Optional. Defaults to '.' when no value is provided. Path(s) can be a string, a comma-separated string, or an array of strings.
+  path: '/path/to/files', # Optional. Defaults to DSYM_OUTPUT_PATH from fastlane context if available, otherwise '.' (current directory). Path(s) can be a string, a comma-separated string, or an array of strings.
 )
 ```
 

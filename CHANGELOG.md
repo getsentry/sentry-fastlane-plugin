@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Improvements
+
+- **`path` parameter default behavior improved in `sentry_debug_files_upload`**: The `path` parameter now defaults to `DSYM_OUTPUT_PATH` from fastlane's lane context if available (set by actions like `build_app` or `ipa`), otherwise falls back to `'.'` (current directory). This provides a smarter default that narrows the search path when running in typical fastlane workflows, addressing issue [#290](https://github.com/getsentry/sentry-fastlane-plugin/issues/290).
+
 ### Breaking Changes
 
 Due to sentry-cli 3.0.0 upgrade, the following breaking changes have been made ([#370](https://github.com/getsentry/sentry-fastlane-plugin/pull/370)):
