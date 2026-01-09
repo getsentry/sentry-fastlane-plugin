@@ -330,18 +330,6 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-      it "includes --force_foreground when true" do
-        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--force-foreground"]).and_return(true)
-
-        Fastlane::FastFile.new.parse("lane :test do
-            sentry_debug_files_upload(
-              path: 'fixture-path',
-              force_foreground: true
-            )
-        end").runner.execute(:test)
-      end
-
       it "includes --include_sources when true" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--include-sources"]).and_return(true)

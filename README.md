@@ -50,11 +50,10 @@ A subset of actions provided by the CLI: https://docs.sentry.io/learn/cli/
 
 ### Authentication & Configuration
 
-`auth_token` is the preferred authentication method with Sentry. This can be obtained on https://sentry.io/api/.
-`api_key` still works but will eventually become deprecated. This can be obtained through the settings of your project.
+`auth_token` is the authentication method with Sentry. This can be obtained on https://sentry.io/api/.
 Also note that as of version `1.2.0` you no longer have to provide the required parameters, we will try to fallback to your `.sentryclirc` config file if possible.
 
-The following environment variables may be used in place of parameters: `SENTRY_API_KEY`, `SENTRY_AUTH_TOKEN`, `SENTRY_ORG_SLUG`, and `SENTRY_PROJECT_SLUG`.
+The following environment variables may be used in place of parameters: `SENTRY_AUTH_TOKEN`, `SENTRY_ORG_SLUG`, and `SENTRY_PROJECT_SLUG`.
 
 ### Uploading Debug Information Files
 
@@ -82,7 +81,6 @@ Further options:
 - __no_zips__: Do not search in ZIP files.
 - __info_plist__: Optional. Optional path to the Info.plist. We will try to find this automatically if run from Xcode. Providing this information will associate the debug symbols with a specific ITC application and build in Sentry. Note that if you provide the plist explicitly it must already be processed.
 - __no_reprocessing__: Optional. Do not trigger reprocessing after uploading.
-- __force_foreground__: Optional. __Deprecated NoOp since 1.26.0. Before v 1.26.0__: Wait for the process to finish. By default, the upload process will detach and continue in the background when triggered from Xcode. When an error happens, a dialog is shown. If this parameter is passed Xcode will wait for the process to finish before the build finishes and output will be shown in the Xcode build output.
 - __include_sources__: Optional. Include sources from the local file system and upload them as source bundles.
 - __wait__: Wait for the server to fully process uploaded files. Errors can only be displayed if --wait is specified, but this will significantly slow down the upload process.
 - __upload_symbol_maps__: Optional. Upload any BCSymbolMap files found to allow Sentry to resolve hidden symbols, e.g. when it downloads dSYMs directly from App Store Connect or when you upload dSYMs without first resolving the hidden symbols using --symbol-maps.
@@ -93,8 +91,7 @@ Upload iOS build archives (.xcarchive) to Sentry for improved symbolication and 
 
 ```ruby
 sentry_upload_build(
-  api_key: '...', # Do not use if using auth_token
-  auth_token: '...', # Do not use if using api_key
+  auth_token: '...',
   org_slug: '...',
   project_slug: '...',
   xcarchive_path: './build/MyApp.xcarchive', # Path to your .xcarchive file
@@ -119,7 +116,6 @@ This action is only supported on iOS platform.
 
 ```ruby
 sentry_create_release(
-  api_key: '...',
   auth_token: '...',
   org_slug: '...',
   project_slug: '...',
@@ -135,7 +131,6 @@ Useful for uploading build artifacts and JS sourcemaps for react-native apps bui
 
 ```ruby
 sentry_upload_sourcemap(
-  api_key: '...',
   auth_token: '...',
   org_slug: '...',
   project_slug: '...',
@@ -152,8 +147,7 @@ sentry_upload_sourcemap(
 
 ```ruby
 sentry_upload_proguard(
-  api_key: '...', # Do not use if using auth_token
-  auth_token: '...', # Do not use if using api_key
+  auth_token: '...',
   org_slug: '...',
   project_slug: '...',
   android_manifest_path: 'path to merged AndroidManifest file', # found in `app/build/intermediates/manifests/full`
@@ -183,8 +177,7 @@ Creates a new release deployment for a project on Sentry.
 
 ```ruby
 sentry_create_deploy(
-  api_key: '...', # Do not use if using auth_token
-  auth_token: '...', # Do not use if using api_key
+  auth_token: '...',
   org_slug: '...',
   project_slug: '...',
   version: '...',

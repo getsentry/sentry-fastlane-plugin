@@ -7,7 +7,7 @@ describe Fastlane do
           Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_sourcemap(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               sourcemap: '#{sourcemap_path}')
           end").runner.execute(:test)
@@ -24,7 +24,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_sourcemap(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               version: '1.0',
               sourcemap: '1.map',
@@ -43,7 +43,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_sourcemap(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               version: '1.0',
               dist: 'dem',
@@ -63,7 +63,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_sourcemap(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               version: '1.0',
               dist: 'dem',
@@ -83,7 +83,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_sourcemap(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               version: '1.0',
               dist: 'dem',
@@ -105,7 +105,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_sourcemap(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               version: '1.0',
               dist: 'dem',
@@ -126,7 +126,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_sourcemap(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               version: '1.0',
               dist: 'dem',
@@ -145,7 +145,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_sourcemap(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               version: '1.0',
               dist: 'dem',
@@ -163,7 +163,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_sourcemap(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               version: '1.0',
               dist: 'dem',
@@ -184,7 +184,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_sourcemap(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               version: '1.0',
               dist: 'dem',
@@ -205,7 +205,7 @@ describe Fastlane do
         Fastlane::FastFile.new.parse("lane :test do
             sentry_upload_sourcemap(
               org_slug: 'some_org',
-              api_key: 'something123',
+              auth_token: 'something123',
               project_slug: 'some_project',
               version: '1.0',
               dist: 'dem',
