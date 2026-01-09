@@ -26,7 +26,6 @@ module Fastlane
         command.push('--no-zips') unless params[:no_zips].nil?
         command.push('--info-plist').push(params[:info_plist]) unless params[:info_plist].nil?
         command.push('--no-reprocessing') unless params[:no_reprocessing].nil?
-        command.push('--force-foreground') unless params[:force_foreground].nil?
         command.push('--include-sources') unless params[:include_sources] != true
         command.push('--wait') unless params[:wait].nil?
         command.push('--upload-symbol-maps') unless params[:upload_symbol_maps].nil?
@@ -118,15 +117,6 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :no_reprocessing,
                                        description: "Do not trigger reprocessing after uploading",
-                                       is_string: false,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :force_foreground,
-                                       description: "Wait for the process to finish.{n}\
-                                       By default, the upload process will detach and continue in the \
-                                       background when triggered from Xcode.  When an error happens, \
-                                       a dialog is shown.  If this parameter is passed Xcode will wait \
-                                       for the process to finish before the build finishes and output \
-                                       will be shown in the Xcode build output",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :include_sources,
