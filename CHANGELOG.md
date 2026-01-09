@@ -8,6 +8,8 @@ Due to sentry-cli 3.0.0 upgrade, the following breaking changes have been made (
 
 - **`sentry_upload_file` action has been removed**: The `releases files` commands were removed in sentry-cli 3.0.0. Users should migrate to `sentry_upload_sourcemap` for source maps or other specialized upload actions.
 - **`android_manifest_path` parameter in `sentry_upload_proguard` has been removed**: The `--android-manifest` argument was removed in sentry-cli 3.0.0 and is no longer needed. Any Fastfiles still using this parameter will need to remove it.
+- **`sentry_upload_dsym` action has been removed**: This action has been deprecated in favor of `sentry_debug_files_upload`. Users should migrate to `sentry_debug_files_upload` with the appropriate `path` parameter. ([#375](https://github.com/getsentry/sentry-fastlane-plugin/pull/375))
+- **`sentry_upload_dif` action has been removed**: This action has been deprecated in favor of `sentry_debug_files_upload`. Users should migrate to `sentry_debug_files_upload` with the appropriate `path` parameter. ([#375](https://github.com/getsentry/sentry-fastlane-plugin/pull/375))
 
 See the [sentry-cli 3.0.0 release notes](https://github.com/getsentry/sentry-cli/releases/tag/3.0.0) for more details on CLI changes.
 
