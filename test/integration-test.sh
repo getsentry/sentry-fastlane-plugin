@@ -10,12 +10,6 @@ stop_server() {
 
 start_server &
 
-# Deprecated. Remove with next major update.
-if ! (fastlane integration_test_upload_dif) ; then
-    stop_server
-    exit 1
-fi
-
 if ! (fastlane integration_test_debug_files_upload) ; then
     stop_server
     exit 1

@@ -7,7 +7,15 @@ module Fastlane
         Helper::SentryConfig.parse_api_params(params)
 
         paths = params[:path]
-        paths = ['.'] if paths.nil?
+        # Use DSYM_OUTPUT_PATH from fastlane context if available, otherwise default to current directory
+        if paths.nil?
+          dsym_path = Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH]
+          if dsym_path && !dsym_path.to_s.empty?
+            paths = [dsym_path]
+          else
+            paths = ['.']
+          end
+        end
 
         command = [
           "debug-files",
@@ -26,7 +34,6 @@ module Fastlane
         command.push('--no-zips') unless params[:no_zips].nil?
         command.push('--info-plist').push(params[:info_plist]) unless params[:info_plist].nil?
         command.push('--no-reprocessing') unless params[:no_reprocessing].nil?
-        command.push('--force-foreground') unless params[:force_foreground].nil?
         command.push('--include-sources') unless params[:include_sources] != true
         command.push('--wait') unless params[:wait].nil?
         command.push('--upload-symbol-maps') unless params[:upload_symbol_maps].nil?
@@ -53,7 +60,7 @@ module Fastlane
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :path,
-                                       description: "Path or an array of paths to search recursively for symbol files",
+                                       description: "Path or an array of paths to search recursively for symbol files. Defaults to DSYM_OUTPUT_PATH from fastlane context if available, otherwise '.' (current directory)",
                                        type: Array,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :type,
@@ -118,15 +125,6 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :no_reprocessing,
                                        description: "Do not trigger reprocessing after uploading",
-                                       is_string: false,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :force_foreground,
-                                       description: "Wait for the process to finish.{n}\
-                                       By default, the upload process will detach and continue in the \
-                                       background when triggered from Xcode.  When an error happens, \
-                                       a dialog is shown.  If this parameter is passed Xcode will wait \
-                                       for the process to finish before the build finishes and output \
-                                       will be shown in the Xcode build output",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :include_sources,
