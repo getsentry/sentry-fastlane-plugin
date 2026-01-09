@@ -7,7 +7,15 @@ module Fastlane
         Helper::SentryConfig.parse_api_params(params)
 
         paths = params[:path]
-        paths = ['.'] if paths.nil?
+        # Use DSYM_OUTPUT_PATH from fastlane context if available, otherwise default to current directory
+        if paths.nil?
+          dsym_path = Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH]
+          if dsym_path && !dsym_path.to_s.empty?
+            paths = [dsym_path]
+          else
+            paths = ['.']
+          end
+        end
 
         command = [
           "debug-files",
@@ -52,7 +60,7 @@ module Fastlane
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :path,
-                                       description: "Path or an array of paths to search recursively for symbol files",
+                                       description: "Path or an array of paths to search recursively for symbol files. Defaults to DSYM_OUTPUT_PATH from fastlane context if available, otherwise '.' (current directory)",
                                        type: Array,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :type,

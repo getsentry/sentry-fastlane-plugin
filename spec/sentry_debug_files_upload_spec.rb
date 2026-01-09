@@ -39,7 +39,77 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "."]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
-            sentry_debug_files_upload()
+            sentry_debug_files_upload(
+              auth_token: 'fixture-auth-token'
+            )
+        end").runner.execute(:test)
+      end
+
+      it "uses DSYM_OUTPUT_PATH from lane context when path is not provided" do
+        require 'fastlane'
+        mock_dsym_path = './assets/SwiftExample.app.dSYM.zip'
+
+        # Set the shared value on the correct module BEFORE parsing the lane
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::DSYM_OUTPUT_PATH] = mock_dsym_path
+
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", mock_dsym_path]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_debug_files_upload(
+              auth_token: 'fixture-auth-token'
+            )
+        end").runner.execute(:test)
+      end
+
+      it "falls back to '.' when DSYM_OUTPUT_PATH is empty string" do
+        require 'fastlane'
+
+        # Set the shared value to empty string
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::DSYM_OUTPUT_PATH] = ''
+
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "."]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_debug_files_upload(
+              auth_token: 'fixture-auth-token'
+            )
+        end").runner.execute(:test)
+      end
+
+      it "falls back to '.' when DSYM_OUTPUT_PATH is nil" do
+        require 'fastlane'
+
+        # Set the shared value to nil explicitly
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::DSYM_OUTPUT_PATH] = nil
+
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "."]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_debug_files_upload(
+              auth_token: 'fixture-auth-token'
+            )
+        end").runner.execute(:test)
+      end
+
+      it "uses explicitly provided path over DSYM_OUTPUT_PATH" do
+        require 'fastlane'
+        mock_dsym_path = './assets/SwiftExample.app.dSYM.zip'
+        explicit_path = './explicit/path'
+
+        # Set the shared value, but explicit path should override it
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::DSYM_OUTPUT_PATH] = mock_dsym_path
+
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", explicit_path]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_debug_files_upload(
+              auth_token: 'fixture-auth-token',
+              path: '#{explicit_path}'
+            )
         end").runner.execute(:test)
       end
 

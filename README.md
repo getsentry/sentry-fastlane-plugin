@@ -62,7 +62,7 @@ sentry_debug_files_upload(
   auth_token: '...',
   org_slug: '...',
   project_slug: '...',
-  path: '/path/to/files', # Optional. Defaults to '.' when no value is provided. Path(s) can be a string, a comma-separated string, or an array of strings.
+  path: '/path/to/files', # Optional. Defaults to DSYM_OUTPUT_PATH from fastlane context if available, otherwise '.' (current directory). Path(s) can be a string, a comma-separated string, or an array of strings.
 )
 ```
 
