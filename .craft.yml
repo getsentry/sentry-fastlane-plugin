@@ -1,6 +1,6 @@
 minVersion: '0.23.1'
 changelogPolicy: auto
-preReleaseCommand: ruby .scripts/bump-version.rb
+preReleaseCommand: ruby .scripts/bump-version.rb "$CRAFT_OLD_VERSION" "$CRAFT_NEW_VERSION"
 targets:
     - name: gem
     - name: registry
