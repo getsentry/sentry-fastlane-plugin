@@ -25,6 +25,9 @@ module Fastlane
         command << "--base-ref" << params[:base_ref] if params[:base_ref]
         command << "--pr-number" << params[:pr_number] if params[:pr_number]
         command << "--build-configuration" << params[:build_configuration] if params[:build_configuration]
+        command << "--release-notes" << params[:release_notes] if params[:release_notes]
+        command << "--force-git-metadata" if params[:force_git_metadata]
+        command << "--no-git-metadata" if params[:no_git_metadata]
 
         Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully uploaded build archive: #{xcarchive_path}")
@@ -95,7 +98,21 @@ module Fastlane
                                        env_name: "SENTRY_BUILD_CONFIGURATION",
                                        description: "The build configuration (e.g., 'Release', 'Debug')",
                                        optional: true,
-                                       is_string: true)
+                                       is_string: true),
+          FastlaneCore::ConfigItem.new(key: :release_notes,
+                                       description: "The release notes to use for the upload",
+                                       optional: true,
+                                       is_string: true),
+          FastlaneCore::ConfigItem.new(key: :force_git_metadata,
+                                       description: "Force collection and sending of git metadata (branch, commit, etc.). \
+                                       If neither this nor --no-git-metadata is specified, git metadata is automatically \
+                                       collected when running in most CI environments",
+                                       is_string: false,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :no_git_metadata,
+                                       description: "Disable collection and sending of git metadata",
+                                       is_string: false,
+                                       optional: true)
         ]
       end
 

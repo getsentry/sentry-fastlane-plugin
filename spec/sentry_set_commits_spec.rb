@@ -144,6 +144,28 @@ describe Fastlane do
               ignore_missing: false)
         end").runner.execute(:test)
       end
+
+      it "includes --local when true" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0", "--local"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_set_commits(
+              version: '1.0',
+              local: true)
+        end").runner.execute(:test)
+      end
+
+      it "includes --initial-depth if present" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0", "--initial-depth", 50]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_set_commits(
+              version: '1.0',
+              initial_depth: 50)
+        end").runner.execute(:test)
+      end
     end
   end
 end

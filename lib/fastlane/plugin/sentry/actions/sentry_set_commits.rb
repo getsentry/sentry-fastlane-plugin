@@ -19,6 +19,8 @@ module Fastlane
         command.push('--auto') if params[:auto]
         command.push('--clear') if params[:clear]
         command.push('--ignore-missing') if params[:ignore_missing]
+        command.push('--local') if params[:local]
+        command.push('--initial-depth').push(params[:initial_depth]) unless params[:initial_depth].nil?
         command.push('--commit').push(params[:commit]) unless params[:commit].nil?
 
         Helper::SentryHelper.call_sentry_cli(params, command)
@@ -67,7 +69,17 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :ignore_missing,
                                        description: "When enabled, if the previous release commit was not found in the repository, will create a release with the default commits count (or the one specified with `--initial-depth`) instead of failing the command",
                                        is_string: false,
-                                       default_value: false)
+                                       default_value: false),
+          FastlaneCore::ConfigItem.new(key: :local,
+                                       description: "Set commits of a release from local git. This requires that the command \
+                                       is run from within a git repository. sentry-cli will then automatically find \
+                                       remotely configured repositories and discover commits",
+                                       is_string: false,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :initial_depth,
+                                       description: "Set the number of commits of the initial release. The default is 20",
+                                       type: Integer,
+                                       optional: true)
         ]
       end
 

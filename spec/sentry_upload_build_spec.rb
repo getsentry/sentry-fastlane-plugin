@@ -214,6 +214,72 @@ describe Fastlane do
             head_sha: 'explicit_abc123')
         end").runner.execute(:test)
       end
+
+      it "includes --release-notes if present" do
+        mock_path = './assets/Test.xcarchive'
+
+        allow(File).to receive(:exist?).with(mock_path).and_return(true)
+        allow(File).to receive(:extname).with(mock_path).and_return('.xcarchive')
+
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+          anything,
+          ["build", "upload", anything, "--release-notes", "Fixed bugs"]
+        ).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+          sentry_upload_build(
+            auth_token: 'test-token',
+            org_slug: 'test-org',
+            project_slug: 'test-project',
+            xcarchive_path: '#{mock_path}',
+            release_notes: 'Fixed bugs')
+        end").runner.execute(:test)
+      end
+
+      it "includes --force-git-metadata when true" do
+        mock_path = './assets/Test.xcarchive'
+
+        allow(File).to receive(:exist?).with(mock_path).and_return(true)
+        allow(File).to receive(:extname).with(mock_path).and_return('.xcarchive')
+
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+          anything,
+          ["build", "upload", anything, "--force-git-metadata"]
+        ).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+          sentry_upload_build(
+            auth_token: 'test-token',
+            org_slug: 'test-org',
+            project_slug: 'test-project',
+            xcarchive_path: '#{mock_path}',
+            force_git_metadata: true)
+        end").runner.execute(:test)
+      end
+
+      it "includes --no-git-metadata when true" do
+        mock_path = './assets/Test.xcarchive'
+
+        allow(File).to receive(:exist?).with(mock_path).and_return(true)
+        allow(File).to receive(:extname).with(mock_path).and_return('.xcarchive')
+
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+          anything,
+          ["build", "upload", anything, "--no-git-metadata"]
+        ).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+          sentry_upload_build(
+            auth_token: 'test-token',
+            org_slug: 'test-org',
+            project_slug: 'test-project',
+            xcarchive_path: '#{mock_path}',
+            no_git_metadata: true)
+        end").runner.execute(:test)
+      end
     end
   end
 end

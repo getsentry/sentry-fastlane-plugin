@@ -70,20 +70,20 @@ The `SENTRY_DSYM_PATH` environment variable may be used in place of the `dsym_pa
 
 Further options:
 
-- __type__: Optional. Only consider debug information files of the given type. By default, all types are considered. Valid options: 'dsym', 'elf', 'breakpad', 'pdb', 'pe', 'sourcebundle', 'bcsymbolmap'.
-- __no_unwind__: Optional. Do not scan for stack unwinding information. Specify this flag for builds with disabled FPO, or when stackwalking occurs on the device. This usually excludes executables and dynamic libraries. They might still be uploaded, if they contain additional processable information (see other flags)".
-- __no_debug__: Optional. Do not scan for debugging information. This will usually exclude debug companion files. They might still be uploaded, if they contain additional processable information (see other flags)".
-- __no_sources__: Optional. "Do not scan for source information. This will usually exclude source bundle files. They might still be uploaded, if they contain additional processable information (see other flags)".
-- __ids__: Optional. Search for specific debug identifiers.
+- __type__: Optional. Only consider debug information files of the given type. By default, all types are considered. Valid options: 'bcsymbolmap', 'breakpad', 'dsym', 'elf', 'jvm', 'pdb', 'pe', 'portablepdb', 'sourcebundle', 'wasm'.
+- __no_unwind__: Optional. Do not scan for stack unwinding information. Specify this flag for builds with disabled FPO, or when stackwalking occurs on the device. This usually excludes executables and dynamic libraries. They might still be uploaded, if they contain additional processable information (see other flags).
+- __no_debug__: Optional. Do not scan for debugging information. This will usually exclude debug companion files. They might still be uploaded, if they contain additional processable information (see other flags).
+- __no_sources__: Optional. Do not scan for source information. This will usually exclude source bundle files. They might still be uploaded, if they contain additional processable information (see other flags).
+- __id__: Optional. Search for specific debug identifiers.
 - __require_all__: Optional. Errors if not all identifiers specified with --id could be found.
-- __symbol_maps__: Optional. Optional path to BCSymbolMap files which are used to resolve hidden symbols in dSYM files downloaded from iTunes Connect. This requires the dsymutil tool to be available.
+- __symbol_maps__: Optional. Path to BCSymbolMap files which are used to resolve hidden symbols in dSYM files downloaded from iTunes Connect. This requires the dsymutil tool to be available.
 - __derived_data__: Optional. Search for debug symbols in Xcode's derived data.
-- __no_zips__: Do not search in ZIP files.
-- __info_plist__: Optional. Optional path to the Info.plist. We will try to find this automatically if run from Xcode. Providing this information will associate the debug symbols with a specific ITC application and build in Sentry. Note that if you provide the plist explicitly it must already be processed.
-- __no_reprocessing__: Optional. Do not trigger reprocessing after uploading.
+- __no_zips__: Optional. Do not search in ZIP files.
+- __no_upload__: Optional. Disable the actual upload. This runs all steps for the processing but does not trigger the upload. This is useful if you just want to verify the setup or skip the upload in tests.
 - __include_sources__: Optional. Include sources from the local file system and upload them as source bundles.
-- __wait__: Wait for the server to fully process uploaded files. Errors can only be displayed if --wait is specified, but this will significantly slow down the upload process.
-- __upload_symbol_maps__: Optional. Upload any BCSymbolMap files found to allow Sentry to resolve hidden symbols, e.g. when it downloads dSYMs directly from App Store Connect or when you upload dSYMs without first resolving the hidden symbols using --symbol-maps.
+- __wait__: Optional. Wait for the server to fully process uploaded files. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.
+- __wait_for__: Optional. Wait for the server to fully process uploaded files, but at most for the given number of seconds. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.
+- __il2cpp_mapping__: Optional. Compute il2cpp line mappings and upload them along with sources.
 
 ### Uploading iOS Build Archives
 
@@ -104,7 +104,10 @@ sentry_upload_build(
   head_ref: 'feature-branch', # Name of the head branch (or SENTRY_HEAD_REF)
   base_ref: 'main', # Name of the base branch (or SENTRY_BASE_REF)
   pr_number: '123', # Pull request number (or SENTRY_PR_NUMBER)
-  build_configuration: 'Release' # Build configuration (e.g., 'Release', 'Debug') (or SENTRY_BUILD_CONFIGURATION)
+  build_configuration: 'Release', # Build configuration (e.g., 'Release', 'Debug') (or SENTRY_BUILD_CONFIGURATION)
+  release_notes: 'Fixed critical bugs', # Optional. Release notes to use for the upload
+  force_git_metadata: false, # Optional. Force collection and sending of git metadata
+  no_git_metadata: false # Optional. Disable collection and sending of git metadata
 )
 ```
 
@@ -121,7 +124,8 @@ sentry_create_release(
   project_slug: '...',
   version: '...', # release version to create
   app_identifier: '...', # pass in the bundle_identifer of your app
-  finalize: true # Whether to finalize the release. If not provided or false, the release can be finalized using the sentry_finalize_release action
+  finalize: true, # Whether to finalize the release. If not provided or false, the release can be finalized using the sentry_finalize_release action
+  release_url: 'https://github.com/owner/repo/releases/tag/v1.0.0' # Optional. URL to the release for information purposes
 )
 ```
 
@@ -139,7 +143,15 @@ sentry_upload_sourcemap(
   build: '...', # Optionally pass in the build number of your app
   dist: '...', # optional distribution of the release usually the buildnumber
   sourcemap: ['main.jsbundle', 'main.jsbundle.map'], # Sourcemap(s) to upload. Path(s) can be a comma-separated string or an array of strings.
-  rewrite: true
+  rewrite: true, # Rewrite the sourcemaps before upload (default: false)
+  url_prefix: '~/', # Optional. Sets a URL prefix in front of all files
+  url_suffix: '.map', # Optional. Sets a URL suffix to append to all filenames
+  note: 'Build from CI', # Optional. Adds a note to the uploaded artifact bundle
+  validate: true, # Optional. Enable basic sourcemap validation
+  decompress: true, # Optional. Enable files gzip decompression prior to upload
+  wait: true, # Optional. Wait for the server to fully process uploaded files
+  wait_for: 60, # Optional. Wait for the server to fully process uploaded files, but at most for the given number of seconds
+  strict: true # Optional. Fail with a non-zero exit code if the specified source map file cannot be uploaded
 )
 ```
 
@@ -150,8 +162,11 @@ sentry_upload_proguard(
   auth_token: '...',
   org_slug: '...',
   project_slug: '...',
-  android_manifest_path: 'path to merged AndroidManifest file', # found in `app/build/intermediates/manifests/full`
   mapping_path: 'path to mapping.txt to upload',
+  no_upload: false, # Optional. Disable the actual upload (useful for verification)
+  write_properties: 'path/to/properties/file', # Optional. Write UUIDs for processed mapping files into properties file
+  require_one: true, # Optional. Require at least one file to upload or the command will error
+  uuid: 'custom-uuid' # Optional. Explicitly override the UUID of the mapping file
 )
 ```
 
@@ -167,7 +182,9 @@ sentry_set_commits(
   auto: false, # enable completely automated commit management
   clear: false, # clear all current commits from the release
   commit: '...', # commit spec, see `sentry-cli releases help set-commits` for more information
-  ignore_missing: false # Optional boolean value: When the flag is set and the previous release commit was not found in the repository, will create a release with the default commits count (or the one specified with `--initial-depth`) instead of failing the command.
+  ignore_missing: false, # Optional boolean value: When the flag is set and the previous release commit was not found in the repository, will create a release with the default commits count (or the one specified with `--initial-depth`) instead of failing the command.
+  local: false, # Optional. Set commits of a release from local git
+  initial_depth: 20 # Optional. Set the number of commits of the initial release (default: 20)
 )
 ```
 
@@ -211,6 +228,52 @@ You can set the `sentry-cli` [configuration value](https://docs.sentry.io/produc
 ## Issues and Feedback
 
 For any other issues and feedback about this plugin, please submit it to this repository.
+
+## Migration Guide
+
+### Migrating from sentry-fastlane-plugin v1 to v2
+
+When upgrading to the latest version of this plugin (which uses sentry-cli v3), you may need to update your Fastfiles. Here are the key changes:
+
+#### Parameter Name Changes
+
+- **`sentry_debug_files_upload`**: The `ids` parameter has been renamed to `id` (singular). Update your Fastfiles:
+  ```ruby
+  # Before
+  sentry_debug_files_upload(ids: 'abc123')
+  
+  # After
+  sentry_debug_files_upload(id: 'abc123')
+  ```
+
+#### Removed Parameters
+
+The following parameters have been removed as they are no longer supported in sentry-cli v3:
+
+- **`sentry_debug_files_upload`**: Remove `info_plist`, `no_reprocessing`, and `upload_symbol_maps` parameters if you're using them.
+- **`sentry_upload_proguard`**: Remove `android_manifest_path` parameter if you're using it (no longer needed).
+
+#### New Available Options
+
+Many new options have been added to match sentry-cli v3 capabilities. See the action documentation above for all available options. Some notable additions:
+
+- **`sentry_debug_files_upload`**: Added `wait_for`, `no_upload`, `il2cpp_mapping` options. Type validation now includes `jvm`, `portablepdb`, and `wasm`.
+- **`sentry_upload_sourcemap`**: Added `url_suffix`, `note`, `validate`, `decompress`, `wait`, `wait_for`, `no_sourcemap_reference`, `debug_id_reference`, `bundle`, `bundle_sourcemap`, `ext`, and `strict` options.
+- **`sentry_upload_proguard`**: Added `no_upload`, `write_properties`, `require_one`, and `uuid` options.
+- **`sentry_upload_build`**: Added `release_notes`, `force_git_metadata`, and `no_git_metadata` options.
+- **`sentry_create_release`**: Added `url` option.
+- **`sentry_finalize_release`**: Added `url` and `released` options.
+- **`sentry_set_commits`**: Added `local` and `initial_depth` options.
+
+#### Removed Actions
+
+The following actions have been removed and replaced:
+
+- **`sentry_upload_file`**: Use `sentry_upload_sourcemap` for source maps or other specialized upload actions.
+- **`sentry_upload_dsym`**: Use `sentry_debug_files_upload` with appropriate `path` parameter.
+- **`sentry_upload_dif`**: Use `sentry_debug_files_upload` with appropriate `path` parameter.
+
+For more details on sentry-cli v3 changes, see the [sentry-cli 3.0.0 release notes](https://github.com/getsentry/sentry-cli/releases/tag/3.0.0).
 
 ## Troubleshooting
 
