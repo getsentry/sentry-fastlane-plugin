@@ -27,16 +27,16 @@ module Fastlane
         command.push('--no-unwind') unless params[:no_unwind].nil?
         command.push('--no-debug') unless params[:no_debug].nil?
         command.push('--no-sources') unless params[:no_sources].nil?
-        command.push('--ids').push(params[:ids]) unless params[:ids].nil?
+        command.push('--id').push(params[:id]) unless params[:id].nil?
         command.push('--require-all') unless params[:require_all].nil?
         command.push('--symbol-maps').push(params[:symbol_maps]) unless params[:symbol_maps].nil?
         command.push('--derived-data') unless params[:derived_data].nil?
         command.push('--no-zips') unless params[:no_zips].nil?
-        command.push('--info-plist').push(params[:info_plist]) unless params[:info_plist].nil?
-        command.push('--no-reprocessing') unless params[:no_reprocessing].nil?
-        command.push('--include-sources') unless params[:include_sources] != true
+        command.push('--no-upload') unless params[:no_upload].nil?
+        command.push('--include-sources') if params[:include_sources] == true
         command.push('--wait') unless params[:wait].nil?
-        command.push('--upload-symbol-maps') unless params[:upload_symbol_maps].nil?
+        command.push('--wait-for').push(params[:wait_for]) unless params[:wait_for].nil?
+        command.push('--il2cpp-mapping') unless params[:il2cpp_mapping].nil?
 
         Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully ran debug-files upload")
@@ -69,7 +69,7 @@ module Fastlane
                                        type.  By default, all types are considered",
                                        optional: true,
                                        verify_block: proc do |value|
-                                         UI.user_error! "Invalid value '#{value}'" unless ['dsym', 'elf', 'breakpad', 'pdb', 'pe', 'sourcebundle', 'bcsymbolmap'].include? value
+                                         UI.user_error! "Invalid value '#{value}'" unless ['bcsymbolmap', 'breakpad', 'dsym', 'elf', 'jvm', 'pdb', 'pe', 'portablepdb', 'sourcebundle', 'wasm'].include? value
                                        end),
           FastlaneCore::ConfigItem.new(key: :no_unwind,
                                        description: "Do not scan for stack unwinding information. Specify \
@@ -95,7 +95,7 @@ module Fastlane
                                        processable information (see other flags)",
                                        is_string: false,
                                        optional: true),
-          FastlaneCore::ConfigItem.new(key: :ids,
+          FastlaneCore::ConfigItem.new(key: :id,
                                        description: "Search for specific debug identifiers",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :require_all,
@@ -116,15 +116,10 @@ module Fastlane
                                        description: "Do not search in ZIP files",
                                        is_string: false,
                                        optional: true),
-          FastlaneCore::ConfigItem.new(key: :info_plist,
-                                       description: "Optional path to the Info.plist.{n}We will try to find this \
-                                       automatically if run from Xcode.  Providing this information \
-                                       will associate the debug symbols with a specific ITC application \
-                                       and build in Sentry.  Note that if you provide the plist \
-                                       explicitly it must already be processed",
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :no_reprocessing,
-                                       description: "Do not trigger reprocessing after uploading",
+          FastlaneCore::ConfigItem.new(key: :no_upload,
+                                       description: "Disable the actual upload. This runs all steps for the \
+                                       processing but does not trigger the upload. This is useful if \
+                                       you just want to verify the setup or skip the upload in tests",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :include_sources,
@@ -134,15 +129,18 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :wait,
                                        description: "Wait for the server to fully process uploaded files. Errors \
-                                       can only be displayed if --wait is specified, but this will \
+                                       can only be displayed if --wait or --wait-for is specified, but this will \
                                        significantly slow down the upload process",
                                        is_string: false,
                                        optional: true),
-          FastlaneCore::ConfigItem.new(key: :upload_symbol_maps,
-                                       description: "Upload any BCSymbolMap files found to allow Sentry to resolve \
-                                       hidden symbols, e.g. when it downloads dSYMs directly from App \
-                                       Store Connect or when you upload dSYMs without first resolving \
-                                       the hidden symbols using --symbol-maps",
+          FastlaneCore::ConfigItem.new(key: :wait_for,
+                                       description: "Wait for the server to fully process uploaded files, but at most \
+                                       for the given number of seconds. Errors can only be displayed if --wait or \
+                                       --wait-for is specified, but this will significantly slow down the upload process",
+                                       type: Integer,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :il2cpp_mapping,
+                                       description: "Compute il2cpp line mappings and upload them along with sources",
                                        is_string: false,
                                        optional: true)
         ]

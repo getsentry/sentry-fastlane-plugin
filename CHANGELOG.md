@@ -13,12 +13,22 @@ Due to sentry-cli 3.0.0 upgrade, the following breaking changes have been made (
 - **`force_foreground` parameter has been removed**: This parameter was deprecated as a no-op since v1.26.0 and has now been removed from `sentry_debug_files_upload`. Users should remove this parameter from their Fastfiles. ([#376](https://github.com/getsentry/sentry-fastlane-plugin/pull/376))
 - **`sentry_upload_dsym` action has been removed**: This action has been deprecated in favor of `sentry_debug_files_upload`. Users should migrate to `sentry_debug_files_upload` with the appropriate `path` parameter. ([#375](https://github.com/getsentry/sentry-fastlane-plugin/pull/375))
 - **`sentry_upload_dif` action has been removed**: This action has been deprecated in favor of `sentry_debug_files_upload`. Users should migrate to `sentry_debug_files_upload` with the appropriate `path` parameter. ([#375](https://github.com/getsentry/sentry-fastlane-plugin/pull/375))
+- **`ids` parameter renamed to `id` in `sentry_debug_files_upload`**: The parameter has been renamed from `ids` to `id` to match sentry-cli v3. Users should update their Fastfiles to use `id` instead of `ids`.
+- **Removed deprecated parameters from `sentry_debug_files_upload`**: The following parameters have been removed as they are no longer supported in sentry-cli v3: `info_plist`, `no_reprocessing`, `upload_symbol_maps`. Users should remove these parameters from their Fastfiles.
 
 See the [sentry-cli 3.0.0 release notes](https://github.com/getsentry/sentry-cli/releases/tag/3.0.0) for more details on CLI changes.
 
 ### Features
 
 - Set `SENTRY_PIPELINE` environment variable for all sentry-cli invocations to identify the plugin and version ([#365](https://github.com/getsentry/sentry-fastlane-plugin/pull/365))
+- **Added missing sentry-cli v3 options to all actions**: All actions have been updated to support all available options from sentry-cli version 3.0.1:
+  - **`sentry_debug_files_upload`**: Added `wait_for`, `no_upload`, `il2cpp_mapping` options. Fixed `id` parameter (was `ids`). Updated type validation to include `jvm`, `portablepdb`, and `wasm` types. Removed deprecated options (`info_plist`, `no_reprocessing`, `upload_symbol_maps`) that are no longer supported in sentry-cli v3.
+  - **`sentry_upload_sourcemap`**: Added `url_suffix`, `note`, `validate`, `decompress`, `wait`, `wait_for`, `no_sourcemap_reference`, `debug_id_reference`, `bundle`, `bundle_sourcemap`, `ext` (array support), and `strict` options.
+  - **`sentry_upload_proguard`**: Added `no_upload`, `write_properties`, `require_one`, and `uuid` options.
+  - **`sentry_upload_build`**: Added `release_notes`, `force_git_metadata`, and `no_git_metadata` options.
+  - **`sentry_create_release`**: Added `url` option.
+  - **`sentry_finalize_release`**: Added `url` and `released` options.
+  - **`sentry_set_commits`**: Added `local` and `initial_depth` options.
 
 ### Improvements
 

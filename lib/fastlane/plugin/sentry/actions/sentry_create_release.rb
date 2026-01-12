@@ -16,6 +16,7 @@ module Fastlane
           version
         ]
         command.push("--finalize") if params[:finalize] == true
+        command.push("--url").push(params[:url]) unless params[:url].nil?
 
         Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully created release: #{version}")
@@ -53,6 +54,9 @@ module Fastlane
                                        description: "Whether to finalize the release. If not provided or false, the release can be finalized using the finalize_release action",
                                        default_value: false,
                                        is_string: false,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :url,
+                                       description: "Optional URL to the release for information purposes",
                                        optional: true)
         ]
       end
