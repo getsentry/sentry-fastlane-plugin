@@ -22,7 +22,7 @@ See the [sentry-cli 3.0.0 release notes](https://github.com/getsentry/sentry-cli
 
 - Set `SENTRY_PIPELINE` environment variable for all sentry-cli invocations to identify the plugin and version ([#365](https://github.com/getsentry/sentry-fastlane-plugin/pull/365))
 - **Added missing sentry-cli v3 options to all actions**: All actions have been updated to support all available options from sentry-cli version 3.0.1:
-  - **`sentry_debug_files_upload`**: Added `wait_for`, `no_upload`, `il2cpp_mapping` options. Fixed `id` parameter (was `ids`). Updated type validation to include `jvm`, `portablepdb`, and `wasm` types. Removed deprecated options (`info_plist`, `no_reprocessing`, `upload_symbol_maps`) that are no longer supported in sentry-cli v3.
+  - **`sentry_debug_files_upload`**: Added `wait_for`, `no_upload`, `il2cpp_mapping` options. Fixed `id` parameter (was `ids`). Updated type validation to include `jvm`, `portablepdb`, and `wasm` types. Removed deprecated options (`info_plist`, `no_reprocessing`, `upload_symbol_maps`) that are no longer supported in sentry-cli v3. (#382)
   - **`sentry_upload_sourcemap`**: Added `url_suffix`, `note`, `validate`, `decompress`, `wait`, `wait_for`, `no_sourcemap_reference`, `debug_id_reference`, `bundle`, `bundle_sourcemap`, `ext` (array support), and `strict` options.
   - **`sentry_upload_proguard`**: Added `no_upload`, `write_properties`, `require_one`, and `uuid` options.
   - **`sentry_upload_build`**: Added `release_notes`, `force_git_metadata`, and `no_git_metadata` options.
