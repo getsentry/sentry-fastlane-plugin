@@ -231,7 +231,7 @@ For any other issues and feedback about this plugin, please submit it to this re
 
 ## Migration Guide
 
-### Migrating from sentry-cli v2 to v3
+### Migrating from sentry-fastlane-plugin v1 to v2
 
 When upgrading to the latest version of this plugin (which uses sentry-cli v3), you may need to update your Fastfiles. Here are the key changes:
 
