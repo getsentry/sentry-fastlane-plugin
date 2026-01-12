@@ -15,7 +15,7 @@ module Fastlane
           "finalize",
           version
         ]
-        command.push("--url").push(params[:url]) unless params[:url].nil?
+        command.push("--url").push(params[:release_url]) unless params[:release_url].nil?
         command.push("--released").push(params[:released]) unless params[:released].nil?
 
         Helper::SentryHelper.call_sentry_cli(params, command)
@@ -50,7 +50,7 @@ module Fastlane
                                        short_option: "-b",
                                        description: "Release build to finalize on Sentry",
                                        optional: true),
-          FastlaneCore::ConfigItem.new(key: :url,
+          FastlaneCore::ConfigItem.new(key: :release_url,
                                        description: "Optional URL to the release for information purposes",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :released,

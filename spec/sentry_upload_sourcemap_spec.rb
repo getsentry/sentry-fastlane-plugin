@@ -213,6 +213,108 @@ describe Fastlane do
               app_identifier: 'app.idf')
         end").runner.execute(:test)
       end
+
+      it "includes --url-suffix if present" do
+        allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("1.map").and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["sourcemaps", "upload", "--release", "1.0", "1.map", "--no-rewrite", "--url-suffix", ".map"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_sourcemap(
+              org_slug: 'some_org',
+              auth_token: 'something123',
+              project_slug: 'some_project',
+              version: '1.0',
+              sourcemap: '1.map',
+              url_suffix: '.map')
+        end").runner.execute(:test)
+      end
+
+      it "includes --note if present" do
+        allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("1.map").and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["sourcemaps", "upload", "--release", "1.0", "1.map", "--no-rewrite", "--note", "Build from CI"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_sourcemap(
+              org_slug: 'some_org',
+              auth_token: 'something123',
+              project_slug: 'some_project',
+              version: '1.0',
+              sourcemap: '1.map',
+              note: 'Build from CI')
+        end").runner.execute(:test)
+      end
+
+      it "includes --validate when true" do
+        allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("1.map").and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["sourcemaps", "upload", "--release", "1.0", "1.map", "--no-rewrite", "--validate"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_sourcemap(
+              org_slug: 'some_org',
+              auth_token: 'something123',
+              project_slug: 'some_project',
+              version: '1.0',
+              sourcemap: '1.map',
+              validate: true)
+        end").runner.execute(:test)
+      end
+
+      it "includes --wait when true" do
+        allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("1.map").and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["sourcemaps", "upload", "--release", "1.0", "1.map", "--no-rewrite", "--wait"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_sourcemap(
+              org_slug: 'some_org',
+              auth_token: 'something123',
+              project_slug: 'some_project',
+              version: '1.0',
+              sourcemap: '1.map',
+              wait: true)
+        end").runner.execute(:test)
+      end
+
+      it "includes --wait-for if present" do
+        allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("1.map").and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["sourcemaps", "upload", "--release", "1.0", "1.map", "--no-rewrite", "--wait-for", 60]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_sourcemap(
+              org_slug: 'some_org',
+              auth_token: 'something123',
+              project_slug: 'some_project',
+              version: '1.0',
+              sourcemap: '1.map',
+              wait_for: 60)
+        end").runner.execute(:test)
+      end
+
+      it "includes --strict when true" do
+        allow(File).to receive(:exist?).and_call_original
+        expect(File).to receive(:exist?).with("1.map").and_return(true)
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["sourcemaps", "upload", "--release", "1.0", "1.map", "--no-rewrite", "--strict"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_upload_sourcemap(
+              org_slug: 'some_org',
+              auth_token: 'something123',
+              project_slug: 'some_project',
+              version: '1.0',
+              sourcemap: '1.map',
+              strict: true)
+        end").runner.execute(:test)
+      end
     end
   end
 end

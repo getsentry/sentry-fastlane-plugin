@@ -66,6 +66,17 @@ describe Fastlane do
               finalize: false)
         end").runner.execute(:test)
       end
+
+      it "includes --url if present" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "new", "1.0", "--url", "https://example.com/release"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_create_release(
+              version: '1.0',
+              release_url: 'https://example.com/release')
+        end").runner.execute(:test)
+      end
     end
   end
 end

@@ -197,6 +197,42 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
+      it "includes --type for value jvm" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--type", "jvm"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_debug_files_upload(
+              path: 'fixture-path',
+              type: 'jvm'
+            )
+        end").runner.execute(:test)
+      end
+
+      it "includes --type for value portablepdb" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--type", "portablepdb"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_debug_files_upload(
+              path: 'fixture-path',
+              type: 'portablepdb'
+            )
+        end").runner.execute(:test)
+      end
+
+      it "includes --type for value wasm" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--type", "wasm"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_debug_files_upload(
+              path: 'fixture-path',
+              type: 'wasm'
+            )
+        end").runner.execute(:test)
+      end
+
       it "fails with unknown --type value" do
         dsym_path_1 = File.absolute_path './assets/this_does_not_exist.app.dSYM.zip'
 
@@ -246,14 +282,14 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-      it "includes --ids if present" do
+      it "includes --id if present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--ids", "fixture-ids"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--id", "fixture-id"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_debug_files_upload(
               path: 'fixture-path',
-              ids: 'fixture-ids'
+              id: 'fixture-id'
             )
         end").runner.execute(:test)
       end
@@ -306,26 +342,14 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-      it "includes --info_plist if present" do
+      it "includes --no_upload when true" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--info-plist", "fixture-info_plist"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--no-upload"]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_debug_files_upload(
               path: 'fixture-path',
-              info_plist: 'fixture-info_plist'
-            )
-        end").runner.execute(:test)
-      end
-
-      it "includes --no_reprocessing when true" do
-        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--no-reprocessing"]).and_return(true)
-
-        Fastlane::FastFile.new.parse("lane :test do
-            sentry_debug_files_upload(
-              path: 'fixture-path',
-              no_reprocessing: true
+              no_upload: true
             )
         end").runner.execute(:test)
       end
@@ -366,14 +390,26 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-      it "includes --upload_symbol_maps when true" do
+      it "includes --wait_for if present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--upload-symbol-maps"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--wait-for", 60]).and_return(true)
 
         Fastlane::FastFile.new.parse("lane :test do
             sentry_debug_files_upload(
               path: 'fixture-path',
-              upload_symbol_maps: true
+              wait_for: 60
+            )
+        end").runner.execute(:test)
+      end
+
+      it "includes --il2cpp_mapping when true" do
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--il2cpp-mapping"]).and_return(true)
+
+        Fastlane::FastFile.new.parse("lane :test do
+            sentry_debug_files_upload(
+              path: 'fixture-path',
+              il2cpp_mapping: true
             )
         end").runner.execute(:test)
       end

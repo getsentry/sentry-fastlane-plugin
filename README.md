@@ -125,7 +125,7 @@ sentry_create_release(
   version: '...', # release version to create
   app_identifier: '...', # pass in the bundle_identifer of your app
   finalize: true, # Whether to finalize the release. If not provided or false, the release can be finalized using the sentry_finalize_release action
-  url: 'https://github.com/owner/repo/releases/tag/v1.0.0' # Optional. URL to the release for information purposes
+  release_url: 'https://github.com/owner/repo/releases/tag/v1.0.0' # Optional. URL to the release for information purposes
 )
 ```
 
