@@ -246,11 +246,30 @@ When upgrading to the latest version of this plugin (which uses sentry-cli v3), 
   sentry_debug_files_upload(id: 'abc123')
   ```
 
+#### Authentication Changes
+
+- **All actions**: The `api_key` parameter has been removed in favor of `auth_token` with the release of [v2.0.0](https://github.com/getsentry/sentry-fastlane-plugin/releases/2.0.0-rc.1). All actions now require `auth_token` for authentication. Update your Fastfiles:
+  ```ruby
+  # Before v2.0.0-rc.1
+  sentry_debug_files_upload(api_key: '...')
+  
+  # After v2.0.0-rc.1
+  sentry_debug_files_upload(auth_token: '...')
+  ```
+
+#### Parameter Behavior Changes
+
+- **`sentry_debug_files_upload`**: The `path` parameter default behavior has changed. Starting with [v2.0.0-rc.1](https://github.com/getsentry/sentry-fastlane-plugin/releases/v2.0.0-rc.1) it defaults to `DSYM_OUTPUT_PATH` from fastlane's lane context if available (set by actions like `build_app` or `ipa`), otherwise falls back to `'.'` (current directory). This changes the default behavior when `DSYM_OUTPUT_PATH` is set. If you were relying on the previous behavior of always searching from the current directory, explicitly specify `path: '.'`:
+  ```ruby
+  # To maintain previous behavior (always search from current directory)
+  sentry_debug_files_upload(path: '.')
+  ```
+
 #### Removed Parameters
 
 The following parameters have been removed as they are no longer supported in sentry-cli v3:
 
-- **`sentry_debug_files_upload`**: Remove `info_plist`, `no_reprocessing`, and `upload_symbol_maps` parameters if you're using them.
+- **`sentry_debug_files_upload`**: Remove `info_plist`, `no_reprocessing`, `upload_symbol_maps`, and `force_foreground` parameters if you're using them. The `force_foreground` parameter was deprecated as a no-op since v1.26.0 and has now been removed.
 - **`sentry_upload_proguard`**: Remove `android_manifest_path` parameter if you're using it (no longer needed).
 
 #### New Available Options
@@ -261,8 +280,8 @@ Many new options have been added to match sentry-cli v3 capabilities. See the ac
 - **`sentry_upload_sourcemap`**: Added `url_suffix`, `note`, `validate`, `decompress`, `wait`, `wait_for`, `no_sourcemap_reference`, `debug_id_reference`, `bundle`, `bundle_sourcemap`, `ext`, and `strict` options.
 - **`sentry_upload_proguard`**: Added `no_upload`, `write_properties`, `require_one`, and `uuid` options.
 - **`sentry_upload_build`**: Added `release_notes`, `force_git_metadata`, and `no_git_metadata` options.
-- **`sentry_create_release`**: Added `url` option.
-- **`sentry_finalize_release`**: Added `url` and `released` options.
+- **`sentry_create_release`**: Added `release_url` option.
+- **`sentry_finalize_release`**: Added `release_url` and `released` options.
 - **`sentry_set_commits`**: Added `local` and `initial_depth` options.
 
 #### Removed Actions
