@@ -248,18 +248,18 @@ When upgrading to the latest version of this plugin (which uses sentry-cli v3), 
 
 #### Authentication Changes
 
-- **All actions**: The `api_key` parameter has been removed in favor of `auth_token`. All actions now require `auth_token` for authentication. Update your Fastfiles:
+- **All actions**: The `api_key` parameter has been removed in favor of `auth_token` with the release of [v2.0.0](https://github.com/getsentry/sentry-fastlane-plugin/releases/2.0.0-rc.1). All actions now require `auth_token` for authentication. Update your Fastfiles:
   ```ruby
-  # Before
+  # Before v2.0.0-rc.1
   sentry_debug_files_upload(api_key: '...')
   
-  # After
+  # After v2.0.0-rc.1
   sentry_debug_files_upload(auth_token: '...')
   ```
 
 #### Parameter Behavior Changes
 
-- **`sentry_debug_files_upload`**: The `path` parameter default behavior has changed. It now defaults to `DSYM_OUTPUT_PATH` from fastlane's lane context if available (set by actions like `build_app` or `ipa`), otherwise falls back to `'.'` (current directory). This changes the default behavior when `DSYM_OUTPUT_PATH` is set. If you were relying on the previous behavior of always searching from the current directory, explicitly specify `path: '.'`:
+- **`sentry_debug_files_upload`**: The `path` parameter default behavior has changed. Starting with [v2.0.0-rc.1](https://github.com/getsentry/sentry-fastlane-plugin/releases/v2.0.0-rc.1) it defaults to `DSYM_OUTPUT_PATH` from fastlane's lane context if available (set by actions like `build_app` or `ipa`), otherwise falls back to `'.'` (current directory). This changes the default behavior when `DSYM_OUTPUT_PATH` is set. If you were relying on the previous behavior of always searching from the current directory, explicitly specify `path: '.'`:
   ```ruby
   # To maintain previous behavior (always search from current directory)
   sentry_debug_files_upload(path: '.')
