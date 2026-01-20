@@ -183,8 +183,7 @@ sentry_upload_dart_symbols(
   debug_file_paths: [ # Array of native debug file paths to pair with the symbol map
     'path/to/App.xcframework/ios-arm64/App.framework.dSYM',
     'path/to/libapp.so'
-  ],
-  wait: false # Optional. Wait for the server to fully process uploaded files
+  ]
 )
 ```
 

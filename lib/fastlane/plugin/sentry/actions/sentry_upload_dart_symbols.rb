@@ -49,9 +49,6 @@ module Fastlane
             command.push('--org').push(params[:org_slug]) unless params[:org_slug].nil?
             command.push('--project').push(params[:project_slug]) unless params[:project_slug].nil?
 
-            # Add wait flag if specified
-            command.push('--wait') if params[:wait] == true
-
             # Add the symbol map and debug file paths
             command.push(symbol_map_path)
             command.push(debug_file_path)
@@ -197,11 +194,7 @@ module Fastlane
                                        verify_block: proc do |value|
                                          UI.user_error!("debug_file_paths must be an array") unless value.is_a?(Array)
                                          UI.user_error!("debug_file_paths cannot be empty") if value.empty?
-                                       end),
-          FastlaneCore::ConfigItem.new(key: :wait,
-                                       description: "Wait for the server to fully process uploaded files",
-                                       is_string: false,
-                                       optional: true)
+                                       end)
         ]
       end
 

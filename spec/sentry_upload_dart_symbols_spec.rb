@@ -107,31 +107,6 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-      it "includes --wait flag when specified" do
-        symbol_map_path = File.absolute_path './assets/AndroidManifest.xml'
-        debug_file_path = File.absolute_path './assets/AndroidManifest.xml'
-
-        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-
-        # Mock fetch_debug_id and prepend_debug_id_marker
-        allow(Fastlane::Actions::SentryUploadDartSymbolsAction).to receive(:fetch_debug_id).and_return('test-debug-id-123')
-        allow(Fastlane::Actions::SentryUploadDartSymbolsAction).to receive(:prepend_debug_id_marker).and_return(nil)
-
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli)
-          .with(anything, ["dart-symbol-map", "upload", "--org", "some_org", "--project", "some_project", "--wait", symbol_map_path, debug_file_path])
-          .and_return(true)
-
-        Fastlane::FastFile.new.parse("lane :test do
-          sentry_upload_dart_symbols(
-            org_slug: 'some_org',
-            auth_token: 'something123',
-            project_slug: 'some_project',
-            symbol_map_path: '#{symbol_map_path}',
-            debug_file_paths: ['#{debug_file_path}'],
-            wait: true)
-        end").runner.execute(:test)
-      end
-
       it "continues on partial failures and reports summary" do
         symbol_map_path = File.absolute_path './assets/AndroidManifest.xml'
         debug_file_path_1 = File.absolute_path './assets/AndroidManifest.xml'
