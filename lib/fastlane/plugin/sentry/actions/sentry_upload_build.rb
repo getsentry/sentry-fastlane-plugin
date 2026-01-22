@@ -85,6 +85,7 @@ module Fastlane
                                        verify_block: proc do |value|
                                          # Skip validation if value is nil or empty (will be validated in run method)
                                          next if value.nil? || value.to_s.empty?
+
                                          UI.user_error!("Could not find xcarchive at path '#{value}'") unless File.exist?(value)
                                          UI.user_error!("Path '#{value}' is not an xcarchive") unless File.extname(value) == '.xcarchive'
                                        end),
