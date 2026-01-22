@@ -12,7 +12,7 @@ on:
 
 jobs:
   update-cli:
-    uses: getsentry/github-workflows/.github/workflows/updater.yml@13be9bec4ec5cd67061b747972b996e9c80f4f3b # v3
+    uses: getsentry/github-workflows/.github/workflows/updater.yml@95603f4efe938315ff0dd427a1f2bb40b1889a92 # v3
     with:
       path: script/sentry-cli.properties
       name: CLI
