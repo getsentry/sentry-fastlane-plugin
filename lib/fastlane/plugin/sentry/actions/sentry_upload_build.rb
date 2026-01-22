@@ -91,25 +91,37 @@ module Fastlane
                                        end),
           FastlaneCore::ConfigItem.new(key: :apk_path,
                                        description: "Path to your Android APK file (.apk). Mutually exclusive with xcarchive_path, aab_path, and ipa_path",
+                                       default_value: Actions.lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
                                        optional: true,
                                        conflicting_options: [:xcarchive_path, :aab_path, :ipa_path],
                                        verify_block: proc do |value|
-                                         UI.user_error!("Could not find APK at path '#{value}'") unless File.exist?(value)
+                                         # Skip validation if value is nil or empty (will be validated in run method)
+                                         next if value.nil? || value.to_s.empty?
+
+                                        UI.user_error!("Could not find APK at path '#{value}'") unless File.exist?(value)
                                          UI.user_error!("Path '#{value}' is not an APK") unless File.extname(value).casecmp('.apk').zero?
                                        end),
           FastlaneCore::ConfigItem.new(key: :aab_path,
                                        description: "Path to your Android App Bundle (.aab). Mutually exclusive with xcarchive_path, apk_path, and ipa_path",
+                                       default_value: Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH],
                                        optional: true,
                                        conflicting_options: [:xcarchive_path, :apk_path, :ipa_path],
                                        verify_block: proc do |value|
+                                         # Skip validation if value is nil or empty (will be validated in run method)
+                                         next if value.nil? || value.to_s.empty?
+
                                          UI.user_error!("Could not find AAB at path '#{value}'") unless File.exist?(value)
                                          UI.user_error!("Path '#{value}' is not an AAB") unless File.extname(value).casecmp('.aab').zero?
                                        end),
           FastlaneCore::ConfigItem.new(key: :ipa_path,
                                        description: "Path to your iOS app bundle (.ipa). Mutually exclusive with xcarchive_path, apk_path, and aab_path",
+                                       default_value: Actions.lane_context[SharedValues::IPA_OUTPUT_PATH],
                                        optional: true,
                                        conflicting_options: [:xcarchive_path, :apk_path, :aab_path],
                                        verify_block: proc do |value|
+                                         # Skip validation if value is nil or empty (will be validated in run method)
+                                         next if value.nil? || value.to_s.empty?
+
                                          UI.user_error!("Could not find IPA at path '#{value}'") unless File.exist?(value)
                                          UI.user_error!("Path '#{value}' is not an IPA") unless File.extname(value).casecmp('.ipa').zero?
                                        end),
