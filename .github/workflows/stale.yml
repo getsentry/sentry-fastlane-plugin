@@ -1,7 +1,7 @@
-name: 'close stale issues/PRs'
+name: "close stale issues/PRs"
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
   workflow_dispatch:
 jobs:
   stale:
@@ -43,5 +43,5 @@ jobs:
 
             "A weed is but an unloved flower." ― _Ella Wheeler Wilcox_ 🥀
           skip-stale-pr-message: false
-          close-pr-label:
+          close-pr-label: ""
           close-pr-message: ""

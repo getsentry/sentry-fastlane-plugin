@@ -14,7 +14,6 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   spec.files         = Dir["{bin,lib}/**/*"] + %w(README.md LICENSE)
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
   spec.add_dependency 'os', '~> 1.1', '>= 1.1.4'
@@ -24,4 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'rubocop-rspec'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end

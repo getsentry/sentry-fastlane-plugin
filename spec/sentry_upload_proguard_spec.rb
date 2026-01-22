@@ -5,7 +5,7 @@ describe Fastlane do
         mapping_path = File.absolute_path './assets/this.does.not.exist.mapping.txt'
 
         expect do
-          Fastlane::FastFile.new.parse("lane :test do
+          described_class.new.parse("lane :test do
             sentry_upload_proguard(
               org_slug: 'some_org',
               auth_token: 'something123',
@@ -20,7 +20,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-proguard", mapping_path, "--no-upload"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_upload_proguard(
               org_slug: 'some_org',
               auth_token: 'something123',
@@ -35,7 +35,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-proguard", mapping_path, "--write-properties", "path/to/properties"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_upload_proguard(
               org_slug: 'some_org',
               auth_token: 'something123',
@@ -50,7 +50,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-proguard", mapping_path, "--require-one"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_upload_proguard(
               org_slug: 'some_org',
               auth_token: 'something123',
@@ -65,7 +65,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-proguard", mapping_path, "--uuid", "custom-uuid"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_upload_proguard(
               org_slug: 'some_org',
               auth_token: 'something123',

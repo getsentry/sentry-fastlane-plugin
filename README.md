@@ -70,20 +70,20 @@ The `SENTRY_DSYM_PATH` environment variable may be used in place of the `dsym_pa
 
 Further options:
 
-- __type__: Optional. Only consider debug information files of the given type. By default, all types are considered. Valid options: 'bcsymbolmap', 'breakpad', 'dsym', 'elf', 'jvm', 'pdb', 'pe', 'portablepdb', 'sourcebundle', 'wasm'.
-- __no_unwind__: Optional. Do not scan for stack unwinding information. Specify this flag for builds with disabled FPO, or when stackwalking occurs on the device. This usually excludes executables and dynamic libraries. They might still be uploaded, if they contain additional processable information (see other flags).
-- __no_debug__: Optional. Do not scan for debugging information. This will usually exclude debug companion files. They might still be uploaded, if they contain additional processable information (see other flags).
-- __no_sources__: Optional. Do not scan for source information. This will usually exclude source bundle files. They might still be uploaded, if they contain additional processable information (see other flags).
-- __id__: Optional. Search for specific debug identifiers.
-- __require_all__: Optional. Errors if not all identifiers specified with --id could be found.
-- __symbol_maps__: Optional. Path to BCSymbolMap files which are used to resolve hidden symbols in dSYM files downloaded from iTunes Connect. This requires the dsymutil tool to be available.
-- __derived_data__: Optional. Search for debug symbols in Xcode's derived data.
-- __no_zips__: Optional. Do not search in ZIP files.
-- __no_upload__: Optional. Disable the actual upload. This runs all steps for the processing but does not trigger the upload. This is useful if you just want to verify the setup or skip the upload in tests.
-- __include_sources__: Optional. Include sources from the local file system and upload them as source bundles.
-- __wait__: Optional. Wait for the server to fully process uploaded files. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.
-- __wait_for__: Optional. Wait for the server to fully process uploaded files, but at most for the given number of seconds. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.
-- __il2cpp_mapping__: Optional. Compute il2cpp line mappings and upload them along with sources.
+- **type**: Optional. Only consider debug information files of the given type. By default, all types are considered. Valid options: 'bcsymbolmap', 'breakpad', 'dsym', 'elf', 'jvm', 'pdb', 'pe', 'portablepdb', 'sourcebundle', 'wasm'.
+- **no_unwind**: Optional. Do not scan for stack unwinding information. Specify this flag for builds with disabled FPO, or when stackwalking occurs on the device. This usually excludes executables and dynamic libraries. They might still be uploaded, if they contain additional processable information (see other flags).
+- **no_debug**: Optional. Do not scan for debugging information. This will usually exclude debug companion files. They might still be uploaded, if they contain additional processable information (see other flags).
+- **no_sources**: Optional. Do not scan for source information. This will usually exclude source bundle files. They might still be uploaded, if they contain additional processable information (see other flags).
+- **id**: Optional. Search for specific debug identifiers.
+- **require_all**: Optional. Errors if not all identifiers specified with --id could be found.
+- **symbol_maps**: Optional. Path to BCSymbolMap files which are used to resolve hidden symbols in dSYM files downloaded from iTunes Connect. This requires the dsymutil tool to be available.
+- **derived_data**: Optional. Search for debug symbols in Xcode's derived data.
+- **no_zips**: Optional. Do not search in ZIP files.
+- **no_upload**: Optional. Disable the actual upload. This runs all steps for the processing but does not trigger the upload. This is useful if you just want to verify the setup or skip the upload in tests.
+- **include_sources**: Optional. Include sources from the local file system and upload them as source bundles.
+- **wait**: Optional. Wait for the server to fully process uploaded files. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.
+- **wait_for**: Optional. Wait for the server to fully process uploaded files, but at most for the given number of seconds. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.
+- **il2cpp_mapping**: Optional. Compute il2cpp line mappings and upload them along with sources.
 
 ### Uploading iOS Build Archives
 
@@ -241,7 +241,7 @@ When upgrading to the latest version of this plugin (which uses sentry-cli v3), 
   ```ruby
   # Before
   sentry_debug_files_upload(ids: 'abc123')
-  
+
   # After
   sentry_debug_files_upload(id: 'abc123')
   ```
@@ -252,7 +252,7 @@ When upgrading to the latest version of this plugin (which uses sentry-cli v3), 
   ```ruby
   # Before v2.0.0-rc.1
   sentry_debug_files_upload(api_key: '...')
-  
+
   # After v2.0.0-rc.1
   sentry_debug_files_upload(auth_token: '...')
   ```

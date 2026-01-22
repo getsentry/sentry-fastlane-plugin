@@ -1,0 +1,67 @@
+## You can find more hooks here https://pre-commit.com/hooks.html
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-json
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+
+  - repo: https://github.com/rubocop/rubocop
+    rev: v1.82.1
+    hooks:
+      - id: rubocop
+        args: [--force-exclusion]
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.36.0
+    hooks:
+      - id: check-github-actions
+      - id: check-github-workflows
+        args: [--verbose]
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        files: ^(script/|bin/).*\.(sh|bash)$
+
+  - repo: local
+    hooks:
+      - id: format-markdown
+        name: Format Markdown
+        description: "Format Markdown files with dprint"
+        files: ^.*\.md$
+        types_or: [markdown]
+        entry: dprint
+        language: system
+        args:
+          - "fmt"
+
+      - id: format-json
+        name: Format JSON
+        description: "Format JSON files with dprint"
+        files: ^.*\.json$
+        types_or: [json]
+        entry: dprint
+        language: system
+        args:
+          - "fmt"
+
+      - id: format-yaml
+        name: Format YAML
+        description: "Format YAML files with dprint"
+        files: ^.*\.(yaml|yml)$
+        types_or: [yaml]
+        entry: dprint
+        language: system
+        args:
+          - "fmt"
