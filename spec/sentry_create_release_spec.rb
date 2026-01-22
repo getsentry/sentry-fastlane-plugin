@@ -6,7 +6,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "new", "app.idf@1.0"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_create_release(
               version: '1.0',
               app_identifier: 'app.idf')
@@ -18,7 +18,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "new", "1.0+123"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_create_release(
               version: '1.0',
               build: '123')
@@ -29,7 +29,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "new", "1.0"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_create_release(
               version: '1.0')
         end").runner.execute(:test)
@@ -39,7 +39,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "new", "1.0", "--finalize"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_create_release(
               version: '1.0',
               finalize: true)
@@ -50,7 +50,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "new", "1.0"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_create_release(
               version: '1.0')
         end").runner.execute(:test)
@@ -60,7 +60,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "new", "1.0"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_create_release(
               version: '1.0',
               finalize: false)
@@ -71,7 +71,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "new", "1.0", "--url", "https://example.com/release"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_create_release(
               version: '1.0',
               release_url: 'https://example.com/release')

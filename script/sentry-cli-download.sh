@@ -15,11 +15,11 @@ do
   download_url=$base_url/sentry-cli-$platform
   target_file="$target_dir/sentry-cli-$platform"
 
-  echo $download_url
-  echo $target_file
+  echo "$download_url"
+  echo "$target_file"
 
   rm -f target_file
-  
+
   curl -SL --progress-bar "$download_url" -o "$target_file"
   chmod +x "$target_file"
 done

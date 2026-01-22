@@ -1,9 +1,9 @@
-minVersion: '0.23.1'
+minVersion: "0.23.1"
 changelogPolicy: auto
 preReleaseCommand: ruby .scripts/bump-version.rb
 targets:
-    - name: gem
-    - name: registry
-      sdks:
-        'gem:fastlane-plugin-sentry':
-    - name: github
+  - name: gem
+  - name: registry
+    sdks:
+      "gem:fastlane-plugin-sentry":
+  - name: github
