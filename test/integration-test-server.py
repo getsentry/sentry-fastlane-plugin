@@ -19,7 +19,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self.start_response(HTTPStatus.OK)
-        
+
         if self.path == "/STOP":
             print("HTTP server stopping!")
             threading.Thread(target=self.server.shutdown).start()

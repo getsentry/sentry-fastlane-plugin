@@ -34,7 +34,6 @@ Lint/MissingSuper:
 Style/MissingRespondToMissing:
   Enabled: false
 
-
 #
 #   File.chmod(0777, f)
 #
@@ -62,7 +61,7 @@ Style/EmptyMethod:
 # specs sometimes have useless assignments, which is fine
 Lint/UselessAssignment:
   Exclude:
-    - '**/spec/**/*'
+    - "**/spec/**/*"
 
 # HoundCI doesn't like this rule
 Layout/DotPosition:
@@ -133,7 +132,6 @@ Style/AndOr:
 Metrics/ClassLength:
   Max: 320
 
-
 # Configuration parameters: AllowURI, URISchemes.
 Layout/LineLength:
   Max: 370
@@ -143,7 +141,7 @@ Metrics/ParameterLists:
   Max: 17
 
 Metrics/PerceivedComplexity:
-  Max: 20
+  Enabled: false
 
 # Sometimes it's easier to read without guards
 Style/GuardClause:
@@ -171,16 +169,16 @@ Lint/UnusedMethodArgument:
 # the let(:key) { ... }
 Lint/ParenthesesAsGroupedExpression:
   Exclude:
-    - '**/spec/**/*'
+    - "**/spec/**/*"
 
 # Allow exec in Gemfile
 Security/Eval:
   Exclude:
-    - 'Gemfile'
+    - "Gemfile"
 
 # This would reject is_ in front of methods
 # We use `is_supported?` everywhere already
-Naming/PredicateName:
+Naming/PredicatePrefix:
   Enabled: false
 
 # We allow the $
@@ -194,32 +192,40 @@ Style/RedundantPercentQ:
 # Disable '+ should be surrounded with a single space' for xcodebuild_spec.rb
 Layout/SpaceAroundOperators:
   Exclude:
-    - '**/spec/actions_specs/xcodebuild_spec.rb'
+    - "**/spec/actions_specs/xcodebuild_spec.rb"
 
 inherit_mode:
   merge:
     - Include
 
+require: []
+
+plugins:
+  - rubocop-rspec
+
 AllCops:
   TargetRubyVersion: 2.6
+  NewCops: enable
+  SuggestExtensions: false
   Include:
-    - '**/fastlane/Fastfile'
+    - "**/fastlane/Fastfile"
   Exclude:
-    - '**/lib/assets/custom_action_template.rb'
-    - './vendor/**/*'
+    - "**/lib/assets/custom_action_template.rb"
+    - "./vendor/**/*"
 
 # They have not to be snake_case
 Naming/FileName:
   Exclude:
-    - '*.gemspec'
-    - '**/Dangerfile'
-    - '**/Brewfile'
-    - '**/Gemfile'
-    - '**/Podfile'
-    - '**/Rakefile'
-    - '**/Fastfile'
-    - '**/Deliverfile'
-    - '**/Snapfile'
+    - "*.gemspec"
+    - "**/Dangerfile"
+    - "**/Brewfile"
+    - "**/Gemfile"
+    - "**/Podfile"
+    - "**/Rakefile"
+    - "**/Fastfile"
+    - "**/Deliverfile"
+    - "**/Snapfile"
+    - ".scripts/**/*"
 
 # We're not there yet
 Style/Documentation:
@@ -241,9 +247,35 @@ Style/IfInsideElse:
 Style/CollectionMethods:
   Enabled: false
 
-Metrics/PerceivedComplexity:
-  Enabled: false
-
 Style/NumericLiterals:
   Enabled: false
-  
+
+# Development dependencies are needed in gemspec for this project
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+
+# Integration tests are longer and have implicit expectations via mocks
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/NoExpectationExample:
+  Enabled: false
+
+# Prefer expect().to receive() for integration tests
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/StubbedMock:
+  Enabled: false
+
+# Multiple expectations are fine for integration tests
+RSpec/MultipleExpectations:
+  Enabled: false
+
+# File naming convention is fine as-is
+RSpec/SpecFilePathFormat:
+  Enabled: false
+
+# Different test cases can have similar structure in integration tests
+RSpec/RepeatedExample:
+  Enabled: false

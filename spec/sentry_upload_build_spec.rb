@@ -6,7 +6,7 @@ module Fastlane
   end
 
   module SharedValues
-    XCODEBUILD_ARCHIVE ||= :xcodebuild_archive
+    XCODEBUILD_ARCHIVE = :xcodebuild_archive unless defined?(XCODEBUILD_ARCHIVE)
   end
 end
 
@@ -20,7 +20,7 @@ describe Fastlane do
         non_existent_path = './assets/NonExistent.xcarchive'
 
         expect do
-          Fastlane::FastFile.new.parse("lane :test do
+          described_class.new.parse("lane :test do
             sentry_upload_build(
               auth_token: 'test-token',
               org_slug: 'test-org',
@@ -38,7 +38,7 @@ describe Fastlane do
         expect(File).to receive(:exist?).with(invalid_archive_path).and_return(true)
 
         expect do
-          Fastlane::FastFile.new.parse("lane :test do
+          described_class.new.parse("lane :test do
             sentry_upload_build(
               auth_token: 'test-token',
               org_slug: 'test-org',
@@ -61,7 +61,7 @@ describe Fastlane do
           ["build", "upload", anything]
         ).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
           sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',
@@ -89,7 +89,7 @@ describe Fastlane do
           ["build", "upload", anything]
         ).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
           sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',
@@ -109,7 +109,7 @@ describe Fastlane do
           ["build", "upload", anything, "--head-sha", "abc123", "--base-sha", "def456", "--vcs-provider", "github", "--head-repo-name", "test/repo", "--base-repo-name", "test/repo", "--head-ref", "feature", "--base-ref", "main", "--pr-number", "123", "--build-configuration", "Release"]
         ).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
           sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',
@@ -151,7 +151,7 @@ describe Fastlane do
           ["build", "upload", anything, "--head-sha", "env_abc123", "--base-sha", "env_def456", "--vcs-provider", "env_gitlab", "--head-repo-name", "env_test/repo", "--base-repo-name", "env_base/repo", "--head-ref", "env_feature", "--base-ref", "env_main", "--pr-number", "env_456", "--build-configuration", "env_Debug"]
         ).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
           sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',
@@ -177,7 +177,7 @@ describe Fastlane do
           ["build", "upload", anything, "--head-sha", "explicit_abc123", "--base-sha", "explicit_def456"]
         ).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
           sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',
@@ -205,7 +205,7 @@ describe Fastlane do
           ["build", "upload", anything, "--head-sha", "explicit_abc123", "--vcs-provider", "env_github", "--pr-number", "env_789"]
         ).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
           sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',
@@ -227,7 +227,7 @@ describe Fastlane do
           ["build", "upload", anything, "--release-notes", "Fixed bugs"]
         ).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
           sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',
@@ -249,7 +249,7 @@ describe Fastlane do
           ["build", "upload", anything, "--force-git-metadata"]
         ).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
           sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',
@@ -271,7 +271,7 @@ describe Fastlane do
           ["build", "upload", anything, "--no-git-metadata"]
         ).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
           sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',

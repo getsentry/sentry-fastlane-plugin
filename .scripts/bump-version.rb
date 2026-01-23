@@ -1,5 +1,5 @@
-new_version = ENV['CRAFT_NEW_VERSION']
-old_version = ENV['CRAFT_OLD_VERSION']
+new_version = ENV.fetch('CRAFT_NEW_VERSION', nil)
+old_version = ENV.fetch('CRAFT_OLD_VERSION', nil)
 
 if new_version.nil? || new_version.empty?
   abort "Error: CRAFT_NEW_VERSION environment variable is not set."

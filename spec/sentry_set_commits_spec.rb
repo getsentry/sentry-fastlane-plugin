@@ -6,7 +6,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "app.idf@1.0"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
               app_identifier: 'app.idf')
@@ -18,7 +18,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0+123"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
               build: '123')
@@ -29,7 +29,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0')
         end").runner.execute(:test)
@@ -39,7 +39,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0", "--auto"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
               auto: true)
@@ -49,7 +49,7 @@ describe Fastlane do
       it "omits --auto when not present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0"]).and_return(true)
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0')
         end").runner.execute(:test)
@@ -58,7 +58,7 @@ describe Fastlane do
       it "omits --auto when false" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0"]).and_return(true)
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
               auto: false)
@@ -69,7 +69,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0", "--clear"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
               clear: true)
@@ -79,7 +79,7 @@ describe Fastlane do
       it "omits --clear when not present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0"]).and_return(true)
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0')
         end").runner.execute(:test)
@@ -88,7 +88,7 @@ describe Fastlane do
       it "omits --clear when false" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0"]).and_return(true)
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
               clear: false)
@@ -99,7 +99,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0", "--commit", "abc"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
               commit: 'abc')
@@ -109,7 +109,7 @@ describe Fastlane do
       it "omits --commit when not not given" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0"]).and_return(true)
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0')
         end").runner.execute(:test)
@@ -119,7 +119,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0", "--ignore-missing"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
               ignore_missing: true)
@@ -129,7 +129,7 @@ describe Fastlane do
       it "omits --ignore-missing when not present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0"]).and_return(true)
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0')
         end").runner.execute(:test)
@@ -138,7 +138,7 @@ describe Fastlane do
       it "omits --ignore-missing when false" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0"]).and_return(true)
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
               ignore_missing: false)
@@ -149,7 +149,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0", "--local"]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
               local: true)
@@ -160,7 +160,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
         expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "set-commits", "1.0", "--initial-depth", 50]).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
             sentry_set_commits(
               version: '1.0',
               initial_depth: 50)

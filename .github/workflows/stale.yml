@@ -1,13 +1,13 @@
-name: 'close stale issues/PRs'
+name: "close stale issues/PRs"
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
   workflow_dispatch:
 jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@997185467fa4f803885201cee163a9f38240193d
+      - uses: actions/stale@997185467fa4f803885201cee163a9f38240193d # v10.1.1
         with:
           repo-token: ${{ github.token }}
           days-before-stale: 21
@@ -43,5 +43,5 @@ jobs:
 
             "A weed is but an unloved flower." ― _Ella Wheeler Wilcox_ 🥀
           skip-stale-pr-message: false
-          close-pr-label:
+          close-pr-label: ""
           close-pr-message: ""

@@ -1,5 +1,4 @@
-fastlane documentation
-----
+## fastlane documentation
 
 # Installation
 
@@ -19,15 +18,11 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane integration_test_upload_dif
 ```
 
-
-
 ### integration_test_debug_files_upload
 
 ```sh
 [bundle exec] fastlane integration_test_debug_files_upload
 ```
-
-
 
 ### integration_test_create_release
 
@@ -35,15 +30,11 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane integration_test_create_release
 ```
 
-
-
 ### integration_test_set_commits
 
 ```sh
 [bundle exec] fastlane integration_test_set_commits
 ```
-
-
 
 ### integration_test_create_deploy
 
@@ -51,15 +42,11 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane integration_test_create_deploy
 ```
 
-
-
 ### integration_test_upload_file
 
 ```sh
 [bundle exec] fastlane integration_test_upload_file
 ```
-
-
 
 ### integration_test_upload_sourcemap
 
@@ -67,17 +54,13 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane integration_test_upload_sourcemap
 ```
 
-
-
 ### integration_test_upload_proguard
 
 ```sh
 [bundle exec] fastlane integration_test_upload_proguard
 ```
 
-
-
-----
+---
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 
