@@ -8,12 +8,12 @@ on:
       - edited
       - labeled
       - unlabeled
-permissions:
-  contents: write
-  pull-requests: write
-  statuses: write
 
 jobs:
   changelog-preview:
+    permissions:
+      contents: write
+      pull-requests: write
+      statuses: write
     uses: getsentry/craft/.github/workflows/changelog-preview.yml@fd370d4d54bec9ff07f909d88a3c4aec6f0ba22b # v2
     secrets: inherit
