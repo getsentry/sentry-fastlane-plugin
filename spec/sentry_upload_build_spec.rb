@@ -296,7 +296,7 @@ describe Fastlane do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
 
         expect do
-          Fastlane::FastFile.new.parse("lane :test do
+          described_class.new.parse("lane :test do
             sentry_upload_build(
               auth_token: 'test-token',
               org_slug: 'test-org',
@@ -315,7 +315,7 @@ describe Fastlane do
         allow(File).to receive(:extname).with(mock_apk).and_return('.apk')
 
         expect do
-          Fastlane::FastFile.new.parse("lane :test do
+          described_class.new.parse("lane :test do
             sentry_upload_build(
               auth_token: 'test-token',
               org_slug: 'test-org',
@@ -345,7 +345,7 @@ describe Fastlane do
             ["build", "upload", anything]
           ).and_return(true)
 
-          Fastlane::FastFile.new.parse("lane :test do
+          described_class.new.parse("lane :test do
             sentry_upload_build(
               auth_token: 'test-token',
               org_slug: 'test-org',
@@ -366,7 +366,7 @@ describe Fastlane do
           allow(File).to receive(:extname).with(nil).and_return('')
 
           expect do
-            Fastlane::FastFile.new.parse("lane :test do
+            described_class.new.parse("lane :test do
               sentry_upload_build(
                 auth_token: 'test-token',
                 org_slug: 'test-org',
@@ -389,7 +389,7 @@ describe Fastlane do
           allow(File).to receive(:extname).with(nil).and_return('')
 
           expect do
-            Fastlane::FastFile.new.parse("lane :test do
+            described_class.new.parse("lane :test do
               sentry_upload_build(
                 auth_token: 'test-token',
                 org_slug: 'test-org',
@@ -419,7 +419,7 @@ describe Fastlane do
             ["build", "upload", anything]
           ).and_return(true)
 
-          Fastlane::FastFile.new.parse("lane :test do
+          described_class.new.parse("lane :test do
             sentry_upload_build(
               auth_token: 'test-token',
               org_slug: 'test-org',
@@ -440,7 +440,7 @@ describe Fastlane do
           allow(File).to receive(:extname).with(nil).and_return('')
 
           expect do
-            Fastlane::FastFile.new.parse("lane :test do
+            described_class.new.parse("lane :test do
               sentry_upload_build(
                 auth_token: 'test-token',
                 org_slug: 'test-org',
@@ -463,7 +463,7 @@ describe Fastlane do
           allow(File).to receive(:extname).with(nil).and_return('')
 
           expect do
-            Fastlane::FastFile.new.parse("lane :test do
+            described_class.new.parse("lane :test do
               sentry_upload_build(
                 auth_token: 'test-token',
                 org_slug: 'test-org',
@@ -493,7 +493,7 @@ describe Fastlane do
             ["build", "upload", anything]
           ).and_return(true)
 
-          Fastlane::FastFile.new.parse("lane :test do
+          described_class.new.parse("lane :test do
             sentry_upload_build(
               auth_token: 'test-token',
               org_slug: 'test-org',
@@ -514,7 +514,7 @@ describe Fastlane do
           allow(File).to receive(:extname).with(nil).and_return('')
 
           expect do
-            Fastlane::FastFile.new.parse("lane :test do
+            described_class.new.parse("lane :test do
               sentry_upload_build(
                 auth_token: 'test-token',
                 org_slug: 'test-org',
@@ -537,7 +537,7 @@ describe Fastlane do
           allow(File).to receive(:extname).with(nil).and_return('')
 
           expect do
-            Fastlane::FastFile.new.parse("lane :test do
+            described_class.new.parse("lane :test do
               sentry_upload_build(
                 auth_token: 'test-token',
                 org_slug: 'test-org',
@@ -566,7 +566,7 @@ describe Fastlane do
           ["build", "upload", anything, "--head-sha", "abc123", "--base-sha", "def456"]
         ).and_return(true)
 
-        Fastlane::FastFile.new.parse("lane :test do
+        described_class.new.parse("lane :test do
           sentry_upload_build(
             auth_token: 'test-token',
             org_slug: 'test-org',

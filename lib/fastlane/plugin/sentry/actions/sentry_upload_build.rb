@@ -24,10 +24,8 @@ module Fastlane
           UI.user_error!("One of xcarchive_path, apk_path, aab_path, or ipa_path must be provided")
         end
 
-        # Verify build file exists
         UI.user_error!("Could not find build file at path '#{build_path}'") unless File.exist?(build_path)
 
-        # Verify file extension matches expected type
         case build_type
         when :xcarchive
           UI.user_error!("Path '#{build_path}' is not an xcarchive") unless File.extname(build_path) == '.xcarchive'
@@ -83,7 +81,6 @@ module Fastlane
                                        optional: true,
                                        conflicting_options: [:apk_path, :aab_path, :ipa_path],
                                        verify_block: proc do |value|
-                                         # Skip validation if value is nil or empty (will be validated in run method)
                                          next if value.nil? || value.to_s.empty?
 
                                          UI.user_error!("Could not find xcarchive at path '#{value}'") unless File.exist?(value)
@@ -95,7 +92,6 @@ module Fastlane
                                        optional: true,
                                        conflicting_options: [:xcarchive_path, :aab_path, :ipa_path],
                                        verify_block: proc do |value|
-                                         # Skip validation if value is nil or empty (will be validated in run method)
                                          next if value.nil? || value.to_s.empty?
 
                                          UI.user_error!("Could not find APK at path '#{value}'") unless File.exist?(value)
@@ -107,7 +103,6 @@ module Fastlane
                                        optional: true,
                                        conflicting_options: [:xcarchive_path, :apk_path, :ipa_path],
                                        verify_block: proc do |value|
-                                         # Skip validation if value is nil or empty (will be validated in run method)
                                          next if value.nil? || value.to_s.empty?
 
                                          UI.user_error!("Could not find AAB at path '#{value}'") unless File.exist?(value)
@@ -119,7 +114,6 @@ module Fastlane
                                        optional: true,
                                        conflicting_options: [:xcarchive_path, :apk_path, :aab_path],
                                        verify_block: proc do |value|
-                                         # Skip validation if value is nil or empty (will be validated in run method)
                                          next if value.nil? || value.to_s.empty?
 
                                          UI.user_error!("Could not find IPA at path '#{value}'") unless File.exist?(value)
