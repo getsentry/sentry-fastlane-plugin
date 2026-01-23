@@ -280,6 +280,302 @@ describe Fastlane do
             no_git_metadata: true)
         end").runner.execute(:test)
       end
+
+      it "fails when no build path is provided" do
+        # Clear the default value from lane context
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+
+        # Stub file checks for empty/nil values
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with(nil).and_return(false)
+        allow(File).to receive(:exist?).with("").and_return(false)
+        allow(File).to receive(:extname).and_call_original
+        allow(File).to receive(:extname).with(nil).and_return('')
+        allow(File).to receive(:extname).with("").and_return('')
+
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+
+        expect do
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project')
+          end").runner.execute(:test)
+        end.to raise_error("One of xcarchive_path, apk_path, aab_path, or ipa_path must be provided")
+      end
+
+      it "fails when multiple build paths are provided" do
+        mock_xcarchive = './assets/Test.xcarchive'
+        mock_apk = './assets/Test.apk'
+
+        allow(File).to receive(:exist?).with(mock_xcarchive).and_return(true)
+        allow(File).to receive(:exist?).with(mock_apk).and_return(true)
+        allow(File).to receive(:extname).with(mock_xcarchive).and_return('.xcarchive')
+        allow(File).to receive(:extname).with(mock_apk).and_return('.apk')
+
+        expect do
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project',
+              xcarchive_path: '#{mock_xcarchive}',
+              apk_path: '#{mock_apk}')
+          end").runner.execute(:test)
+        end.to raise_error(/Unresolved conflict between options/)
+      end
+
+      describe "APK upload" do
+        it "calls sentry-cli with APK path" do
+          mock_apk_path = './assets/Test.apk'
+
+          # Clear default value and stub file checks
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(mock_apk_path).and_return(true)
+          allow(File).to receive(:exist?).with(nil).and_return(false)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(mock_apk_path).and_return('.apk')
+          allow(File).to receive(:extname).with(nil).and_return('')
+
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+            anything,
+            ["build", "upload", anything]
+          ).and_return(true)
+
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project',
+              apk_path: '#{mock_apk_path}')
+          end").runner.execute(:test)
+        end
+
+        it "fails when APK path does not exist" do
+          non_existent_path = './assets/NonExistent.apk'
+
+          # Clear default value
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(non_existent_path).and_return(false)
+          allow(File).to receive(:exist?).with(nil).and_return(false)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(nil).and_return('')
+
+          expect do
+            described_class.new.parse("lane :test do
+              sentry_upload_build(
+                auth_token: 'test-token',
+                org_slug: 'test-org',
+                project_slug: 'test-project',
+                apk_path: '#{non_existent_path}')
+            end").runner.execute(:test)
+          end.to raise_error("Could not find APK at path '#{non_existent_path}'")
+        end
+
+        it "fails when file is not an APK" do
+          invalid_apk_path = './assets/test.zip'
+
+          # Clear default value
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(invalid_apk_path).and_return(true)
+          allow(File).to receive(:exist?).with(nil).and_return(false)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(invalid_apk_path).and_return('.zip')
+          allow(File).to receive(:extname).with(nil).and_return('')
+
+          expect do
+            described_class.new.parse("lane :test do
+              sentry_upload_build(
+                auth_token: 'test-token',
+                org_slug: 'test-org',
+                project_slug: 'test-project',
+                apk_path: '#{invalid_apk_path}')
+            end").runner.execute(:test)
+          end.to raise_error("Path '#{invalid_apk_path}' is not an APK")
+        end
+      end
+
+      describe "AAB upload" do
+        it "calls sentry-cli with AAB path" do
+          mock_aab_path = './assets/Test.aab'
+
+          # Clear default value and stub file checks
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(mock_aab_path).and_return(true)
+          allow(File).to receive(:exist?).with(nil).and_return(false)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(mock_aab_path).and_return('.aab')
+          allow(File).to receive(:extname).with(nil).and_return('')
+
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+            anything,
+            ["build", "upload", anything]
+          ).and_return(true)
+
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project',
+              aab_path: '#{mock_aab_path}')
+          end").runner.execute(:test)
+        end
+
+        it "fails when AAB path does not exist" do
+          non_existent_path = './assets/NonExistent.aab'
+
+          # Clear default value
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(non_existent_path).and_return(false)
+          allow(File).to receive(:exist?).with(nil).and_return(false)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(nil).and_return('')
+
+          expect do
+            described_class.new.parse("lane :test do
+              sentry_upload_build(
+                auth_token: 'test-token',
+                org_slug: 'test-org',
+                project_slug: 'test-project',
+                aab_path: '#{non_existent_path}')
+            end").runner.execute(:test)
+          end.to raise_error("Could not find AAB at path '#{non_existent_path}'")
+        end
+
+        it "fails when file is not an AAB" do
+          invalid_aab_path = './assets/test.zip'
+
+          # Clear default value
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(invalid_aab_path).and_return(true)
+          allow(File).to receive(:exist?).with(nil).and_return(false)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(invalid_aab_path).and_return('.zip')
+          allow(File).to receive(:extname).with(nil).and_return('')
+
+          expect do
+            described_class.new.parse("lane :test do
+              sentry_upload_build(
+                auth_token: 'test-token',
+                org_slug: 'test-org',
+                project_slug: 'test-project',
+                aab_path: '#{invalid_aab_path}')
+            end").runner.execute(:test)
+          end.to raise_error("Path '#{invalid_aab_path}' is not an AAB")
+        end
+      end
+
+      describe "IPA upload" do
+        it "calls sentry-cli with IPA path" do
+          mock_ipa_path = './assets/Test.ipa'
+
+          # Clear default value and stub file checks
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(mock_ipa_path).and_return(true)
+          allow(File).to receive(:exist?).with(nil).and_return(false)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(mock_ipa_path).and_return('.ipa')
+          allow(File).to receive(:extname).with(nil).and_return('')
+
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+            anything,
+            ["build", "upload", anything]
+          ).and_return(true)
+
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project',
+              ipa_path: '#{mock_ipa_path}')
+          end").runner.execute(:test)
+        end
+
+        it "fails when IPA path does not exist" do
+          non_existent_path = './assets/NonExistent.ipa'
+
+          # Clear default value
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(non_existent_path).and_return(false)
+          allow(File).to receive(:exist?).with(nil).and_return(false)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(nil).and_return('')
+
+          expect do
+            described_class.new.parse("lane :test do
+              sentry_upload_build(
+                auth_token: 'test-token',
+                org_slug: 'test-org',
+                project_slug: 'test-project',
+                ipa_path: '#{non_existent_path}')
+            end").runner.execute(:test)
+          end.to raise_error("Could not find IPA at path '#{non_existent_path}'")
+        end
+
+        it "fails when file is not an IPA" do
+          invalid_ipa_path = './assets/test.zip'
+
+          # Clear default value
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(invalid_ipa_path).and_return(true)
+          allow(File).to receive(:exist?).with(nil).and_return(false)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(invalid_ipa_path).and_return('.zip')
+          allow(File).to receive(:extname).with(nil).and_return('')
+
+          expect do
+            described_class.new.parse("lane :test do
+              sentry_upload_build(
+                auth_token: 'test-token',
+                org_slug: 'test-org',
+                project_slug: 'test-project',
+                ipa_path: '#{invalid_ipa_path}')
+            end").runner.execute(:test)
+          end.to raise_error("Path '#{invalid_ipa_path}' is not an IPA")
+        end
+      end
+
+      it "calls sentry-cli with git parameters when using APK" do
+        mock_apk_path = './assets/Test.apk'
+
+        # Clear default value and stub file checks
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with(mock_apk_path).and_return(true)
+        allow(File).to receive(:exist?).with(nil).and_return(false)
+        allow(File).to receive(:extname).and_call_original
+        allow(File).to receive(:extname).with(mock_apk_path).and_return('.apk')
+        allow(File).to receive(:extname).with(nil).and_return('')
+
+        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+          anything,
+          ["build", "upload", anything, "--head-sha", "abc123", "--base-sha", "def456"]
+        ).and_return(true)
+
+        described_class.new.parse("lane :test do
+          sentry_upload_build(
+            auth_token: 'test-token',
+            org_slug: 'test-org',
+            project_slug: 'test-project',
+            apk_path: '#{mock_apk_path}',
+            head_sha: 'abc123',
+            base_sha: 'def456')
+        end").runner.execute(:test)
+      end
     end
   end
 end

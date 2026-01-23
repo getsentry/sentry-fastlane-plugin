@@ -279,3 +279,7 @@ RSpec/SpecFilePathFormat:
 # Different test cases can have similar structure in integration tests
 RSpec/RepeatedExample:
   Enabled: false
+
+# Allow deeper nesting for platform-specific test groups (APK, AAB, IPA)
+RSpec/NestedGroups:
+  Max: 4
