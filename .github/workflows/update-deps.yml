@@ -20,8 +20,13 @@ jobs:
   update-cli:
     name: Update CLI
     runs-on: ubuntu-latest
+    outputs:
+      originalTag: ${{ steps.updater.outputs.originalTag }}
+      latestTag: ${{ steps.updater.outputs.latestTag }}
+      prBranch: ${{ steps.updater.outputs.prBranch }}
     steps:
-      - uses: getsentry/github-workflows/updater@v3
+      - id: updater
+        uses: getsentry/github-workflows/updater@95603f4efe938315ff0dd427a1f2bb40b1889a92 # v3
         with:
           path: script/sentry-cli.properties
           name: CLI
