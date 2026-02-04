@@ -8,12 +8,13 @@ on:
   push:
     branches:
       - main
+      - fix-ci
   workflow_dispatch:
 
 permissions:
-  contents: write      # To modify files and create commits
+  contents: write # To modify files and create commits
   pull-requests: write # To create and update pull requests
-  actions: write       # To cancel previous workflow runs
+  actions: write # To cancel previous workflow runs
 
 jobs:
   update-cli:
