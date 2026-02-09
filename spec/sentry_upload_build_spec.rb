@@ -576,6 +576,97 @@ describe Fastlane do
             base_sha: 'def456')
         end").runner.execute(:test)
       end
+
+      describe "install_groups parameter" do
+        it "includes single install group as string" do
+          mock_path = './assets/Test.xcarchive'
+
+          allow(File).to receive(:exist?).with(mock_path).and_return(true)
+          allow(File).to receive(:extname).with(mock_path).and_return('.xcarchive')
+
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+            anything,
+            ["build", "upload", anything, "--install-group", "beta"]
+          ).and_return(true)
+
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project',
+              xcarchive_path: '#{mock_path}',
+              install_groups: 'beta')
+          end").runner.execute(:test)
+        end
+
+        it "includes multiple install groups as array" do
+          mock_path = './assets/Test.xcarchive'
+
+          allow(File).to receive(:exist?).with(mock_path).and_return(true)
+          allow(File).to receive(:extname).with(mock_path).and_return('.xcarchive')
+
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+            anything,
+            ["build", "upload", anything, "--install-group", "beta", "--install-group", "internal"]
+          ).and_return(true)
+
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project',
+              xcarchive_path: '#{mock_path}',
+              install_groups: ['beta', 'internal'])
+          end").runner.execute(:test)
+        end
+
+        it "filters out empty strings from install groups" do
+          mock_path = './assets/Test.xcarchive'
+
+          allow(File).to receive(:exist?).with(mock_path).and_return(true)
+          allow(File).to receive(:extname).with(mock_path).and_return('.xcarchive')
+
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+            anything,
+            ["build", "upload", anything, "--install-group", "beta", "--install-group", "internal"]
+          ).and_return(true)
+
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project',
+              xcarchive_path: '#{mock_path}',
+              install_groups: ['beta', '', 'internal', '  '])
+          end").runner.execute(:test)
+        end
+
+        it "works with install groups and other git parameters" do
+          mock_path = './assets/Test.xcarchive'
+
+          allow(File).to receive(:exist?).with(mock_path).and_return(true)
+          allow(File).to receive(:extname).with(mock_path).and_return('.xcarchive')
+
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+            anything,
+            ["build", "upload", anything, "--head-sha", "abc123", "--install-group", "beta", "--install-group", "internal"]
+          ).and_return(true)
+
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project',
+              xcarchive_path: '#{mock_path}',
+              head_sha: 'abc123',
+              install_groups: ['beta', 'internal'])
+          end").runner.execute(:test)
+        end
+      end
     end
   end
 end
