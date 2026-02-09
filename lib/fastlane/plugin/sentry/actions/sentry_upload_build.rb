@@ -56,17 +56,14 @@ module Fastlane
         command << "--release-notes" << params[:release_notes] if params[:release_notes]
 
         unless params[:install_groups].nil?
-          # Normalize to array
           unless params[:install_groups].kind_of?(Enumerable)
             params[:install_groups] = [params[:install_groups]]
           end
-          # Filter out nil or empty strings
           params[:install_groups].reject! do |e|
             e.to_s.strip.empty?
           rescue StandardError
             true
           end
-          # Add each group as separate flag
           params[:install_groups].each do |group|
             command.push('--install-group').push(group)
           end
