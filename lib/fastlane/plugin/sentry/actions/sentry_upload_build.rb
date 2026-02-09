@@ -85,7 +85,10 @@ module Fastlane
       end
 
       def self.details
-        "This action allows you to upload build files to Sentry. Supported formats include iOS build archives (.xcarchive), iOS app bundles (.ipa), Android APK files (.apk), and Android App Bundles (.aab). The action supports optional git-related parameters for enhanced context including commit SHAs, branch names, repository information, and pull request details. Install groups can be specified to control update visibility between builds."
+        "This action allows you to upload build files to Sentry. Supported formats include iOS build archives (.xcarchive), " \
+          "iOS app bundles (.ipa), Android APK files (.apk), and Android App Bundles (.aab). The action supports optional " \
+          "git-related parameters for enhanced context including commit SHAs, branch names, repository information, and pull " \
+          "request details. Install groups can be specified to control update visibility between builds."
       end
 
       def self.available_options
