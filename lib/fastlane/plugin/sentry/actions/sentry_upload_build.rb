@@ -54,6 +54,21 @@ module Fastlane
         command << "--pr-number" << params[:pr_number] if params[:pr_number]
         command << "--build-configuration" << params[:build_configuration] if params[:build_configuration]
         command << "--release-notes" << params[:release_notes] if params[:release_notes]
+
+        unless params[:install_groups].nil?
+          unless params[:install_groups].kind_of?(Enumerable)
+            params[:install_groups] = [params[:install_groups]]
+          end
+          params[:install_groups].reject! do |e|
+            e.to_s.strip.empty?
+          rescue StandardError
+            true
+          end
+          params[:install_groups].each do |group|
+            command.push('--install-group').push(group)
+          end
+        end
+
         command << "--force-git-metadata" if params[:force_git_metadata]
         command << "--no-git-metadata" if params[:no_git_metadata]
 
@@ -70,7 +85,10 @@ module Fastlane
       end
 
       def self.details
-        "This action allows you to upload build files to Sentry. Supported formats include iOS build archives (.xcarchive), iOS app bundles (.ipa), Android APK files (.apk), and Android App Bundles (.aab). The action supports optional git-related parameters for enhanced context including commit SHAs, branch names, repository information, and pull request details."
+        "This action allows you to upload build files to Sentry. Supported formats include iOS build archives (.xcarchive), " \
+          "iOS app bundles (.ipa), Android APK files (.apk), and Android App Bundles (.aab). The action supports optional " \
+          "git-related parameters for enhanced context including commit SHAs, branch names, repository information, and pull " \
+          "request details. Install groups can be specified to control update visibility between builds."
       end
 
       def self.available_options
@@ -164,6 +182,13 @@ module Fastlane
                                        description: "The build configuration (e.g., 'Release', 'Debug')",
                                        optional: true,
                                        is_string: true),
+          FastlaneCore::ConfigItem.new(key: :install_groups,
+                                       env_name: "SENTRY_INSTALL_GROUPS",
+                                       description: "One or more install groups that control update visibility between builds. \
+                                       Builds with at least one matching install group will be shown updates for each other. \
+                                       Specify multiple groups as an array (e.g., ['group1', 'group2']) or a single group as a string",
+                                       type: Array,
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :release_notes,
                                        description: "The release notes to use for the upload",
                                        optional: true,

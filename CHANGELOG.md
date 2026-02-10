@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Features
+
+- **`sentry_upload_build`**: Added `install_groups` option to specify one or more install groups for controlling update visibility between builds. Requires sentry-cli v3.2.0+. ([#414](https://github.com/getsentry/sentry-fastlane-plugin/pull/414))
+
 ### Dependencies
 
 - Bump CLI from v3.1.0 to v3.2.0 ([#413](https://github.com/getsentry/sentry-fastlane-plugin/pull/413))

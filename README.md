@@ -105,6 +105,7 @@ sentry_upload_build(
   base_ref: 'main', # Name of the base branch (or SENTRY_BASE_REF)
   pr_number: '123', # Pull request number (or SENTRY_PR_NUMBER)
   build_configuration: 'Release', # Build configuration (e.g., 'Release', 'Debug') (or SENTRY_BUILD_CONFIGURATION)
+  install_groups: ['beta', 'internal'], # Optional. Control update visibility between builds (or SENTRY_INSTALL_GROUPS)
   release_notes: 'Fixed critical bugs', # Optional. Release notes to use for the upload
   force_git_metadata: false, # Optional. Force collection and sending of git metadata
   no_git_metadata: false # Optional. Disable collection and sending of git metadata
