@@ -10,32 +10,32 @@ stop_server() {
 
 start_server &
 
-if ! (fastlane integration_test_debug_files_upload) ; then
+if ! (bundle exec fastlane integration_test_debug_files_upload) ; then
     stop_server
     exit 1
 fi
 
-if ! (fastlane integration_test_create_release) ; then
+if ! (bundle exec fastlane integration_test_create_release) ; then
     stop_server
     exit 1
 fi
 
-if ! (fastlane integration_test_set_commits) ; then
+if ! (bundle exec fastlane integration_test_set_commits) ; then
     stop_server
     exit 1
 fi
 
-if ! (fastlane integration_test_create_deploy) ; then
+if ! (bundle exec fastlane integration_test_create_deploy) ; then
     stop_server
     exit 1
 fi
 
-if ! (fastlane integration_test_upload_sourcemap) ; then
+if ! (bundle exec fastlane integration_test_upload_sourcemap) ; then
     stop_server
     exit 1
 fi
 
-if ! (fastlane integration_test_upload_proguard) ; then
+if ! (bundle exec fastlane integration_test_upload_proguard) ; then
     stop_server
     exit 1
 fi
