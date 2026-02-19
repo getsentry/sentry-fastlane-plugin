@@ -25,4 +25,4 @@ jobs:
         run: bundle install
 
       - name: Run integration tests
-        run: bundle exec test/integration-test.sh
+        run: bash test/integration-test.sh
