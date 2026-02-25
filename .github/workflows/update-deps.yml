@@ -24,12 +24,19 @@ jobs:
       latestTag: ${{ steps.updater.outputs.latestTag }}
       prBranch: ${{ steps.updater.outputs.prBranch }}
     steps:
+      - name: Generate GitHub App Token
+        id: app_token
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+        with:
+          app-id: ${{ vars.SENTRY_FASTLANE_PLUGIN_UPDATER_GITHUB_APP_ID }}
+          private-key: ${{ secrets.SENTRY_FASTLANE_PLUGIN_UPDATER_GITHUB_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
       - id: updater
         uses: getsentry/github-workflows/updater@26f565c05d0dd49f703d238706b775883037d76b # v3.3.0
         with:
           path: script/sentry-cli.properties
           name: CLI
-          api-token: ${{ secrets.CI_DEPLOY_KEY }}
+          api-token: ${{ steps.app_token.outputs.token }}
 
   update-binaries:
     name: Update Binaries
@@ -37,10 +44,18 @@ jobs:
     needs: update-cli
     if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
     steps:
+      - name: Generate GitHub App Token
+        id: app_token
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+        with:
+          app-id: ${{ vars.SENTRY_FASTLANE_PLUGIN_UPDATER_GITHUB_APP_ID }}
+          private-key: ${{ secrets.SENTRY_FASTLANE_PLUGIN_UPDATER_GITHUB_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
       - name: Checkout PR branch
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ needs.update-cli.outputs.prBranch }}
+          token: ${{ steps.app_token.outputs.token }}
       - name: Download latest binaries.
         run: script/sentry-cli-download.sh
       - name: Commit latest binaries.
