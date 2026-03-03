@@ -240,15 +240,20 @@ module Fastlane
       end
 
       def self.upload_dsym_if_requested(params)
-        dsym_paths = Array(params[:dsym_path])
+        dsym_paths = Array(params[:dsym_path]).reject { |p| p.nil? || p.to_s.empty? }
+        uploaded_count = 0
         dsym_paths.each do |path|
-          next if path.nil? || path.to_s.empty?
           next unless File.exist?(path)
 
           command = ["debug-files", "upload", File.absolute_path(path), "--type", "dsym"]
           Helper::SentryHelper.call_sentry_cli(params, command)
+          uploaded_count += 1
         end
-        UI.success("Successfully uploaded dSYM files") unless dsym_paths.reject { |p| p.nil? || p.to_s.empty? }.empty?
+        if uploaded_count > 0
+          UI.success("Successfully uploaded dSYM files")
+        elsif dsym_paths.any?
+          UI.verbose("No dSYM files were uploaded: none of the specified paths exist (#{dsym_paths.join(', ')})")
+        end
       end
     end
   end
