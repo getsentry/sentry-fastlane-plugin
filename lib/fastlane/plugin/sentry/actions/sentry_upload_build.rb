@@ -4,25 +4,8 @@ module Fastlane
       def self.run(params)
         Helper::SentryConfig.parse_api_params(params)
 
-        # Determine which build file path to use (conflicting_options handles mutual exclusivity)
-        build_path = nil
-        build_type = nil
-
-        if params[:xcarchive_path]
-          build_path = params[:xcarchive_path]
-          build_type = :xcarchive
-        elsif params[:apk_path]
-          build_path = params[:apk_path]
-          build_type = :apk
-        elsif params[:aab_path]
-          build_path = params[:aab_path]
-          build_type = :aab
-        elsif params[:ipa_path]
-          build_path = params[:ipa_path]
-          build_type = :ipa
-        else
-          UI.user_error!("One of xcarchive_path, apk_path, aab_path, or ipa_path must be provided")
-        end
+        # Resolve build path: explicit params take precedence over SharedValues defaults
+        build_path, build_type = resolve_build_path(params)
 
         UI.user_error!("Could not find build file at path '#{build_path}'") unless File.exist?(build_path)
 
@@ -74,6 +57,9 @@ module Fastlane
 
         Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully uploaded build file: #{build_path}")
+
+        # Upload dSYMs for iOS builds when dsym_path is provided or DSYM_OUTPUT_PATH is set
+        upload_dsym_if_requested(params, build_type)
       end
 
       #####################################################
@@ -86,16 +72,17 @@ module Fastlane
 
       def self.details
         "This action allows you to upload build files to Sentry. Supported formats include iOS build archives (.xcarchive), " \
-          "iOS app bundles (.ipa), Android APK files (.apk), and Android App Bundles (.aab). The action supports optional " \
-          "git-related parameters for enhanced context including commit SHAs, branch names, repository information, and pull " \
-          "request details. Install groups can be specified to control update visibility between builds."
+          "iOS app bundles (.ipa), Android APK files (.apk), and Android App Bundles (.aab). IPA files typically don't " \
+          "embed dSYMs—use the dsym_path parameter to upload symbols for proper symbolication, or call sentry_debug_files_upload " \
+          "separately. The action supports optional git-related parameters for enhanced context including commit SHAs, " \
+          "branch names, repository information, and pull request details. Install groups can be specified to control update " \
+          "visibility between builds."
       end
 
       def self.available_options
         Helper::SentryConfig.common_api_config_items + [
           FastlaneCore::ConfigItem.new(key: :xcarchive_path,
-                                       description: "Path to your iOS build archive (.xcarchive). Mutually exclusive with apk_path, aab_path, and ipa_path",
-                                       default_value: Actions.lane_context[SharedValues::XCODEBUILD_ARCHIVE],
+                                       description: "Path to your iOS build archive (.xcarchive). Defaults to XCODEBUILD_ARCHIVE from lane context. Mutually exclusive with apk_path, aab_path, and ipa_path",
                                        optional: true,
                                        conflicting_options: [:apk_path, :aab_path, :ipa_path],
                                        verify_block: proc do |value|
@@ -105,8 +92,7 @@ module Fastlane
                                          UI.user_error!("Path '#{value}' is not an xcarchive") unless File.extname(value) == '.xcarchive'
                                        end),
           FastlaneCore::ConfigItem.new(key: :apk_path,
-                                       description: "Path to your Android APK file (.apk). Mutually exclusive with xcarchive_path, aab_path, and ipa_path",
-                                       default_value: Actions.lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH],
+                                       description: "Path to your Android APK file (.apk). Defaults to GRADLE_APK_OUTPUT_PATH from lane context. Mutually exclusive with xcarchive_path, aab_path, and ipa_path",
                                        optional: true,
                                        conflicting_options: [:xcarchive_path, :aab_path, :ipa_path],
                                        verify_block: proc do |value|
@@ -116,8 +102,7 @@ module Fastlane
                                          UI.user_error!("Path '#{value}' is not an APK") unless File.extname(value).casecmp('.apk').zero?
                                        end),
           FastlaneCore::ConfigItem.new(key: :aab_path,
-                                       description: "Path to your Android App Bundle (.aab). Mutually exclusive with xcarchive_path, apk_path, and ipa_path",
-                                       default_value: Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH],
+                                       description: "Path to your Android App Bundle (.aab). Defaults to GRADLE_AAB_OUTPUT_PATH from lane context. Mutually exclusive with xcarchive_path, apk_path, and ipa_path",
                                        optional: true,
                                        conflicting_options: [:xcarchive_path, :apk_path, :ipa_path],
                                        verify_block: proc do |value|
@@ -127,8 +112,7 @@ module Fastlane
                                          UI.user_error!("Path '#{value}' is not an AAB") unless File.extname(value).casecmp('.aab').zero?
                                        end),
           FastlaneCore::ConfigItem.new(key: :ipa_path,
-                                       description: "Path to your iOS app bundle (.ipa). Mutually exclusive with xcarchive_path, apk_path, and aab_path",
-                                       default_value: Actions.lane_context[SharedValues::IPA_OUTPUT_PATH],
+                                       description: "Path to your iOS app bundle (.ipa). Defaults to IPA_OUTPUT_PATH from lane context. For symbolication, use dsym_path or call sentry_debug_files_upload separately. Mutually exclusive with xcarchive_path, apk_path, and aab_path",
                                        optional: true,
                                        conflicting_options: [:xcarchive_path, :apk_path, :aab_path],
                                        verify_block: proc do |value|
@@ -137,6 +121,11 @@ module Fastlane
                                          UI.user_error!("Could not find IPA at path '#{value}'") unless File.exist?(value)
                                          UI.user_error!("Path '#{value}' is not an IPA") unless File.extname(value).casecmp('.ipa').zero?
                                        end),
+          FastlaneCore::ConfigItem.new(key: :dsym_path,
+                                       description: "Path to dSYM file(s) for symbolication. Use when uploading IPA (IPAs typically don't embed dSYMs). Can be a path or array of paths. Defaults to DSYM_OUTPUT_PATH from lane context for iOS builds when not specified",
+                                       optional: true,
+                                       type: Array,
+                                       skip_type_validation: true),
           FastlaneCore::ConfigItem.new(key: :head_sha,
                                        env_name: "SENTRY_HEAD_SHA",
                                        description: "The SHA of the head of the current branch",
@@ -216,6 +205,62 @@ module Fastlane
 
       def self.is_supported?(platform)
         [:ios, :android].include?(platform)
+      end
+
+      #####################################################
+      # @!group Private helpers
+      #####################################################
+
+      def self.resolve_build_path(params)
+        # Explicit params take precedence over SharedValues defaults
+        if params[:ipa_path] && !params[:ipa_path].to_s.empty?
+          [params[:ipa_path], :ipa]
+        elsif params[:xcarchive_path] && !params[:xcarchive_path].to_s.empty?
+          [params[:xcarchive_path], :xcarchive]
+        elsif params[:apk_path] && !params[:apk_path].to_s.empty?
+          [params[:apk_path], :apk]
+        elsif params[:aab_path] && !params[:aab_path].to_s.empty?
+          [params[:aab_path], :aab]
+        else
+          # No explicit path - use SharedValues defaults
+          path = Actions.lane_context[SharedValues::XCODEBUILD_ARCHIVE]
+          return [path, :xcarchive] if path && !path.to_s.empty?
+
+          path = Actions.lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+          return [path, :apk] if path && !path.to_s.empty?
+
+          path = Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]
+          return [path, :aab] if path && !path.to_s.empty?
+
+          path = Actions.lane_context[SharedValues::IPA_OUTPUT_PATH]
+          return [path, :ipa] if path && !path.to_s.empty?
+
+          UI.user_error!("One of xcarchive_path, apk_path, aab_path, or ipa_path must be provided")
+        end
+      end
+
+      def self.upload_dsym_if_requested(params, build_type)
+        dsym_paths = Array(params[:dsym_path]).reject { |p| p.nil? || p.to_s.empty? }
+        # For iOS builds, use DSYM_OUTPUT_PATH from lane context when dsym_path not specified
+        if dsym_paths.empty? && [:ipa, :xcarchive].include?(build_type)
+          dsym_from_context = Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH]
+          dsym_paths = [dsym_from_context] if dsym_from_context && !dsym_from_context.to_s.empty?
+        end
+        return if dsym_paths.empty?
+
+        uploaded_count = 0
+        dsym_paths.each do |path|
+          next unless File.exist?(path)
+
+          command = ["debug-files", "upload", File.absolute_path(path), "--type", "dsym"]
+          Helper::SentryHelper.call_sentry_cli(params, command)
+          uploaded_count += 1
+        end
+        if uploaded_count > 0
+          UI.success("Successfully uploaded dSYM files")
+        elsif dsym_paths.any?
+          UI.verbose("No dSYM files were uploaded: none of the specified paths exist (#{dsym_paths.join(', ')})")
+        end
       end
     end
   end

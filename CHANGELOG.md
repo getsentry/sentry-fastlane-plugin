@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Fixes
+
+- Prefer explicit path params over SharedValues defaults ([#434](https://github.com/getsentry/sentry-fastlane-plugin/pull/434))
+  - **Behavior change**: When both an explicit path param (e.g. `ipa_path`) and a SharedValue (e.g. `XCODEBUILD_ARCHIVE`) are set, the explicit param now correctly takes precedence. Previously, the first param in resolution order was used regardless of whether it was explicitly passed.
+
 ### Dependencies
 
 - Bump CLI from v3.2.2 to v3.2.3 ([#430](https://github.com/getsentry/sentry-fastlane-plugin/pull/430))
@@ -495,7 +500,7 @@ We bumped the minimum sentry-cli version to `1.70.1` because it includes an esse
 
 ### Fixes
 
-- fix: Upload Dif use '-' instead of '_' ([#99](https://github.com/getsentry/sentry-fastlane-plugin/pull/99))
+- fix: Upload Dif use '-' instead of '\_' ([#99](https://github.com/getsentry/sentry-fastlane-plugin/pull/99))
 
 ## 1.10.0
 

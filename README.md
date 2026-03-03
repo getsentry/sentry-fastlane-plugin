@@ -85,16 +85,23 @@ Further options:
 - **wait_for**: Optional. Wait for the server to fully process uploaded files, but at most for the given number of seconds. Errors can only be displayed if --wait or --wait-for is specified, but this will significantly slow down the upload process.
 - **il2cpp_mapping**: Optional. Compute il2cpp line mappings and upload them along with sources.
 
-### Uploading iOS Build Archives
+### Uploading Builds
 
-Upload iOS build archives (.xcarchive) to Sentry for improved symbolication and source context.
+Upload build files to Sentry for improved symbolication and source context. Supported formats:
+
+- **iOS**: `.xcarchive` (build archive) or `.ipa` (app bundle)
+- **Android**: `.apk` or `.aab` (App Bundle)
+
+Explicitly passed path parameters take precedence over SharedValues. For IPA uploads, use `dsym_path` to attach dSYM files for symbolication (IPAs typically don't embed symbols).
 
 ```ruby
 sentry_upload_build(
   auth_token: '...',
   org_slug: '...',
   project_slug: '...',
-  xcarchive_path: './build/MyApp.xcarchive', # Path to your .xcarchive file
+  # One of: xcarchive_path, ipa_path, apk_path, or aab_path (mutually exclusive)
+  xcarchive_path: './build/MyApp.xcarchive', # or ipa_path, apk_path, aab_path
+  dsym_path: './build/MyApp.app.dSYM.zip', # Optional. For IPA/xcarchive - path or array of dSYM paths. Defaults to DSYM_OUTPUT_PATH from lane context when not specified
   # Optional git context parameters (can also be set via environment variables)
   head_sha: 'abc123...', # The SHA of the head of the current branch (or SENTRY_HEAD_SHA)
   base_sha: 'def456...', # The SHA of the base branch (or SENTRY_BASE_SHA)
@@ -112,9 +119,9 @@ sentry_upload_build(
 )
 ```
 
-By default the `SharedValue::XCODEBUILD_ARCHIVE` sets the `xcarchive_path` parameter if set by a prior lane such as `build_app`.
+Path parameters default to SharedValues when not explicitly passed: `XCODEBUILD_ARCHIVE` (xcarchive), `IPA_OUTPUT_PATH` (ipa), `GRADLE_APK_OUTPUT_PATH` (apk), `GRADLE_AAB_OUTPUT_PATH` (aab). Explicit parameters always take precedence.
 
-This action is only supported on iOS platform.
+This action is supported on iOS and Android platforms.
 
 ### Creating & Finalizing Releases
 
@@ -239,6 +246,7 @@ When upgrading to the latest version of this plugin (which uses sentry-cli v3), 
 #### Parameter Name Changes
 
 - **`sentry_debug_files_upload`**: The `ids` parameter has been renamed to `id` (singular). Update your Fastfiles:
+
   ```ruby
   # Before
   sentry_debug_files_upload(ids: 'abc123')
@@ -250,6 +258,7 @@ When upgrading to the latest version of this plugin (which uses sentry-cli v3), 
 #### Authentication Changes
 
 - **All actions**: The `api_key` parameter has been removed in favor of `auth_token` with the release of [v2.0.0](https://github.com/getsentry/sentry-fastlane-plugin/releases/2.0.0-rc.1). All actions now require `auth_token` for authentication. Update your Fastfiles:
+
   ```ruby
   # Before v2.0.0-rc.1
   sentry_debug_files_upload(api_key: '...')
