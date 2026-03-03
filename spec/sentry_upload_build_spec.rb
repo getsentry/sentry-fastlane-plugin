@@ -502,6 +502,35 @@ describe Fastlane do
           end").runner.execute(:test)
         end
 
+        it "prefers explicit ipa_path over XCODEBUILD_ARCHIVE from SharedValues" do
+          mock_ipa_path = './assets/Test.ipa'
+          mock_xcarchive_path = './assets/Other.xcarchive'
+
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = mock_xcarchive_path
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(mock_ipa_path).and_return(true)
+          allow(File).to receive(:exist?).with(mock_xcarchive_path).and_return(true)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(mock_ipa_path).and_return('.ipa')
+          allow(File).to receive(:extname).with(mock_xcarchive_path).and_return('.xcarchive')
+
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli) do |_params, command|
+            expect(command[0]).to eq("build")
+            expect(command[1]).to eq("upload")
+            expect(command[2]).to end_with("Test.ipa")
+            true
+          end
+
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project',
+              ipa_path: '#{mock_ipa_path}')
+          end").runner.execute(:test)
+        end
+
         it "fails when IPA path does not exist" do
           non_existent_path = './assets/NonExistent.ipa'
 
@@ -522,6 +551,43 @@ describe Fastlane do
                 ipa_path: '#{non_existent_path}')
             end").runner.execute(:test)
           end.to raise_error("Could not find IPA at path '#{non_existent_path}'")
+        end
+
+        it "uploads dSYM files when dsym_path is provided" do
+          mock_ipa_path = './assets/Test.ipa'
+          mock_dsym_path = './assets/SwiftExample.app.dSYM.zip'
+
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(mock_ipa_path).and_return(true)
+          allow(File).to receive(:exist?).with(mock_dsym_path).and_return(true)
+          allow(File).to receive(:exist?).with(nil).and_return(false)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(mock_ipa_path).and_return('.ipa')
+          allow(File).to receive(:extname).with(mock_dsym_path).and_return('.zip')
+
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          call_count = 0
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).at_least(:twice) do |_params, command|
+            call_count += 1
+            if call_count == 1
+              expect(command[0]).to eq("build")
+              expect(command[1]).to eq("upload")
+            elsif call_count == 2
+              expect(command[0]).to eq("debug-files")
+              expect(command[1]).to eq("upload")
+            end
+            true
+          end
+
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project',
+              ipa_path: '#{mock_ipa_path}',
+              dsym_path: '#{mock_dsym_path}')
+          end").runner.execute(:test)
         end
 
         it "fails when file is not an IPA" do
