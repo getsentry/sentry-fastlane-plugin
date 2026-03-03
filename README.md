@@ -101,7 +101,7 @@ sentry_upload_build(
   project_slug: '...',
   # One of: xcarchive_path, ipa_path, apk_path, or aab_path (mutually exclusive)
   xcarchive_path: './build/MyApp.xcarchive', # or ipa_path, apk_path, aab_path
-  dsym_path: './build/MyApp.app.dSYM.zip', # Optional. For IPA uploads - path or array of dSYM paths
+  dsym_path: './build/MyApp.app.dSYM.zip', # Optional. For IPA/xcarchive - path or array of dSYM paths. Defaults to DSYM_OUTPUT_PATH from lane context when not specified
   # Optional git context parameters (can also be set via environment variables)
   head_sha: 'abc123...', # The SHA of the head of the current branch (or SENTRY_HEAD_SHA)
   base_sha: 'def456...', # The SHA of the base branch (or SENTRY_BASE_SHA)

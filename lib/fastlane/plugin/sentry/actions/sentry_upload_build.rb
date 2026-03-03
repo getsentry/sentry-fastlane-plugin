@@ -58,8 +58,8 @@ module Fastlane
         Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully uploaded build file: #{build_path}")
 
-        # Upload dSYMs when dsym_path is provided (e.g. for IPA builds which don't embed symbols)
-        upload_dsym_if_requested(params) if params[:dsym_path]
+        # Upload dSYMs for iOS builds when dsym_path is provided or DSYM_OUTPUT_PATH is set
+        upload_dsym_if_requested(params, build_type)
       end
 
       #####################################################
@@ -122,7 +122,7 @@ module Fastlane
                                          UI.user_error!("Path '#{value}' is not an IPA") unless File.extname(value).casecmp('.ipa').zero?
                                        end),
           FastlaneCore::ConfigItem.new(key: :dsym_path,
-                                       description: "Path to dSYM file(s) for symbolication. Use when uploading IPA (IPAs typically don't embed dSYMs). Can be a path or array of paths",
+                                       description: "Path to dSYM file(s) for symbolication. Use when uploading IPA (IPAs typically don't embed dSYMs). Can be a path or array of paths. Defaults to DSYM_OUTPUT_PATH from lane context for iOS builds when not specified",
                                        optional: true,
                                        type: Array,
                                        skip_type_validation: true),
@@ -239,8 +239,15 @@ module Fastlane
         end
       end
 
-      def self.upload_dsym_if_requested(params)
+      def self.upload_dsym_if_requested(params, build_type)
         dsym_paths = Array(params[:dsym_path]).reject { |p| p.nil? || p.to_s.empty? }
+        # For iOS builds, use DSYM_OUTPUT_PATH from lane context when dsym_path not specified
+        if dsym_paths.empty? && [:ipa, :xcarchive].include?(build_type)
+          dsym_from_context = Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH]
+          dsym_paths = [dsym_from_context] if dsym_from_context && !dsym_from_context.to_s.empty?
+        end
+        return if dsym_paths.empty?
+
         uploaded_count = 0
         dsym_paths.each do |path|
           next unless File.exist?(path)

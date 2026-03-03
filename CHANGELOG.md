@@ -5,6 +5,7 @@
 ### Fixes
 
 - Prefer explicit path params over SharedValues defaults ([#434](https://github.com/getsentry/sentry-fastlane-plugin/pull/434))
+  - **Behavior change**: When both an explicit path param (e.g. `ipa_path`) and a SharedValue (e.g. `XCODEBUILD_ARCHIVE`) are set, the explicit param now correctly takes precedence. Previously, the first param in resolution order was used regardless of whether it was explicitly passed.
 
 ### Dependencies
 
