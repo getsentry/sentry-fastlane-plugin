@@ -31,10 +31,7 @@ module Fastlane
       end
 
       def self.details
-        [
-          "This action allows you to upload snapshot images to Sentry for pre-production artifact analysis.",
-          "See https://docs.sentry.io/product/cli/ for more information."
-        ].join(" ")
+        "This action allows you to upload snapshot images to Sentry to check for visual regressions."
       end
 
       def self.available_options
