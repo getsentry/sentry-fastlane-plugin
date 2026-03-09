@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-### Features
+### Experimental
 
 - Add `sentry_upload_snapshots` action for uploading snapshot images ([#436](https://github.com/getsentry/sentry-fastlane-plugin/pull/436))
 
