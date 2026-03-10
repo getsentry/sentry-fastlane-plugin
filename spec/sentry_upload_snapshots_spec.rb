@@ -32,20 +32,21 @@ describe Fastlane do
       end
 
       it "builds correct command with required params" do
-        path = File.absolute_path './assets/snapshots'
-        expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
-          anything, ["build", "snapshots", "--app-id", "com.example.app", path]
-        ).and_return(true)
+        Dir.mktmpdir do |path|
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+            anything, ["build", "snapshots", "--app-id", "com.example.app", path]
+          ).and_return(true)
 
-        described_class.new.parse("lane :test do
-            sentry_upload_snapshots(
-              org_slug: 'some_org',
-              auth_token: 'something123',
-              project_slug: 'some_project',
-              app_id: 'com.example.app',
-              path: '#{path}')
-        end").runner.execute(:test)
+          described_class.new.parse("lane :test do
+              sentry_upload_snapshots(
+                org_slug: 'some_org',
+                auth_token: 'something123',
+                project_slug: 'some_project',
+                app_id: 'com.example.app',
+                path: '#{path}')
+          end").runner.execute(:test)
+        end
       end
     end
   end
