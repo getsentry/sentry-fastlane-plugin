@@ -31,7 +31,7 @@ module Fastlane
       end
 
       def self.details
-        "This action allows you to upload snapshot images to Sentry to check for visual regressions."
+        "This action allows you to upload snapshot images to Sentry to check for visual regressions. NOTE: This features is experimental and might be changed in future releases."
       end
 
       def self.available_options
