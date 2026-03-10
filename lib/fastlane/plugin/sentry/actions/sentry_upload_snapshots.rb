@@ -27,7 +27,7 @@ module Fastlane
       #####################################################
 
       def self.description
-        "Upload snapshot images to Sentry"
+        "Upload snapshot images to Sentry (EXPERIMENTAL)"
       end
 
       def self.details
