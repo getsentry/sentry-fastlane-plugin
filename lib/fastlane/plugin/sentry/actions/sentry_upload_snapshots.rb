@@ -18,6 +18,8 @@ module Fastlane
           path
         ]
 
+        Helper::SentryConfig.build_vcs_command(command, params)
+
         Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully uploaded snapshots!")
       end
@@ -46,7 +48,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :app_id,
                                        description: "Application identifier",
                                        optional: false)
-        ]
+        ] + Helper::SentryConfig.common_vcs_config_items
       end
 
       def self.return_value
