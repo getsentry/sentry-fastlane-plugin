@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Features
+
+- Add experimental `sentry_upload_snapshots` action for uploading snapshot images ([#436](https://github.com/getsentry/sentry-fastlane-plugin/pull/436))
+
 ### Dependencies
 
 - Bump CLI from v3.2.3 to v3.3.3 ([#435](https://github.com/getsentry/sentry-fastlane-plugin/pull/435), [#441](https://github.com/getsentry/sentry-fastlane-plugin/pull/441), [#442](https://github.com/getsentry/sentry-fastlane-plugin/pull/442), [#443](https://github.com/getsentry/sentry-fastlane-plugin/pull/443))
