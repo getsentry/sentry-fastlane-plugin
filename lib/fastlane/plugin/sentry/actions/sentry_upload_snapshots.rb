@@ -18,16 +18,7 @@ module Fastlane
           path
         ]
 
-        command << "--head-sha" << params[:head_sha] if params[:head_sha]
-        command << "--base-sha" << params[:base_sha] if params[:base_sha]
-        command << "--vcs-provider" << params[:vcs_provider] if params[:vcs_provider]
-        command << "--head-repo-name" << params[:head_repo_name] if params[:head_repo_name]
-        command << "--base-repo-name" << params[:base_repo_name] if params[:base_repo_name]
-        command << "--head-ref" << params[:head_ref] if params[:head_ref]
-        command << "--base-ref" << params[:base_ref] if params[:base_ref]
-        command << "--pr-number" << params[:pr_number] if params[:pr_number]
-        command << "--force-git-metadata" if params[:force_git_metadata]
-        command << "--no-git-metadata" if params[:no_git_metadata]
+        Helper::SentryConfig.build_vcs_command(command, params)
 
         Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully uploaded snapshots!")
@@ -56,58 +47,8 @@ module Fastlane
                                                      end),
           FastlaneCore::ConfigItem.new(key: :app_id,
                                        description: "Application identifier",
-                                       optional: false),
-          FastlaneCore::ConfigItem.new(key: :head_sha,
-                                       env_name: "SENTRY_HEAD_SHA",
-                                       description: "The SHA of the head of the current branch",
-                                       optional: true,
-                                       is_string: true),
-          FastlaneCore::ConfigItem.new(key: :base_sha,
-                                       env_name: "SENTRY_BASE_SHA",
-                                       description: "The SHA of the base branch",
-                                       optional: true,
-                                       is_string: true),
-          FastlaneCore::ConfigItem.new(key: :vcs_provider,
-                                       env_name: "SENTRY_VCS_PROVIDER",
-                                       description: "The version control system provider (e.g., 'github', 'gitlab')",
-                                       optional: true,
-                                       is_string: true),
-          FastlaneCore::ConfigItem.new(key: :head_repo_name,
-                                       env_name: "SENTRY_HEAD_REPO_NAME",
-                                       description: "The name of the head repository",
-                                       optional: true,
-                                       is_string: true),
-          FastlaneCore::ConfigItem.new(key: :base_repo_name,
-                                       env_name: "SENTRY_BASE_REPO_NAME",
-                                       description: "The name of the base repository",
-                                       optional: true,
-                                       is_string: true),
-          FastlaneCore::ConfigItem.new(key: :head_ref,
-                                       env_name: "SENTRY_HEAD_REF",
-                                       description: "The name of the head branch",
-                                       optional: true,
-                                       is_string: true),
-          FastlaneCore::ConfigItem.new(key: :base_ref,
-                                       env_name: "SENTRY_BASE_REF",
-                                       description: "The name of the base branch",
-                                       optional: true,
-                                       is_string: true),
-          FastlaneCore::ConfigItem.new(key: :pr_number,
-                                       env_name: "SENTRY_PR_NUMBER",
-                                       description: "The pull request number",
-                                       optional: true,
-                                       is_string: true),
-          FastlaneCore::ConfigItem.new(key: :force_git_metadata,
-                                       description: "Force collection and sending of git metadata (branch, commit, etc.). \
-                                       If neither this nor --no-git-metadata is specified, git metadata is automatically \
-                                       collected when running in most CI environments",
-                                       is_string: false,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :no_git_metadata,
-                                       description: "Disable collection and sending of git metadata",
-                                       is_string: false,
-                                       optional: true)
-        ]
+                                       optional: false)
+        ] + Helper::SentryConfig.common_vcs_config_items
       end
 
       def self.return_value
