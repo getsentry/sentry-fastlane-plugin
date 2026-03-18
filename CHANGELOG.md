@@ -1,11 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- **`sentry_upload_snapshots`**: Add VCS options (`head_sha`, `base_sha`, `vcs_provider`, `head_repo_name`, `base_repo_name`, `head_ref`, `base_ref`, `pr_number`, `force_git_metadata`, `no_git_metadata`) ([#444](https://github.com/getsentry/sentry-fastlane-plugin/pull/444))
+
 ## 2.3.0
 
 ### Features
 
 - Add experimental `sentry_upload_snapshots` action for uploading snapshot images ([#436](https://github.com/getsentry/sentry-fastlane-plugin/pull/436))
-- **`sentry_upload_snapshots`**: Add VCS options (`head_sha`, `base_sha`, `vcs_provider`, `head_repo_name`, `base_repo_name`, `head_ref`, `base_ref`, `pr_number`, `force_git_metadata`, `no_git_metadata`) ([#444](https://github.com/getsentry/sentry-fastlane-plugin/pull/444))
 
 ### Dependencies
 
