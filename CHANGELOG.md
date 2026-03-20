@@ -1,10 +1,19 @@
 # Changelog
 
-## Unreleased
+## 2.4.0
 
-### Features
+### New Features ✨
 
-- **`sentry_upload_snapshots`**: Add VCS options (`head_sha`, `base_sha`, `vcs_provider`, `head_repo_name`, `base_repo_name`, `head_ref`, `base_ref`, `pr_number`, `force_git_metadata`, `no_git_metadata`) ([#444](https://github.com/getsentry/sentry-fastlane-plugin/pull/444))
+- (snapshots) Add VCS options to sentry_upload_snapshots action by @runningcode in [#444](https://github.com/getsentry/sentry-fastlane-plugin/pull/444)
+
+### Internal Changes 🔧
+
+#### Deps
+
+- Bump ruby/setup-ruby from 1.290.0 to 1.294.0 by @dependabot in [#445](https://github.com/getsentry/sentry-fastlane-plugin/pull/445)
+- Bump getsentry/craft from 2.23.2 to 2.24.2 by @dependabot in [#447](https://github.com/getsentry/sentry-fastlane-plugin/pull/447)
+- Bump actions/create-github-app-token from 2.2.1 to 3.0.0 by @dependabot in [#448](https://github.com/getsentry/sentry-fastlane-plugin/pull/448)
+- Bump getsentry/craft/.github/workflows/changelog-preview.yml from 2.23.2 to 2.24.2 by @dependabot in [#446](https://github.com/getsentry/sentry-fastlane-plugin/pull/446)
 
 ## 2.3.0
 
