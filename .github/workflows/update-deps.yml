@@ -63,3 +63,6 @@ jobs:
         with:
           branch: ${{ needs.update-cli.outputs.prBranch }}
           commit_message: bump bundled binaries
+          commit_author: "${{ steps.app_token.outputs.app-slug }}[bot] <${{ vars.SENTRY_FASTLANE_PLUGIN_UPDATER_GITHUB_APP_ID }}+${{ steps.app_token.outputs.app-slug }}[bot]@users.noreply.github.com>"
+          commit_user_name: "${{ steps.app_token.outputs.app-slug }}[bot]"
+          commit_user_email: "${{ vars.SENTRY_FASTLANE_PLUGIN_UPDATER_GITHUB_APP_ID }}+${{ steps.app_token.outputs.app-slug }}[bot]@users.noreply.github.com"
