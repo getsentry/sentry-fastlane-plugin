@@ -58,11 +58,18 @@ jobs:
           token: ${{ steps.app_token.outputs.token }}
       - name: Download latest binaries.
         run: script/sentry-cli-download.sh
+      - name: Resolve bot user ID for noreply email
+        id: bot_user
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
+        run: |
+          BOT_ID=$(gh api "users/${{ steps.app_token.outputs.app-slug }}%5Bbot%5D" --jq .id)
+          echo "id=${BOT_ID}" >> "${GITHUB_OUTPUT}"
       - name: Commit latest binaries.
         uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
         with:
           branch: ${{ needs.update-cli.outputs.prBranch }}
           commit_message: bump bundled binaries
-          commit_author: "${{ steps.app_token.outputs.app-slug }}[bot] <${{ vars.SENTRY_FASTLANE_PLUGIN_UPDATER_GITHUB_APP_ID }}+${{ steps.app_token.outputs.app-slug }}[bot]@users.noreply.github.com>"
+          commit_author: "${{ steps.app_token.outputs.app-slug }}[bot] <${{ steps.bot_user.outputs.id }}+${{ steps.app_token.outputs.app-slug }}[bot]@users.noreply.github.com>"
           commit_user_name: "${{ steps.app_token.outputs.app-slug }}[bot]"
-          commit_user_email: "${{ vars.SENTRY_FASTLANE_PLUGIN_UPDATER_GITHUB_APP_ID }}+${{ steps.app_token.outputs.app-slug }}[bot]@users.noreply.github.com"
+          commit_user_email: "${{ steps.bot_user.outputs.id }}+${{ steps.app_token.outputs.app-slug }}[bot]@users.noreply.github.com"
