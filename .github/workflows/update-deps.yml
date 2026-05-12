@@ -32,7 +32,7 @@ jobs:
           private-key: ${{ secrets.SENTRY_FASTLANE_PLUGIN_UPDATER_GITHUB_APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
       - id: updater
-        uses: getsentry/github-workflows/updater@26f565c05d0dd49f703d238706b775883037d76b # v3.3.0
+        uses: getsentry/github-workflows/updater@607fed74f812e69201531a5185b6c3c57caa4e89 # v3.4.0
         with:
           path: script/sentry-cli.properties
           name: CLI
