@@ -1,5 +1,5 @@
 module Fastlane
   module Sentry
-    VERSION = "2.5.4"
+    VERSION = "2.5.5"
   end
 end
