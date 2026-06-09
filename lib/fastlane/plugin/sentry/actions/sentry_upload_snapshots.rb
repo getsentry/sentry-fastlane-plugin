@@ -11,8 +11,8 @@ module Fastlane
         UI.user_error!("Path is not a directory: #{path}") unless File.directory?(path)
 
         command = [
-          "build",
           "snapshots",
+          "upload",
           "--app-id",
           app_id,
           path

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixes
+
+- Use `sentry-cli snapshots upload` instead of `build snapshots` (requires sentry-cli >= 3.5.0, already enforced by the bundled CLI version check) ([#493](https://github.com/getsentry/sentry-fastlane-plugin/pull/493))
+
 ## 2.5.6
 
 ### Dependencies

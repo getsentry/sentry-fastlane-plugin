@@ -35,7 +35,7 @@ describe Fastlane do
         Dir.mktmpdir do |path|
           expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
           expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
-            anything, ["build", "snapshots", "--app-id", "com.example.app", path]
+            anything, ["snapshots", "upload", "--app-id", "com.example.app", path]
           ).and_return(true)
 
           described_class.new.parse("lane :test do
@@ -54,7 +54,7 @@ describe Fastlane do
           expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
           expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
             anything,
-            ["build", "snapshots", "--app-id", "com.example.app", path,
+            ["snapshots", "upload", "--app-id", "com.example.app", path,
              "--head-sha", "abc123", "--base-sha", "def456",
              "--vcs-provider", "github", "--head-repo-name", "test/repo",
              "--base-repo-name", "test/repo", "--head-ref", "feature",
@@ -85,7 +85,7 @@ describe Fastlane do
           expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
           expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
             anything,
-            ["build", "snapshots", "--app-id", "com.example.app", path, "--force-git-metadata"]
+            ["snapshots", "upload", "--app-id", "com.example.app", path, "--force-git-metadata"]
           ).and_return(true)
 
           described_class.new.parse("lane :test do
@@ -105,7 +105,7 @@ describe Fastlane do
           expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
           expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
             anything,
-            ["build", "snapshots", "--app-id", "com.example.app", path, "--no-git-metadata"]
+            ["snapshots", "upload", "--app-id", "com.example.app", path, "--no-git-metadata"]
           ).and_return(true)
 
           described_class.new.parse("lane :test do
