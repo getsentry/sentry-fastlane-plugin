@@ -21,6 +21,7 @@ jobs:
         with:
           ruby-version: "3.1.2"
 
+      - run: gem install bundler -v '2.6.8'
       - name: Run bundle install
         run: bundle install
 
