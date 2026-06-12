@@ -18,11 +18,10 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'os', '~> 1.1', '>= 1.1.4'
 
-  spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'fastlane', '>= 2.10.0'
-  spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'rubocop-rspec'
+  spec.add_development_dependency 'fastlane', '~> 2.10'
+  spec.add_development_dependency 'pry', '~> 0.14'
+  spec.add_development_dependency 'rspec', '~> 3.0'
+  spec.add_development_dependency 'rubocop', '~> 1.0'
+  spec.add_development_dependency 'rubocop-rspec', '~> 3.0'
   spec.metadata['rubygems_mfa_required'] = 'true'
 end
