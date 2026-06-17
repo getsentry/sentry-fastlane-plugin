@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.5.8
 
 ### Dependencies
 
