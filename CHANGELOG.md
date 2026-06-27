@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Dependencies
+
+- Bump CLI from v3.5.1 to v3.6.0 ([#504](https://github.com/getsentry/sentry-fastlane-plugin/pull/504))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#360)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/3.5.1...3.6.0)
+
 ## 2.5.8
 
 ### Dependencies
