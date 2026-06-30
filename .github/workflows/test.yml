@@ -20,7 +20,6 @@ jobs:
         with:
           ruby-version: "3.1.4"
 
-      - run: gem install bundler -v '2.6.8'
       - run: bundle install
       - run: sentry-cli info --config-status-json
       - run: bundle exec rubocop
