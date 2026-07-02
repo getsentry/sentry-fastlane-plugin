@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Features
+
+- Add parameter `diff_threshold` to `sentry_upload_snapshots` ([#509](https://github.com/getsentry/sentry-fastlane-plugin/pull/509))
+
 ### Dependencies
 
 - Bump CLI from v3.5.1 to v3.6.0 ([#504](https://github.com/getsentry/sentry-fastlane-plugin/pull/504))
