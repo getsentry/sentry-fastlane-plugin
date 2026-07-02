@@ -14,9 +14,14 @@ module Fastlane
           "snapshots",
           "upload",
           "--app-id",
-          app_id,
-          path
+          app_id
         ]
+
+        if params[:diff_threshold]
+          command += ["--diff-threshold", params[:diff_threshold].to_s]
+        end
+
+        command << path
 
         Helper::SentryConfig.build_vcs_command(command, params)
 
@@ -47,7 +52,17 @@ module Fastlane
                                                      end),
           FastlaneCore::ConfigItem.new(key: :app_id,
                                        description: "Application identifier",
-                                       optional: false)
+                                       optional: false),
+          FastlaneCore::ConfigItem.new(key: :diff_threshold,
+                                       description: "Only report images as changed if their difference percentage exceeds this value (0.0–1.0). " \
+                                                    "For example, 0.001 ignores changes affecting less than 0.1% of pixels. " \
+                                                    "Useful for filtering out sub-pixel rendering noise (e.g. anti-aliasing, transparency). " \
+                                                    "Defaults to 0.0 (any pixel change is reported) when not set.",
+                                       optional: true,
+                                       type: Float,
+                                       verify_block: proc do |value|
+                                                       UI.user_error! "diff_threshold must be between 0.0 and 1.0" unless value >= 0.0 && value < 1.0
+                                                     end)
         ] + Helper::SentryConfig.common_vcs_config_items
       end
 

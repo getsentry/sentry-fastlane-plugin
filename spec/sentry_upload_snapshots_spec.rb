@@ -119,6 +119,60 @@ describe Fastlane do
           end").runner.execute(:test)
         end
       end
+
+      it "passes --diff-threshold when specified" do
+        Dir.mktmpdir do |path|
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+            anything,
+            ["snapshots", "upload", "--app-id", "com.example.app", "--diff-threshold", "0.001", path]
+          ).and_return(true)
+
+          described_class.new.parse("lane :test do
+              sentry_upload_snapshots(
+                org_slug: 'some_org',
+                auth_token: 'something123',
+                project_slug: 'some_project',
+                app_id: 'com.example.app',
+                path: '#{path}',
+                diff_threshold: 0.001)
+          end").runner.execute(:test)
+        end
+      end
+
+      it "omits --diff-threshold when not specified" do
+        Dir.mktmpdir do |path|
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
+            anything, ["snapshots", "upload", "--app-id", "com.example.app", path]
+          ).and_return(true)
+
+          described_class.new.parse("lane :test do
+              sentry_upload_snapshots(
+                org_slug: 'some_org',
+                auth_token: 'something123',
+                project_slug: 'some_project',
+                app_id: 'com.example.app',
+                path: '#{path}')
+          end").runner.execute(:test)
+        end
+      end
+
+      it "raises an error when diff_threshold is out of range" do
+        Dir.mktmpdir do |path|
+          expect do
+            described_class.new.parse("lane :test do
+              sentry_upload_snapshots(
+                org_slug: 'some_org',
+                auth_token: 'something123',
+                project_slug: 'some_project',
+                app_id: 'com.example.app',
+                path: '#{path}',
+                diff_threshold: 1.5)
+            end").runner.execute(:test)
+          end.to raise_error("diff_threshold must be between 0.0 and 1.0")
+        end
+      end
     end
   end
 end
