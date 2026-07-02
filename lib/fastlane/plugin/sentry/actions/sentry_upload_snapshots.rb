@@ -61,7 +61,7 @@ module Fastlane
                                        optional: true,
                                        type: Float,
                                        verify_block: proc do |value|
-                                                       UI.user_error! "diff_threshold must be between 0.0 and 1.0" unless value >= 0.0 && value <= 1.0
+                                                       UI.user_error! "diff_threshold must be between 0.0 and 1.0" unless value.between?(0.0, 1.0)
                                                      end)
         ] + Helper::SentryConfig.common_vcs_config_items
       end
