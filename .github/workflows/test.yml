@@ -18,7 +18,7 @@ jobs:
 
       - uses: ruby/setup-ruby@9eb537ca036ebaed86729dcb9309076e4c5c3b74 # v1.314.0
         with:
-          ruby-version: "3.1.4"
+          ruby-version: "3.3.11"
 
       - run: bundle install
       - run: sentry-cli info --config-status-json
