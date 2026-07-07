@@ -19,7 +19,7 @@ jobs:
           python-version: "3.11.9"
       - uses: ruby/setup-ruby@9eb537ca036ebaed86729dcb9309076e4c5c3b74 # v1.314.0
         with:
-          ruby-version: "3.1.2"
+          ruby-version: "3.3.11"
 
       - name: Run bundle install
         run: bundle install
