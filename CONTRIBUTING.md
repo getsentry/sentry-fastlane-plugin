@@ -11,7 +11,7 @@ We welcome suggested improvements and bug fixes for `sentry-fastlane-plugin`, in
 
 ## Environment
 
-Make sure you have Ruby (>= 3.0) and [Bundler](https://bundler.io/) installed. Then run:
+Make sure you have Ruby (>= 3.1.0) and [Bundler](https://bundler.io/) installed. Then run:
 
 ```sh
 bundle install
