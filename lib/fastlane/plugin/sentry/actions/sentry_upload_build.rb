@@ -20,11 +20,20 @@ module Fastlane
           UI.user_error!("Path '#{build_path}' is not an IPA") unless File.extname(build_path).casecmp('.ipa').zero?
         end
 
+        dsym_paths = resolve_dsym_paths(params, build_type)
         command = [
           "build",
           "upload",
           File.absolute_path(build_path)
         ]
+
+        if build_type == :ipa
+          # build upload accepts uncompressed dSYM bundles or directories containing them.
+          # Zipped dSYMs are still handled by the separate debug-files upload below.
+          dsym_paths.select { |path| File.directory?(path) }.each do |path|
+            command.push("--dsym").push(File.absolute_path(path))
+          end
+        end
 
         Helper::SentryConfig.build_vcs_command(command, params)
 
@@ -49,7 +58,7 @@ module Fastlane
         UI.success("Successfully uploaded build file: #{build_path}")
 
         # Upload dSYMs for iOS builds when dsym_path is provided or DSYM_OUTPUT_PATH is set
-        upload_dsym_if_requested(params, build_type)
+        upload_dsyms(params, dsym_paths)
       end
 
       #####################################################
@@ -63,8 +72,8 @@ module Fastlane
       def self.details
         "This action allows you to upload build files to Sentry. Supported formats include iOS build archives (.xcarchive), " \
           "iOS app bundles (.ipa), Android APK files (.apk), and Android App Bundles (.aab). IPA files typically don't " \
-          "embed dSYMs—use the dsym_path parameter to upload symbols for proper symbolication, or call sentry_debug_files_upload " \
-          "separately. The action supports optional git-related parameters for enhanced context including commit SHAs, " \
+          "embed dSYMs—use the dsym_path parameter to include dSYM bundles in the build upload and upload them for event " \
+          "symbolication, or call sentry_debug_files_upload separately. The action supports optional git-related parameters for enhanced context including commit SHAs, " \
           "branch names, repository information, and pull request details. Install groups can be specified to control update " \
           "visibility between builds."
       end
@@ -102,7 +111,7 @@ module Fastlane
                                          UI.user_error!("Path '#{value}' is not an AAB") unless File.extname(value).casecmp('.aab').zero?
                                        end),
           FastlaneCore::ConfigItem.new(key: :ipa_path,
-                                       description: "Path to your iOS app bundle (.ipa). Defaults to IPA_OUTPUT_PATH from lane context. For symbolication, use dsym_path or call sentry_debug_files_upload separately. Mutually exclusive with xcarchive_path, apk_path, and aab_path",
+                                       description: "Path to your iOS app bundle (.ipa). Defaults to IPA_OUTPUT_PATH from lane context. Use dsym_path to include dSYMs in build analysis and event symbolication. Mutually exclusive with xcarchive_path, apk_path, and aab_path",
                                        optional: true,
                                        conflicting_options: [:xcarchive_path, :apk_path, :aab_path],
                                        verify_block: proc do |value|
@@ -112,7 +121,7 @@ module Fastlane
                                          UI.user_error!("Path '#{value}' is not an IPA") unless File.extname(value).casecmp('.ipa').zero?
                                        end),
           FastlaneCore::ConfigItem.new(key: :dsym_path,
-                                       description: "Path to dSYM file(s) for symbolication. Use when uploading IPA (IPAs typically don't embed dSYMs). Can be a path or array of paths. Defaults to DSYM_OUTPUT_PATH from lane context for iOS builds when not specified",
+                                       description: "Path to dSYM bundle(s), a directory containing dSYM bundles, or zipped dSYMs. For IPA uploads, directory inputs are included in the build upload. All inputs are also uploaded for event symbolication. Can be a path or array of paths. Defaults to DSYM_OUTPUT_PATH from lane context for iOS builds when not specified",
                                        optional: true,
                                        type: Array,
                                        skip_type_validation: true)
@@ -180,13 +189,17 @@ module Fastlane
         end
       end
 
-      def self.upload_dsym_if_requested(params, build_type)
+      def self.resolve_dsym_paths(params, build_type)
         dsym_paths = Array(params[:dsym_path]).reject { |p| p.nil? || p.to_s.empty? }
         # For iOS builds, use DSYM_OUTPUT_PATH from lane context when dsym_path not specified
         if dsym_paths.empty? && [:ipa, :xcarchive].include?(build_type)
           dsym_from_context = Actions.lane_context[SharedValues::DSYM_OUTPUT_PATH]
           dsym_paths = [dsym_from_context] if dsym_from_context && !dsym_from_context.to_s.empty?
         end
+        dsym_paths
+      end
+
+      def self.upload_dsyms(params, dsym_paths)
         return if dsym_paths.empty?
 
         uploaded_count = 0
