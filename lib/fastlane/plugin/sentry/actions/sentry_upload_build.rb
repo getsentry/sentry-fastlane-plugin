@@ -28,10 +28,9 @@ module Fastlane
         ]
 
         if build_type == :ipa
-          # build upload accepts uncompressed dSYM bundles or directories containing them.
-          # Zipped dSYMs are still handled by the separate debug-files upload below.
-          dsym_paths.select { |path| File.directory?(path) }.each do |path|
-            command.push("--dsym").push(File.absolute_path(path))
+          # Include dSYM bundles, containing directories, and ZIPs in the build upload.
+          dsym_paths.each do |path|
+            command.push("--dsym").push(path)
           end
         end
 
@@ -121,7 +120,7 @@ module Fastlane
                                          UI.user_error!("Path '#{value}' is not an IPA") unless File.extname(value).casecmp('.ipa').zero?
                                        end),
           FastlaneCore::ConfigItem.new(key: :dsym_path,
-                                       description: "Path to dSYM bundle(s), a directory containing dSYM bundles, or zipped dSYMs. For IPA uploads, directory inputs are included in the build upload. All inputs are also uploaded for event symbolication. Can be a path or array of paths. Defaults to DSYM_OUTPUT_PATH from lane context for iOS builds when not specified",
+                                       description: "Path to dSYM bundle(s), a directory containing dSYM bundles, or zipped dSYMs. For IPA uploads, all inputs are included in the build upload. All inputs are also uploaded for event symbolication. Can be a path or array of paths. Defaults to DSYM_OUTPUT_PATH from lane context for iOS builds when not specified",
                                        optional: true,
                                        type: Array,
                                        skip_type_validation: true)
