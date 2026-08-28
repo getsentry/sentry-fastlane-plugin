@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- Include dSYMs in IPA build uploads ([#531](https://github.com/getsentry/sentry-fastlane-plugin/pull/531))
+
 ## 2.6.3
 
 ### Dependencies
