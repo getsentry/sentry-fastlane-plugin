@@ -595,6 +595,36 @@ describe Fastlane do
           end").runner.execute(:test)
         end
 
+        it "skips missing dSYM paths" do
+          mock_ipa_path = './assets/Test.ipa'
+          missing_dsym_path = './assets/Missing.app.dSYM'
+
+          Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with(mock_ipa_path).and_return(true)
+          allow(File).to receive(:exist?).with(missing_dsym_path).and_return(false)
+          allow(File).to receive(:exist?).with(nil).and_return(false)
+          allow(File).to receive(:extname).and_call_original
+          allow(File).to receive(:extname).with(mock_ipa_path).and_return('.ipa')
+
+          expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
+          expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli) do |_params, command|
+            expect(command[0]).to eq("build")
+            expect(command[1]).to eq("upload")
+            expect(command).not_to include("--dsym")
+            true
+          end
+
+          described_class.new.parse("lane :test do
+            sentry_upload_build(
+              auth_token: 'test-token',
+              org_slug: 'test-org',
+              project_slug: 'test-project',
+              ipa_path: '#{mock_ipa_path}',
+              dsym_path: '#{missing_dsym_path}')
+          end").runner.execute(:test)
+        end
+
         it "forwards dSYM bundle and directory paths unchanged in IPA build uploads" do
           mock_ipa_path = './assets/Test.ipa'
           mock_dsym_bundle = './assets/Test.app.dSYM'

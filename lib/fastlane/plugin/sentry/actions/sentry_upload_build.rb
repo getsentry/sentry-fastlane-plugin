@@ -29,6 +29,8 @@ module Fastlane
         dsym_paths = resolve_dsym_paths(params, build_type)
         if build_type == :ipa
           dsym_paths.each do |path|
+            next unless File.exist?(path)
+
             command.push("--dsym").push(path)
           end
         end
