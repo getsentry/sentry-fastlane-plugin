@@ -27,7 +27,8 @@ module Fastlane
         ]
 
         dsym_paths = resolve_dsym_paths(params, build_type)
-        if build_type == :ipa
+        supports_dsym_build_upload = OS.mac? && OS.host_cpu == 'arm64'
+        if build_type == :ipa && supports_dsym_build_upload
           dsym_paths.each do |path|
             next unless File.exist?(path)
 
@@ -204,17 +205,16 @@ module Fastlane
 
         uploaded_count = 0
         dsym_paths.each do |path|
-          next unless File.exist?(path)
+          unless File.exist?(path)
+            UI.important("Skipping missing dSYM path: #{path}")
+            next
+          end
 
           command = ["debug-files", "upload", File.absolute_path(path), "--type", "dsym"]
           Helper::SentryHelper.call_sentry_cli(params, command)
           uploaded_count += 1
         end
-        if uploaded_count > 0
-          UI.success("Successfully uploaded dSYM files")
-        elsif dsym_paths.any?
-          UI.verbose("No dSYM files were uploaded: none of the specified paths exist (#{dsym_paths.join(', ')})")
-        end
+        UI.success("Successfully uploaded dSYM files") if uploaded_count > 0
       end
     end
   end
