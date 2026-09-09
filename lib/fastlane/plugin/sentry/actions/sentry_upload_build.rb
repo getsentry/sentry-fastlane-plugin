@@ -119,7 +119,7 @@ module Fastlane
                                          UI.user_error!("Path '#{value}' is not an IPA") unless File.extname(value).casecmp('.ipa').zero?
                                        end),
           FastlaneCore::ConfigItem.new(key: :dsym_path,
-                                       description: "Path to dSYM bundle(s), a directory containing dSYM bundles, or zipped dSYMs. For IPA uploads, all inputs are included in the build upload. All inputs are also uploaded for event symbolication. Can be a path or array of paths. Defaults to DSYM_OUTPUT_PATH from lane context for iOS builds when not specified",
+                                       description: "Path or array of paths to a dSYM bundle, a directory containing dSYM bundles, or a ZIP archive containing either. For IPA uploads, inputs are included in build analysis and uploaded for event symbolication. Defaults to DSYM_OUTPUT_PATH from lane context for iOS builds when omitted",
                                        optional: true,
                                        type: Array,
                                        skip_type_validation: true)
