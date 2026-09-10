@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- Add dSYM support to IPA build uploads. Pass `dsym_path` to `sentry_upload_build` to include symbols in build analysis:
+
+  ```ruby
+  sentry_upload_build(
+    ipa_path: "./build/MyApp.ipa",
+    dsym_path: "./build/MyApp.app.dSYM.zip"
+  )
+  ```
+
+  `dsym_path` accepts a path or array of paths to dSYM bundles, directories containing dSYMs, or ZIP archives. The dSYMs are also uploaded separately for event symbolication. Including dSYMs in IPA build analysis is supported when running on macOS with Apple silicon. ([#531](https://github.com/getsentry/sentry-fastlane-plugin/pull/531))
+
 ## 2.6.3
 
 ### Dependencies
