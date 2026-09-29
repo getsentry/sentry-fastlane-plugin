@@ -18,4 +18,4 @@ jobs:
     name: Danger
     runs-on: ubuntu-24.04
     steps:
-      - uses: getsentry/github-workflows/danger@607fed74f812e69201531a5185b6c3c57caa4e89 # v3.4.0
+      - uses: getsentry/github-workflows/danger@959162c159b866489d3fabe93327f48f9b8cb7ee # v3.4.1
