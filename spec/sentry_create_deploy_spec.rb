@@ -4,7 +4,7 @@ describe Fastlane do
       it "accepts app_identifier" do
         allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "deploys", "app.idf@1.0", "new", "--env", "staging"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "deploy", "app.idf@1.0", "staging"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_create_deploy(
@@ -17,7 +17,7 @@ describe Fastlane do
       it "accepts build" do
         allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "deploys", "1.0+123", "new", "--env", "staging"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "deploy", "1.0+123", "staging"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_create_deploy(
@@ -29,7 +29,7 @@ describe Fastlane do
 
       it "does not prepend app_identifier if not specified" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "deploys", "1.0", "new", "--env", "staging"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "deploy", "1.0", "staging"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_create_deploy(
@@ -40,7 +40,7 @@ describe Fastlane do
 
       it "includes --name if present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "deploys", "1.0", "new", "--env", "staging", "--name", "fixture-name"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "deploy", "1.0", "staging", "fixture-name"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_create_deploy(
@@ -52,7 +52,7 @@ describe Fastlane do
 
       it "includes --url if present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "deploys", "1.0", "new", "--env", "staging", "--url", "http://www.sentry.io"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "deploy", "1.0", "staging", "--url", "http://www.sentry.io"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_create_deploy(
@@ -64,7 +64,7 @@ describe Fastlane do
 
       it "includes --started and --finished if present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "deploys", "1.0", "new", "--env", "staging", "--started", 1622630647, "--finished", 1622630700]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "deploy", "1.0", "staging", "--started", 1622630647, "--finished", 1622630700]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_create_deploy(
@@ -77,7 +77,7 @@ describe Fastlane do
 
       it "includes --started if present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "deploys", "1.0", "new", "--env", "staging", "--started", 1622630647]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "deploy", "1.0", "staging", "--started", 1622630647]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_create_deploy(
@@ -89,7 +89,7 @@ describe Fastlane do
 
       it "includes --finished if present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "deploys", "1.0", "new", "--env", "staging", "--finished", 1622630700]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "deploy", "1.0", "staging", "--finished", 1622630700]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_create_deploy(
@@ -101,7 +101,7 @@ describe Fastlane do
 
       it "includes --time if present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "deploys", "1.0", "new", "--env", "staging", "--time", 180]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "deploy", "1.0", "staging", "--time", 180]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_create_deploy(

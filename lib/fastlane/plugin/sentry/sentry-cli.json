@@ -1,0 +1,11 @@
+{
+  "version": "0.45.0",
+  "repo": "https://github.com/getsentry/cli",
+  "assets": {
+    "sentry-darwin-arm64.gz": "106c82468058c6103121781d9fcb00e0a1d93cc0be2b828d4e3ee0db7d6bec68",
+    "sentry-darwin-x64.gz": "bd89aa3d5acdc925fd702bea990e634b1cb37aabf5e1837c74757cb840a5cb55",
+    "sentry-linux-arm64.gz": "15da331a11738e51f0347b4a387300372b31330ac824b3ce281b6693fe0a2692",
+    "sentry-linux-x64.gz": "f15803939b6fee8496fc5673988d2104af845f328da5244beed61c8b75ba2ec5",
+    "sentry-windows-x64.exe.gz": "ccaa0a656a9b2891308aa1eb5050367aa2aa2ac15ce1936664cd045063c8bb3f"
+  }
+}

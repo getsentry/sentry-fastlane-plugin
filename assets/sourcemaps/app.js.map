@@ -1,0 +1,1 @@
+{"version":3,"file":"app.js","sources":["app.ts"],"sourcesContent":["console.log(\"hello from the sentry fastlane plugin integration test\");\n"],"names":[],"mappings":"AAAA,OAAO,CAAC,GAAG,CAAC,wDAAwD,CAAC,CAAC","debug_id":"3b3f0d1e-6c7a-4f2e-9b7d-2f1c0a9e8d61"}

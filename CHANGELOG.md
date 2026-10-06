@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+### Breaking Changes
+
+- Migrate the plugin to the new [Sentry CLI](https://github.com/getsentry/cli) (`sentry`), replacing the bundled legacy `sentry-cli`. See the [migration guide](MIGRATION.md) for details. ([#542](https://github.com/getsentry/sentry-fastlane-plugin/pull/542))
+  - The CLI is no longer bundled with the gem. The plugin downloads the pinned CLI version on first use, verifies its SHA-256 checksum and caches it in `~/.cache/sentry-fastlane-plugin` (configurable via `SENTRY_FASTLANE_PLUGIN_CACHE_DIR`). Use `sentry_cli_path` or `SENTRY_CLI_PATH` to point the plugin at a manually installed CLI, for example on machines without access to GitHub.
+  - `sentry_cli_path` must point to the new `sentry` binary. The legacy `sentry-cli` is rejected.
+  - 32-bit Linux and Windows hosts are no longer supported. Linux arm64 is now supported.
+  - `sentry_upload_sourcemap`: `sourcemap` now takes directories instead of files, the CLI only considers `.js`, `.cjs` and `.mjs` files by default (use `ext: ['jsbundle', 'bundle']` for react-native), and the `url_suffix`, `note`, `validate`, `decompress`, `wait`, `wait_for`, `no_sourcemap_reference`, `debug_id_reference`, `bundle`, `bundle_sourcemap` and `strict` options are ignored with a deprecation warning.
+  - `sentry_upload_build`: dSYMs passed via `dsym_path` are still uploaded for event symbolication but are no longer attached to the IPA build upload.
+  - `sentry_debug_files_upload`: `symbol_maps` is ignored with a deprecation warning.
+  - `sentry_set_commits`: `ignore_missing` is ignored with a deprecation warning.
+  - `sentry_upload_proguard`: `write_properties` is ignored with a deprecation warning.
+- Add a third-party license notice for the Sentry CLI (FSL-1.1-Apache-2.0) to `LICENSE`.
+
 ## 2.8.0
 
 ### Dependencies

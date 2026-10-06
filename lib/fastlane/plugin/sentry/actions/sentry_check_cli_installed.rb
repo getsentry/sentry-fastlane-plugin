@@ -16,8 +16,8 @@ module Fastlane
 
       def self.details
         [
-          "This action checks that the senty-cli is installed and meets the mimum verson requirements.",
-          "You can use it at the start of your lane to ensure that sentry-cli is correctly installed."
+          "This action checks that the Sentry CLI is installed and meets the minimum version requirements, downloading the pinned version if necessary.",
+          "You can use it at the start of your lane to ensure that the Sentry CLI is correctly installed."
         ].join(" ")
       end
 

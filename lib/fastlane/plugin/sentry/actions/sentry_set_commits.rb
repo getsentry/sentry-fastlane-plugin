@@ -11,14 +11,13 @@ module Fastlane
         version = "#{version}+#{params[:build]}" if params[:build]
 
         command = [
-          "releases",
+          "release",
           "set-commits",
           version
         ]
 
         command.push('--auto') if params[:auto]
         command.push('--clear') if params[:clear]
-        command.push('--ignore-missing') if params[:ignore_missing]
         command.push('--local') if params[:local]
         command.push('--initial-depth').push(params[:initial_depth]) unless params[:initial_depth].nil?
         command.push('--commit').push(params[:commit]) unless params[:commit].nil?
@@ -68,8 +67,9 @@ module Fastlane
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :ignore_missing,
                                        description: "When enabled, if the previous release commit was not found in the repository, will create a release with the default commits count (or the one specified with `--initial-depth`) instead of failing the command",
+                                       deprecated: "The Sentry CLI no longer supports `--ignore-missing`, this option is ignored",
                                        is_string: false,
-                                       default_value: false),
+                                       optional: true),
           FastlaneCore::ConfigItem.new(key: :local,
                                        description: "Set commits of a release from local git. This requires that the command \
                                        is run from within a git repository. sentry-cli will then automatically find \

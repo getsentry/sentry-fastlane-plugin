@@ -29,7 +29,6 @@ module Fastlane
         command.push('--no-sources') unless params[:no_sources].nil?
         command.push('--id').push(params[:id]) unless params[:id].nil?
         command.push('--require-all') unless params[:require_all].nil?
-        command.push('--symbol-maps').push(params[:symbol_maps]) unless params[:symbol_maps].nil?
         command.push('--derived-data') unless params[:derived_data].nil?
         command.push('--no-zips') unless params[:no_zips].nil?
         command.push('--no-upload') unless params[:no_upload].nil?
@@ -107,6 +106,7 @@ module Fastlane
                                        resolve hidden symbols in dSYM files downloaded from \
                                        iTunes Connect. This requires the dsymutil tool to be \
                                        available",
+                                       deprecated: "The Sentry CLI no longer supports `--symbol-maps` (BCSymbolMap resolution only applies to Apple Bitcode, which Apple has deprecated), this option is ignored",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :derived_data,
                                        description: "Search for debug symbols in Xcode's derived data",

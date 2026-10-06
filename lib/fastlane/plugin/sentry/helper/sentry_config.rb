@@ -5,7 +5,7 @@ module Fastlane
         [
           FastlaneCore::ConfigItem.new(key: :sentry_cli_path,
                                        env_name: "SENTRY_CLI_PATH",
-                                       description: "Path to your sentry-cli. Defaults to `which sentry-cli`",
+                                       description: "Path to a Sentry CLI (https://github.com/getsentry/cli) executable. Defaults to the pinned CLI version downloaded and cached by the plugin",
                                        optional: true,
                                        verify_block: proc do |value|
                                          UI.user_error! "'#{value}' is not executable" unless FastlaneCore::Helper.executable?(value)

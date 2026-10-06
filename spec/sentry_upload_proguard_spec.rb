@@ -18,7 +18,7 @@ describe Fastlane do
       it "includes --no-upload when true" do
         mapping_path = File.absolute_path './assets/AndroidExample.mapping.txt'
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-proguard", mapping_path, "--no-upload"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["proguard", "upload", mapping_path, "--no-upload"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_upload_proguard(
@@ -30,10 +30,11 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-      it "includes --write-properties if present" do
+      it "ignores the deprecated write_properties option" do
         mapping_path = File.absolute_path './assets/AndroidExample.mapping.txt'
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-proguard", mapping_path, "--write-properties", "path/to/properties"]).and_return(true)
+        expect(FastlaneCore::UI).to receive(:deprecated).with(a_string_including("write_properties"))
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["proguard", "upload", mapping_path]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_upload_proguard(
@@ -48,7 +49,7 @@ describe Fastlane do
       it "includes --require-one when true" do
         mapping_path = File.absolute_path './assets/AndroidExample.mapping.txt'
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-proguard", mapping_path, "--require-one"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["proguard", "upload", mapping_path, "--require-one"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_upload_proguard(
@@ -63,7 +64,7 @@ describe Fastlane do
       it "includes --uuid if present" do
         mapping_path = File.absolute_path './assets/AndroidExample.mapping.txt'
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["upload-proguard", mapping_path, "--uuid", "custom-uuid"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["proguard", "upload", mapping_path, "--uuid", "custom-uuid"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_upload_proguard(

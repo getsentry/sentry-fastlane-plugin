@@ -10,63 +10,31 @@ module Fastlane
         version = "#{params[:app_identifier]}@#{params[:version]}" if params[:app_identifier]
         version = "#{version}+#{params[:build]}" if params[:build]
 
-        sourcemaps = params[:sourcemap]
+        options = []
+        options.push('--no-rewrite') unless params[:rewrite]
+        options.push('--strip-prefix').push(params[:strip_prefix]) if params[:strip_prefix]
+        options.push('--strip-common-prefix') if params[:strip_common_prefix]
+        options.push('--url-prefix').push(params[:url_prefix]) unless params[:url_prefix].nil?
+        options.push('--dist').push(params[:dist]) unless params[:dist].nil?
 
-        command = [
-          "sourcemaps",
-          "upload",
-          "--release",
-          version
-        ]
-        command += sourcemaps
+        ignore = normalize_list(params[:ignore])
+        options.push('--ignore').push(ignore.join(',')) unless ignore.empty?
+        options.push('--ignore-file').push(params[:ignore_file]) unless params[:ignore_file].nil?
 
-        command.push('--no-rewrite') unless params[:rewrite]
-        command.push('--strip-prefix').push(params[:strip_prefix]) if params[:strip_prefix]
-        command.push('--strip-common-prefix') if params[:strip_common_prefix]
-        command.push('--url-prefix').push(params[:url_prefix]) unless params[:url_prefix].nil?
-        command.push('--url-suffix').push(params[:url_suffix]) unless params[:url_suffix].nil?
-        command.push('--dist').push(params[:dist]) unless params[:dist].nil?
-        command.push('--note').push(params[:note]) unless params[:note].nil?
-        command.push('--validate') if params[:validate]
-        command.push('--decompress') if params[:decompress]
-        command.push('--wait') if params[:wait]
-        command.push('--wait-for').push(params[:wait_for]) unless params[:wait_for].nil?
-        command.push('--no-sourcemap-reference') if params[:no_sourcemap_reference]
-        command.push('--debug-id-reference') if params[:debug_id_reference]
-        command.push('--bundle').push(params[:bundle]) unless params[:bundle].nil?
-        command.push('--bundle-sourcemap').push(params[:bundle_sourcemap]) unless params[:bundle_sourcemap].nil?
-        command.push('--strict') if params[:strict]
+        ext = normalize_list(params[:ext])
+        options.push('--ext').push(ext.join(',')) unless ext.empty?
 
-        unless params[:ignore].nil?
-          # normalize to array
-          unless params[:ignore].kind_of?(Enumerable)
-            params[:ignore] = [params[:ignore]]
-          end
-          # no nil or empty strings
-          params[:ignore].reject! do |e|
-            e.strip.empty?
-          rescue StandardError
-            true
-          end
-          params[:ignore].each do |pattern|
-            command.push('--ignore').push(pattern)
-          end
+        # The Sentry CLI uploads one directory per invocation
+        params[:sourcemap].each do |directory|
+          command = ["sourcemap", "upload", "--release", version, directory] + options
+          Helper::SentryHelper.call_sentry_cli(params, command)
         end
-
-        command.push('--ignore-file').push(params[:ignore_file]) unless params[:ignore_file].nil?
-
-        unless params[:ext].nil?
-          # normalize to array
-          unless params[:ext].kind_of?(Enumerable)
-            params[:ext] = [params[:ext]]
-          end
-          params[:ext].each do |extension|
-            command.push('--ext').push(extension)
-          end
-        end
-
-        Helper::SentryHelper.call_sentry_cli(params, command)
         UI.success("Successfully uploaded files to release: #{version}")
+      end
+
+      # Accepts a single value or an array and returns an array without nil or blank entries
+      def self.normalize_list(value)
+        [*value].map { |entry| entry.to_s.strip }.reject(&:empty?)
       end
 
       #####################################################
@@ -101,7 +69,7 @@ module Fastlane
                                        description: "Distribution in release",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :sourcemap,
-                                       description: "Path or an array of paths to the sourcemap(s) to upload",
+                                       description: "Directory or an array of directories containing the sourcemaps to upload. Each directory is uploaded in a separate Sentry CLI invocation",
                                        type: Array,
                                        verify_block: proc do |values|
                                          [*values].each do |value|
@@ -131,29 +99,36 @@ module Fastlane
                                        description: "Sets a URL prefix in front of all files",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :url_suffix,
+                                       deprecated: "The Sentry CLI no longer supports `--url-suffix`, this option is ignored",
                                        description: "Sets a URL suffix to append to all filenames",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :note,
+                                       deprecated: "The Sentry CLI no longer supports `--note`, this option is ignored",
                                        description: "Adds an optional note to the uploaded artifact bundle",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :validate,
+                                       deprecated: "The Sentry CLI no longer supports `--validate`, this option is ignored",
                                        description: "Enable basic sourcemap validation",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :decompress,
+                                       deprecated: "The Sentry CLI no longer supports `--decompress`, this option is ignored",
                                        description: "Enable files gzip decompression prior to upload",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :wait,
+                                       deprecated: "The Sentry CLI no longer supports `--wait`, this option is ignored",
                                        description: "Wait for the server to fully process uploaded files",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :wait_for,
+                                       deprecated: "The Sentry CLI no longer supports `--wait-for`, this option is ignored",
                                        description: "Wait for the server to fully process uploaded files, but at most \
                                        for the given number of seconds",
                                        type: Integer,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :no_sourcemap_reference,
+                                       deprecated: "The Sentry CLI no longer supports `--no-sourcemap-reference`, this option is ignored",
                                        description: "Disable emitting of automatic sourcemap references. By default the \
                                        tool will store a 'Sourcemap' header with minified files so that sourcemaps \
                                        are located automatically if the tool can detect a link. If this causes issues \
@@ -161,6 +136,7 @@ module Fastlane
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :debug_id_reference,
+                                       deprecated: "The Sentry CLI now always uses the debug ID of the linked sourcemap, this option is ignored",
                                        description: "Enable emitting of automatic debug id references. By default Debug ID \
                                        reference has to be present both in the source and the related sourcemap. But in \
                                        cases of binary bundles, the tool can't verify presence of the Debug ID. This flag \
@@ -168,23 +144,26 @@ module Fastlane
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :bundle,
+                                       deprecated: "The Sentry CLI no longer supports `--bundle`, this option is ignored",
                                        description: "Path to the application bundle (indexed, file, or regular)",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :bundle_sourcemap,
+                                       deprecated: "The Sentry CLI no longer supports `--bundle-sourcemap`, this option is ignored",
                                        description: "Path to the bundle sourcemap",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :ext,
-                                       description: "Set the file extensions that are considered for upload. This overrides \
+                                       description: "File extension or array of file extensions that are considered for upload. This overrides \
                                        the default extensions. To add an extension, all default extensions must be repeated. \
-                                       Specify once per extension. Defaults to: js, cjs, mjs, map, jsbundle, bundle",
+                                       Defaults to: js, cjs, mjs",
                                        type: Array,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :strict,
+                                       deprecated: "The Sentry CLI no longer supports `--strict`, this option is ignored",
                                        description: "Fail with a non-zero exit code if the specified source map file cannot be uploaded",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :ignore,
-                                       description: "Ignores all files and folders matching the given glob or array of globs",
+                                       description: "Ignores all files and folders matching the given glob or array of globs (globs must not contain commas)",
                                        is_string: false,
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :ignore_file,

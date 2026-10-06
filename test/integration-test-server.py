@@ -2,7 +2,7 @@
 
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import urlparse
+from urllib.parse import urlparse, unquote
 import sys
 import threading
 import binascii
@@ -125,7 +125,7 @@ class Handler(BaseHTTPRequestHandler):
         return None
 
     def isApi(self, api: str):
-        if self.path.strip('/') == api.strip('/'):
+        if unquote(self.path).strip('/') == api.strip('/'):
             self.log_message("Matched API endpoint {}".format(api))
             return True
         return False

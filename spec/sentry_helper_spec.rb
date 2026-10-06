@@ -1,71 +1,70 @@
 describe Fastlane::Helper::SentryHelper do
+  let(:pinned_version) { Fastlane::Helper::SentryCliInstaller.version }
+
   describe "call_sentry_cli" do
     it "uses cli path resolved by find_and_check_sentry_cli_path!" do
       sentry_cli_path = 'path'
       options = {}
       expect(described_class).to receive(:find_and_check_sentry_cli_path!).with(options).and_return(sentry_cli_path)
-      expect(Open3).to receive(:popen3).with({ 'SENTRY_PIPELINE' => "sentry-fastlane-plugin/#{Fastlane::Sentry::VERSION}" }, "#{sentry_cli_path} subcommand")
+      expected_env = {
+        'SENTRY_PIPELINE' => "sentry-fastlane-plugin/#{Fastlane::Sentry::VERSION}",
+        'SENTRY_CLI_NO_UPDATE_CHECK' => '1'
+      }
+      expect(Open3).to receive(:popen3).with(expected_env, "#{sentry_cli_path} subcommand")
 
       described_class.call_sentry_cli(options, ["subcommand"])
     end
   end
 
   describe "find_and_check_sentry_cli_path!" do
+    it "uses the managed Sentry CLI when no sentry_cli_path is given" do
+      managed_path = '/cache/sentry-cli/sentry'
+      expect(Fastlane::Helper::SentryCliInstaller).to receive(:ensure_installed!).and_return(managed_path)
+      expect(described_class).to receive(:`).with("#{managed_path} --version").and_return("#{pinned_version}\n")
+
+      expect(described_class.find_and_check_sentry_cli_path!({})).to eq(managed_path)
+    end
+
     it "uses sentry_cli_path passed to check its version" do
-      bundled_sentry_cli_path = described_class.bundled_sentry_cli_path
-      bundled_sentry_cli_version = `#{bundled_sentry_cli_path} --version`
-
-      sentry_cli_path = 'path'
-
-      expect(described_class).to receive(:`).with("#{bundled_sentry_cli_path} --version").and_return(bundled_sentry_cli_path) # Called for bundled version
-      expect(described_class).to receive(:`).with("#{sentry_cli_path} --version").and_return(bundled_sentry_cli_version) # Called sentry_cli_path parmeter
+      sentry_cli_path = '/usr/local/bin/sentry'
+      expect(Fastlane::Helper::SentryCliInstaller).not_to receive(:ensure_installed!)
+      expect(described_class).to receive(:`).with("#{sentry_cli_path} --version").and_return("#{pinned_version}\n")
 
       expect(described_class.find_and_check_sentry_cli_path!({ sentry_cli_path: sentry_cli_path })).to eq(sentry_cli_path)
     end
-  end
 
-  describe "bundled_sentry_cli_path" do
-    it "mac universal" do
-      expect(OS).to receive(:mac?).and_return(true)
+    it "accepts a newer Sentry CLI" do
+      sentry_cli_path = 'sentry'
+      expect(described_class).to receive(:`).with("#{sentry_cli_path} --version").and_return("999.0.0\n")
 
-      expexted_file_path = File.expand_path('../bin/sentry-cli-Darwin-universal', File.dirname(__FILE__))
-      expect(described_class.bundled_sentry_cli_path).to eq(expexted_file_path)
+      expect(described_class.find_and_check_sentry_cli_path!({ sentry_cli_path: sentry_cli_path })).to eq(sentry_cli_path)
     end
 
-    it "windows 64 bit" do
-      expect(OS).to receive(:mac?).and_return(false)
-      expect(OS).to receive(:windows?).and_return(true)
-      expect(OS).to receive(:bits).and_return(64)
+    it "fails on an outdated Sentry CLI" do
+      sentry_cli_path = 'sentry'
+      expect(described_class).to receive(:`).with("#{sentry_cli_path} --version").and_return("0.0.1\n")
 
-      expexted_file_path = File.expand_path('../bin/sentry-cli-Windows-x86_64.exe', File.dirname(__FILE__))
-      expect(described_class.bundled_sentry_cli_path).to eq(expexted_file_path)
+      expect do
+        described_class.find_and_check_sentry_cli_path!({ sentry_cli_path: sentry_cli_path })
+      end.to raise_error("Your Sentry CLI is outdated, please upgrade to at least version #{pinned_version} and start your lane again!")
     end
 
-    it "windows 32 bit" do
-      expect(OS).to receive(:mac?).and_return(false)
-      expect(OS).to receive(:windows?).and_return(true)
-      expect(OS).to receive(:bits).and_return(32)
+    it "fails on the legacy sentry-cli" do
+      sentry_cli_path = '/usr/local/bin/sentry-cli'
+      expect(described_class).to receive(:`).with("#{sentry_cli_path} --version").and_return("sentry-cli 3.8.0\n")
 
-      expexted_file_path = File.expand_path('../bin/sentry-cli-Windows-i686.exe', File.dirname(__FILE__))
-      expect(described_class.bundled_sentry_cli_path).to eq(expexted_file_path)
+      expect do
+        described_class.find_and_check_sentry_cli_path!({ sentry_cli_path: sentry_cli_path })
+      end.to raise_error(/legacy sentry-cli, which is no longer supported/)
     end
 
-    it "linux 64 bit" do
-      expect(OS).to receive(:mac?).and_return(false)
-      expect(OS).to receive(:windows?).and_return(false)
-      expect(OS).to receive(:bits).and_return(64)
+    it "fails when the version cannot be determined" do
+      sentry_cli_path = 'sentry'
+      expect(described_class).to receive(:`).with("#{sentry_cli_path} --version").and_return("")
 
-      expexted_file_path = File.expand_path('../bin/sentry-cli-Linux-x86_64', File.dirname(__FILE__))
-      expect(described_class.bundled_sentry_cli_path).to eq(expexted_file_path)
-    end
-
-    it "linux 32 bit" do
-      expect(OS).to receive(:mac?).and_return(false)
-      expect(OS).to receive(:windows?).and_return(false)
-      expect(OS).to receive(:bits).and_return(32)
-
-      expexted_file_path = File.expand_path('../bin/sentry-cli-Linux-i686', File.dirname(__FILE__))
-      expect(described_class.bundled_sentry_cli_path).to eq(expexted_file_path)
+      expect do
+        described_class.find_and_check_sentry_cli_path!({ sentry_cli_path: sentry_cli_path })
+      end.to raise_error("Could not determine the version of the Sentry CLI at 'sentry'")
     end
   end
 end
