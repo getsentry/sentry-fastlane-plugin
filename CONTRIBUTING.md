@@ -39,6 +39,26 @@ To run a specific test file:
 bundle exec rspec spec/sentry_helper_spec.rb
 ```
 
+## Integration Tests
+
+`test/integration-test.sh` runs the lanes in `fastlane/Fastfile` against the mock Sentry API server in `test/integration-test-server.py`:
+
+```sh
+bash test/integration-test.sh
+```
+
+The plugin downloads the pinned Sentry CLI on first use. Set `SENTRY_FASTLANE_PLUGIN_CACHE_DIR` to keep that download out of your home directory when experimenting.
+
+## Updating the Sentry CLI
+
+The CLI version is pinned in `script/sentry-cli.properties` and bumped automatically by the dependency updater workflow. After changing the version, regenerate the checksum manifest the plugin uses to verify downloads:
+
+```sh
+script/update-sentry-cli.sh
+```
+
+This downloads every release asset and writes `lib/fastlane/plugin/sentry/sentry-cli.json`.
+
 ## Code Formatting
 
 We use [dprint](https://dprint.dev/) for formatting JSON, Markdown, and YAML files. The configuration is in [`dprint.json`](./dprint.json). To check formatting:

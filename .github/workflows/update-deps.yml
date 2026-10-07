@@ -19,10 +19,6 @@ jobs:
   update-cli:
     name: Update CLI
     runs-on: ubuntu-latest
-    outputs:
-      originalTag: ${{ steps.updater.outputs.originalTag }}
-      latestTag: ${{ steps.updater.outputs.latestTag }}
-      prBranch: ${{ steps.updater.outputs.prBranch }}
     steps:
       - name: Generate GitHub App Token
         id: app_token
@@ -36,40 +32,6 @@ jobs:
         with:
           path: script/sentry-cli.properties
           name: CLI
+          # Regenerates the checksum manifest the plugin uses to verify the CLI download.
+          post-update-script: script/update-sentry-cli.sh
           api-token: ${{ steps.app_token.outputs.token }}
-
-  update-binaries:
-    name: Update Binaries
-    runs-on: ubuntu-latest
-    needs: update-cli
-    if: needs.update-cli.outputs.originalTag != needs.update-cli.outputs.latestTag
-    steps:
-      - name: Generate GitHub App Token
-        id: app_token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
-        with:
-          app-id: ${{ vars.SENTRY_FASTLANE_PLUGIN_UPDATER_GITHUB_APP_ID }}
-          private-key: ${{ secrets.SENTRY_FASTLANE_PLUGIN_UPDATER_GITHUB_APP_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-      - name: Checkout PR branch
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ needs.update-cli.outputs.prBranch }}
-          token: ${{ steps.app_token.outputs.token }}
-      - name: Download latest binaries.
-        run: script/sentry-cli-download.sh
-      - name: Resolve bot user ID for noreply email
-        id: bot_user
-        env:
-          GH_TOKEN: ${{ steps.app_token.outputs.token }}
-        run: |
-          BOT_ID=$(gh api "users/${{ steps.app_token.outputs.app-slug }}%5Bbot%5D" --jq .id)
-          echo "id=${BOT_ID}" >> "${GITHUB_OUTPUT}"
-      - name: Commit latest binaries.
-        uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
-        with:
-          branch: ${{ needs.update-cli.outputs.prBranch }}
-          commit_message: bump bundled binaries
-          commit_author: "${{ steps.app_token.outputs.app-slug }}[bot] <${{ steps.bot_user.outputs.id }}+${{ steps.app_token.outputs.app-slug }}[bot]@users.noreply.github.com>"
-          commit_user_name: "${{ steps.app_token.outputs.app-slug }}[bot]"
-          commit_user_email: "${{ steps.bot_user.outputs.id }}+${{ steps.app_token.outputs.app-slug }}[bot]@users.noreply.github.com"

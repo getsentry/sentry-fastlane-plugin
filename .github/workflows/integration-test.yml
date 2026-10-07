@@ -12,8 +12,16 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
+    env:
+      # Keep the Sentry CLI downloaded by the plugin inside the workspace so it can be cached.
+      SENTRY_FASTLANE_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.sentry-cli-cache
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Cache Sentry CLI
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .sentry-cli-cache
+          key: sentry-cli-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lib/fastlane/plugin/sentry/sentry-cli.json') }}
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.11.9"

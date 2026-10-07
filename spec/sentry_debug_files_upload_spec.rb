@@ -306,9 +306,10 @@ describe Fastlane do
         end").runner.execute(:test)
       end
 
-      it "includes --symbol_maps if present" do
+      it "ignores the deprecated symbol_maps option" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path", "--symbol-maps", "fixture-symbol_maps"]).and_return(true)
+        expect(FastlaneCore::UI).to receive(:deprecated).with(a_string_including("symbol_maps"))
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["debug-files", "upload", "fixture-path"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_debug_files_upload(

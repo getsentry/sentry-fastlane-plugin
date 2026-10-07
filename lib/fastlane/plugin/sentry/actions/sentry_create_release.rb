@@ -11,8 +11,8 @@ module Fastlane
         version = "#{version}+#{params[:build]}" if params[:build]
 
         command = [
-          "releases",
-          "new",
+          "release",
+          "create",
           version
         ]
         command.push("--finalize") if params[:finalize] == true

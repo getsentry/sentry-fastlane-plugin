@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/getsentry/sentry-fastlane-plugin"
   spec.license       = "MIT"
 
-  spec.files         = Dir["{bin,lib}/**/*"] + %w(README.md LICENSE)
+  spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE MIGRATION.md)
   spec.require_paths = ['lib']
 
   spec.add_dependency 'os', '~> 1.1', '>= 1.1.4'

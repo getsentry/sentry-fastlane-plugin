@@ -13,3 +13,6 @@ fastlane/report.xml
 .env
 .env.api
 .env.auth
+
+# Sentry CLI cache used by the integration tests
+.sentry-cli-cache/

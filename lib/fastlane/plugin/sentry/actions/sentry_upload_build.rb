@@ -27,15 +27,6 @@ module Fastlane
         ]
 
         dsym_paths = resolve_dsym_paths(params, build_type)
-        supports_dsym_build_upload = OS.mac? && OS.host_cpu == 'arm64'
-        if build_type == :ipa && supports_dsym_build_upload
-          dsym_paths.each do |path|
-            next unless File.exist?(path)
-
-            command.push("--dsym").push(path)
-          end
-        end
-
         Helper::SentryConfig.build_vcs_command(command, params)
 
         command << "--build-configuration" << params[:build_configuration] if params[:build_configuration]
@@ -72,8 +63,7 @@ module Fastlane
       def self.details
         "This action allows you to upload build files to Sentry. Supported formats include iOS build archives (.xcarchive), " \
           "iOS app bundles (.ipa), Android APK files (.apk), and Android App Bundles (.aab). IPA files typically don't " \
-          "embed dSYMs; use dsym_path to provide them for build analysis and event symbolication, or call " \
-          "sentry_debug_files_upload to upload them only for symbolication. The action supports optional git-related " \
+          "embed dSYMs; use dsym_path to upload them for event symbolication. The action supports optional git-related " \
           "parameters for enhanced context including commit SHAs, " \
           "branch names, repository information, and pull request details. Install groups can be specified to control update " \
           "visibility between builds."
@@ -112,7 +102,7 @@ module Fastlane
                                          UI.user_error!("Path '#{value}' is not an AAB") unless File.extname(value).casecmp('.aab').zero?
                                        end),
           FastlaneCore::ConfigItem.new(key: :ipa_path,
-                                       description: "Path to your iOS app bundle (.ipa). Defaults to IPA_OUTPUT_PATH from lane context. Use dsym_path to include dSYMs in build analysis and event symbolication. Mutually exclusive with xcarchive_path, apk_path, and aab_path",
+                                       description: "Path to your iOS app bundle (.ipa). Defaults to IPA_OUTPUT_PATH from lane context. Use dsym_path to upload dSYMs for event symbolication. Mutually exclusive with xcarchive_path, apk_path, and aab_path",
                                        optional: true,
                                        conflicting_options: [:xcarchive_path, :apk_path, :aab_path],
                                        verify_block: proc do |value|
@@ -122,7 +112,7 @@ module Fastlane
                                          UI.user_error!("Path '#{value}' is not an IPA") unless File.extname(value).casecmp('.ipa').zero?
                                        end),
           FastlaneCore::ConfigItem.new(key: :dsym_path,
-                                       description: "Path or array of paths to a dSYM bundle, a directory containing dSYM bundles, or a ZIP archive containing either. For IPA uploads, inputs are included in build analysis and uploaded for event symbolication. Defaults to DSYM_OUTPUT_PATH from lane context for iOS builds when omitted",
+                                       description: "Path or array of paths to a dSYM bundle, a directory containing dSYM bundles, or a ZIP archive containing either. The dSYMs are uploaded with `debug-files upload` for event symbolication. Defaults to DSYM_OUTPUT_PATH from lane context for iOS builds when omitted",
                                        optional: true,
                                        type: Array,
                                        skip_type_validation: true)

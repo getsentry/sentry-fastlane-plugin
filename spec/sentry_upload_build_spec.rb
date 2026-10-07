@@ -581,7 +581,7 @@ describe Fastlane do
             if call_count == 1
               expect(command[0]).to eq("build")
               expect(command[1]).to eq("upload")
-              expect(command).to include("--dsym", mock_dsym_path)
+              expect(command).not_to include("--dsym")
             elsif call_count == 2
               expect(command[0]).to eq("debug-files")
               expect(command[1]).to eq("upload")
@@ -630,12 +630,11 @@ describe Fastlane do
           end").runner.execute(:test)
         end
 
-        it "does not include dSYMs in IPA build uploads on x86_64" do
+        it "uploads dSYMs separately from the IPA build upload" do
           mock_ipa_path = './assets/Test.ipa'
           mock_dsym_path = './assets/SwiftExample.app.dSYM.zip'
 
           Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_ARCHIVE] = nil
-          allow(OS).to receive(:host_cpu).and_return('x86_64')
           allow(File).to receive(:exist?).and_call_original
           allow(File).to receive(:exist?).with(mock_ipa_path).and_return(true)
           allow(File).to receive(:exist?).with(mock_dsym_path).and_return(true)
@@ -663,7 +662,7 @@ describe Fastlane do
           end").runner.execute(:test)
         end
 
-        it "forwards dSYM bundle and directory paths unchanged in IPA build uploads" do
+        it "uploads every dSYM bundle and directory separately" do
           mock_ipa_path = './assets/Test.ipa'
           mock_dsym_bundle = './assets/Test.app.dSYM'
           mock_dsym_directory = './assets/dSYMs'
@@ -680,15 +679,7 @@ describe Fastlane do
           expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
           expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
             anything,
-            [
-              "build",
-              "upload",
-              a_string_ending_with("/assets/Test.ipa"),
-              "--dsym",
-              mock_dsym_bundle,
-              "--dsym",
-              mock_dsym_directory
-            ]
+            ["build", "upload", a_string_ending_with("/assets/Test.ipa")]
           ).ordered.and_return(true)
           expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(
             anything,

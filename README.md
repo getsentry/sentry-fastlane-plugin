@@ -46,7 +46,9 @@ Add the actions you want to use to your `Fastfile` file and call `bundle exec fa
 
 ## Sentry Actions
 
-A subset of actions provided by the CLI: https://docs.sentry.io/learn/cli/
+A subset of actions provided by the [Sentry CLI](https://cli.sentry.dev). The plugin downloads a pinned version of the CLI on first use and caches it locally, see [Sentry CLI installation](#sentry-cli-installation) below.
+
+> Upgrading from plugin v2? See the [migration guide](MIGRATION.md).
 
 ### Authentication & Configuration
 
@@ -76,7 +78,6 @@ Further options:
 - **no_sources**: Optional. Do not scan for source information. This will usually exclude source bundle files. They might still be uploaded, if they contain additional processable information (see other flags).
 - **id**: Optional. Search for specific debug identifiers.
 - **require_all**: Optional. Errors if not all identifiers specified with --id could be found.
-- **symbol_maps**: Optional. Path to BCSymbolMap files which are used to resolve hidden symbols in dSYM files downloaded from iTunes Connect. This requires the dsymutil tool to be available.
 - **derived_data**: Optional. Search for debug symbols in Xcode's derived data.
 - **no_zips**: Optional. Do not search in ZIP files.
 - **no_upload**: Optional. Disable the actual upload. This runs all steps for the processing but does not trigger the upload. This is useful if you just want to verify the setup or skip the upload in tests.
@@ -92,7 +93,7 @@ Upload build files to Sentry for improved symbolication and source context. Supp
 - **iOS**: `.xcarchive` (build archive) or `.ipa` (app bundle)
 - **Android**: `.apk` or `.aab` (App Bundle)
 
-Explicitly passed path parameters take precedence over SharedValues. dSYMs provided through `dsym_path` are uploaded for symbolication and are also included in IPA build analysis.
+Explicitly passed path parameters take precedence over SharedValues. dSYMs provided through `dsym_path` are uploaded separately for event symbolication.
 
 ```ruby
 sentry_upload_build(
@@ -101,7 +102,7 @@ sentry_upload_build(
   project_slug: '...',
   # One of: xcarchive_path, ipa_path, apk_path, or aab_path (mutually exclusive)
   xcarchive_path: './build/MyApp.xcarchive', # or ipa_path, apk_path, aab_path
-  dsym_path: './build/MyApp.app.dSYM.zip', # Optional. Path or array of dSYM inputs for symbolication; with IPA uploads, also used for build analysis. Defaults to DSYM_OUTPUT_PATH from lane context when not specified
+  dsym_path: './build/MyApp.app.dSYM.zip', # Optional. Path or array of dSYM inputs uploaded for event symbolication. Defaults to DSYM_OUTPUT_PATH from lane context when not specified
   # Optional git context parameters (can also be set via environment variables)
   head_sha: 'abc123...', # The SHA of the head of the current branch (or SENTRY_HEAD_SHA)
   base_sha: 'def456...', # The SHA of the base branch (or SENTRY_BASE_SHA)
@@ -139,7 +140,7 @@ sentry_create_release(
 
 ### Uploading Files & Sourcemaps
 
-Useful for uploading build artifacts and JS sourcemaps for react-native apps built using fastlane.
+Useful for uploading build artifacts and JS sourcemaps for react-native apps built using fastlane. The Sentry CLI scans a directory for JavaScript files and their sourcemaps, so pass the directory containing your bundle and its `.map` file.
 
 ```ruby
 sentry_upload_sourcemap(
@@ -150,18 +151,18 @@ sentry_upload_sourcemap(
   app_identifier: '...', # pass in the bundle_identifer of your app
   build: '...', # Optionally pass in the build number of your app
   dist: '...', # optional distribution of the release usually the buildnumber
-  sourcemap: ['main.jsbundle', 'main.jsbundle.map'], # Sourcemap(s) to upload. Path(s) can be a comma-separated string or an array of strings.
-  rewrite: true, # Rewrite the sourcemaps before upload (default: false)
+  sourcemap: 'build/sourcemaps', # Directory (or array of directories) containing the bundle(s) and sourcemap(s) to upload. Each directory is uploaded separately.
+  ext: ['jsbundle', 'bundle'], # Optional. File extensions to consider. Defaults to js, cjs, mjs, so react-native bundles need this.
+  rewrite: true, # Rewrite the sourcemaps (inject debug IDs) before upload (default: false)
   url_prefix: '~/', # Optional. Sets a URL prefix in front of all files
-  url_suffix: '.map', # Optional. Sets a URL suffix to append to all filenames
-  note: 'Build from CI', # Optional. Adds a note to the uploaded artifact bundle
-  validate: true, # Optional. Enable basic sourcemap validation
-  decompress: true, # Optional. Enable files gzip decompression prior to upload
-  wait: true, # Optional. Wait for the server to fully process uploaded files
-  wait_for: 60, # Optional. Wait for the server to fully process uploaded files, but at most for the given number of seconds
-  strict: true # Optional. Fail with a non-zero exit code if the specified source map file cannot be uploaded
+  strip_prefix: 'build/', # Optional. Strips the given prefix from uploaded file paths
+  strip_common_prefix: true, # Optional. Strips the longest common path prefix from all files
+  ignore: ['node_modules/**'], # Optional. Glob or array of globs to exclude (globs must not contain commas)
+  ignore_file: '.sentryignore' # Optional. File with gitignore-style patterns to exclude
 )
 ```
+
+The `url_suffix`, `note`, `validate`, `decompress`, `wait`, `wait_for`, `no_sourcemap_reference`, `debug_id_reference`, `bundle`, `bundle_sourcemap` and `strict` options of previous plugin versions are not supported by the Sentry CLI anymore and are ignored with a warning.
 
 ### Uploading Proguard Mapping File
 
@@ -172,7 +173,6 @@ sentry_upload_proguard(
   project_slug: '...',
   mapping_path: 'path to mapping.txt to upload',
   no_upload: false, # Optional. Disable the actual upload (useful for verification)
-  write_properties: 'path/to/properties/file', # Optional. Write UUIDs for processed mapping files into properties file
   require_one: true, # Optional. Require at least one file to upload or the command will error
   uuid: 'custom-uuid' # Optional. Explicitly override the UUID of the mapping file
 )
@@ -189,8 +189,7 @@ sentry_set_commits(
   build: '...', # Optionally pass in the build number of your app
   auto: false, # enable completely automated commit management
   clear: false, # clear all current commits from the release
-  commit: '...', # commit spec, see `sentry-cli releases help set-commits` for more information
-  ignore_missing: false, # Optional boolean value: When the flag is set and the previous release commit was not found in the repository, will create a release with the default commits count (or the one specified with `--initial-depth`) instead of failing the command.
+  commit: '...', # commit spec, see `sentry release set-commits --help` for more information
   local: false, # Optional. Set commits of a release from local git
   initial_depth: 20 # Optional. Set the number of commits of the initial release (default: 20)
 )
@@ -217,13 +216,17 @@ sentry_create_deploy(
 )
 ```
 
-### Specify custom sentry-cli path
+### Sentry CLI installation
 
-Starting with version `1.13.0`, the plugin bundles both macOS and Windows 64 bit executables of `sentry-cli`. You can also specify a custom `sentry-cli` path by adding `sentry_cli_path` to any action.
+Starting with version `3.0.0`, the plugin uses the new [Sentry CLI](https://github.com/getsentry/cli) (`sentry`) and no longer bundles the legacy `sentry-cli`. The first time an action runs, the plugin downloads the pinned CLI version for the current host from GitHub Releases, verifies its SHA-256 checksum and caches it in `~/.cache/sentry-fastlane-plugin` (`$XDG_CACHE_HOME` and `%LOCALAPPDATA%` are honored). Subsequent runs reuse the cached binary.
 
-### Checking the sentry-cli is installed
+- Set `SENTRY_FASTLANE_PLUGIN_CACHE_DIR` to change the cache location, for example to cache it between CI runs.
+- Supported hosts are macOS (Apple silicon and Intel), Linux (x86_64 and arm64) and Windows (x86_64).
+- To use a CLI you installed yourself (for example on machines without access to GitHub), add `sentry_cli_path: '/path/to/sentry'` to any action or set the `SENTRY_CLI_PATH` environment variable. The CLI must be at least the version pinned by the plugin. The legacy `sentry-cli` is not supported.
 
-Useful for checking that the sentry-cli is installed and meets the minimum version requirements before starting to build your app in your lane.
+### Checking the Sentry CLI is installed
+
+Useful for checking that the Sentry CLI is installed and meets the minimum version requirements before starting to build your app in your lane. This also downloads the CLI if it is not cached yet.
 
 ```ruby
 sentry_check_cli_installed()
@@ -231,13 +234,17 @@ sentry_check_cli_installed()
 
 ### Logging
 
-You can set the `sentry-cli` [configuration value](https://docs.sentry.io/product/cli/configuration/#configuration-values) `SENTRY_LOG_LEVEL` by adding `log_level` to any action. Supported values are 'trace', 'debug', 'info', 'warn' and 'error'.
+You can set the Sentry CLI [environment variable](https://cli.sentry.dev/configuration/) `SENTRY_LOG_LEVEL` by adding `log_level` to any action. Supported values are 'trace', 'debug', 'info', 'warn' and 'error'.
 
 ## Issues and Feedback
 
 For any other issues and feedback about this plugin, please submit it to this repository.
 
 ## Migration Guide
+
+### Migrating from sentry-fastlane-plugin v2 to v3
+
+Version 3 switches from the legacy `sentry-cli` to the new [Sentry CLI](https://github.com/getsentry/cli), which is downloaded on first use instead of being bundled with the gem. Most actions keep working unchanged. The notable exceptions are `sentry_upload_sourcemap`, which now takes directories instead of files, and a few options the new CLI no longer supports. See [MIGRATION.md](MIGRATION.md) for the full list of changes.
 
 ### Migrating from sentry-fastlane-plugin v1 to v2
 

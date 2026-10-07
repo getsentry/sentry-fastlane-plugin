@@ -11,13 +11,12 @@ module Fastlane
         version = "#{version}+#{params[:build]}" if params[:build]
 
         command = [
-          "releases",
-          "deploys",
+          "release",
+          "deploy",
           version,
-          "new"
+          params[:env]
         ]
-        command.push('--env').push(params[:env]) unless params[:env].nil?
-        command.push('--name').push(params[:name]) unless params[:name].nil?
+        command.push(params[:name]) unless params[:name].nil?
         command.push('--url').push(params[:deploy_url]) unless params[:deploy_url].nil?
         command.push('--started').push(params[:started]) unless params[:started].nil?
         command.push('--finished').push(params[:finished]) unless params[:finished].nil?

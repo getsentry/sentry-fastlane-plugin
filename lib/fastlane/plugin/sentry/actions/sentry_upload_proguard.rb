@@ -10,12 +10,12 @@ module Fastlane
         UI.user_error!("Mapping file does not exist at path: #{mapping_path}") unless File.exist? mapping_path
 
         command = [
-          "upload-proguard",
+          "proguard",
+          "upload",
           mapping_path
         ]
 
         command.push('--no-upload') if params[:no_upload]
-        command.push('--write-properties').push(params[:write_properties]) unless params[:write_properties].nil?
         command.push('--require-one') if params[:require_one]
         command.push('--uuid').push(params[:uuid]) unless params[:uuid].nil?
 
@@ -56,6 +56,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :write_properties,
                                        description: "Write the UUIDs for the processed mapping files into the given \
                                        properties file",
+                                       deprecated: "The Sentry CLI no longer supports `--write-properties`, this option is ignored",
                                        optional: true),
           FastlaneCore::ConfigItem.new(key: :require_one,
                                        description: "Requires at least one file to upload or the command will error",

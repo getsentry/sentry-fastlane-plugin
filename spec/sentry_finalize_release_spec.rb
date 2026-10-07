@@ -4,7 +4,7 @@ describe Fastlane do
       it "accepts app_identifier" do
         allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "finalize", "app.idf@1.0"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "finalize", "app.idf@1.0"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_finalize_release(
@@ -16,7 +16,7 @@ describe Fastlane do
       it "accepts build" do
         allow(CredentialsManager::AppfileConfig).to receive(:try_fetch_value).with(:app_identifier).and_return(false)
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "finalize", "1.0+123"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "finalize", "1.0+123"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_finalize_release(
@@ -27,7 +27,7 @@ describe Fastlane do
 
       it "does not prepend app_identifier if not specified" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "finalize", "1.0"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "finalize", "1.0"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_finalize_release(
@@ -37,7 +37,7 @@ describe Fastlane do
 
       it "includes --url if present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "finalize", "1.0", "--url", "https://example.com/release"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "finalize", "1.0", "--url", "https://example.com/release"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_finalize_release(
@@ -48,7 +48,7 @@ describe Fastlane do
 
       it "includes --released if present" do
         expect(Fastlane::Helper::SentryConfig).to receive(:parse_api_params).and_return(true)
-        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["releases", "finalize", "1.0", "--released", "1234567890"]).and_return(true)
+        expect(Fastlane::Helper::SentryHelper).to receive(:call_sentry_cli).with(anything, ["release", "finalize", "1.0", "--released", "1234567890"]).and_return(true)
 
         described_class.new.parse("lane :test do
             sentry_finalize_release(
