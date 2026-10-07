@@ -4,6 +4,7 @@ require 'shellwords'
 module Fastlane
   module Helper
     class SentryHelper
+      VERSION_PATTERN = /\A\d+\.\d+\.\d+/
       MIGRATION_GUIDE_URL = 'https://github.com/getsentry/sentry-fastlane-plugin/blob/master/MIGRATION.md'.freeze
 
       # Resolves the Sentry CLI executable to use and verifies that it is compatible with this plugin.
@@ -23,7 +24,8 @@ module Fastlane
                          "See #{MIGRATION_GUIDE_URL}")
         end
 
-        version_string = version_output[/\d+\.\d+\.\d+/]
+        # Match anchored tokens rather than scanning the whole output to avoid polynomial regex backtracking.
+        version_string = version_output.split.filter_map { |token| token[VERSION_PATTERN] }.first
         UI.user_error!("Could not determine the version of the Sentry CLI at '#{sentry_cli_path}'") if version_string.nil?
 
         sentry_cli_version = Gem::Version.new(version_string)

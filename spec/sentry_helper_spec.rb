@@ -40,6 +40,13 @@ describe Fastlane::Helper::SentryHelper do
       expect(described_class.find_and_check_sentry_cli_path!({ sentry_cli_path: sentry_cli_path })).to eq(sentry_cli_path)
     end
 
+    it "parses the version when the output has a prefix" do
+      sentry_cli_path = 'sentry'
+      expect(described_class).to receive(:`).with("#{sentry_cli_path} --version").and_return("sentry #{pinned_version} (abc123)\n")
+
+      expect(described_class.find_and_check_sentry_cli_path!({ sentry_cli_path: sentry_cli_path })).to eq(sentry_cli_path)
+    end
+
     it "fails on an outdated Sentry CLI" do
       sentry_cli_path = 'sentry'
       expect(described_class).to receive(:`).with("#{sentry_cli_path} --version").and_return("0.0.1\n")
