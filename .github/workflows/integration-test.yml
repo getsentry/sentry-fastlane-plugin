@@ -1,4 +1,4 @@
-name: integration-test
+name: Integration Test
 
 on:
   push:
@@ -8,10 +8,17 @@ on:
 
 jobs:
   integration-test:
+    name: Integration Test (${{ matrix.name }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-26, windows-2025, ubuntu-26.04]
+        include:
+          - name: macOS
+            os: macos-26
+          - name: Windows
+            os: windows-2025
+          - name: Ubuntu
+            os: ubuntu-26.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
