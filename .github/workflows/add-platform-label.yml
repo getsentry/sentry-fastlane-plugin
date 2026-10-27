@@ -1,4 +1,5 @@
 name: Add Platform Label
+
 on:
   issues:
     types: [opened]
@@ -7,7 +8,8 @@ on:
 
 jobs:
   add_label:
-    runs-on: ubuntu-latest
+    name: Add Platform Label
+    runs-on: ubuntu-26.04
     permissions:
       issues: write
     steps:
