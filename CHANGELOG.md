@@ -4,9 +4,9 @@
 
 ### Dependencies
 
-- Bump CLI from v3.8.0 to v3.8.1 ([#551](https://github.com/getsentry/sentry-fastlane-plugin/pull/551))
-  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#381)
-  - [diff](https://github.com/getsentry/sentry-cli/compare/3.8.0...3.8.1)
+- Bump CLI from v3.8.0 to v3.8.2 ([#551](https://github.com/getsentry/sentry-fastlane-plugin/pull/551), [#555](https://github.com/getsentry/sentry-fastlane-plugin/pull/555))
+  - [changelog](https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md#382)
+  - [diff](https://github.com/getsentry/sentry-cli/compare/3.8.0...3.8.2)
 
 ## 2.8.0
 
